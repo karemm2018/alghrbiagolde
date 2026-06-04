@@ -349,7 +349,7 @@ export default function HomePage() {
           </motion.span>
           <motion.h1
             variants={fadeUpVariants}
-            className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-text-primary leading-snug mb-3"
+            className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-text-primary leading-snug mb-3 hover-premium-gold"
           >
             نعتمد أحدث التقنيات تربط العملاء <br className="hidden sm:inline" />
             <span className="bg-gradient-to-r from-gold-light via-gold-primary to-gold-deep bg-clip-text text-transparent">بأفضل الفرص السكنية والاستثمارية</span>
