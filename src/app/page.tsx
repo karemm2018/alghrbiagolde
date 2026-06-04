@@ -473,11 +473,14 @@ export default function HomePage() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-80px" }}
-          variants={fadeUpVariants}
+          variants={{
+            hidden: {},
+            visible: { transition: { staggerChildren: 0.12 } }
+          }}
           className="text-center mb-12"
         >
-          <h2 className="text-xl sm:text-3xl font-extrabold text-text-primary mb-3">اختر وجهتك المفضلة في المملكة</h2>
-          <p className="text-sm text-text-secondary max-w-xl mx-auto">نساعدك على امتلاك منزل أحلامك في أرقى أحياء المدن الرئيسية</p>
+          <motion.h2 variants={fadeUpVariants} className="text-xl sm:text-3xl font-extrabold text-text-primary mb-3">اختر وجهتك المفضلة في المملكة</motion.h2>
+          <motion.p variants={fadeUpVariants} className="text-sm text-text-secondary max-w-xl mx-auto">نساعدك على امتلاك منزل أحلامك في أرقى أحياء المدن الرئيسية</motion.p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -616,16 +619,19 @@ export default function HomePage() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-80px" }}
-            variants={fadeUpVariants}
+            variants={{
+              hidden: {},
+              visible: { transition: { staggerChildren: 0.1 } }
+            }}
             className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12"
           >
             <div className="text-right mb-4 md:mb-0">
-              <span className="text-xs font-semibold text-gold-primary uppercase">قائمتنا المحدثة</span>
-              <h2 className="text-xl sm:text-3xl font-extrabold text-text-primary mt-1">تصفح آخر العروض والفرص الحالية</h2>
+              <motion.span variants={fadeUpVariants} className="block text-xs font-semibold text-gold-primary uppercase">قائمتنا المحدثة</motion.span>
+              <motion.h2 variants={fadeUpVariants} className="text-xl sm:text-3xl font-extrabold text-text-primary mt-1">تصفح آخر العروض والفرص الحالية</motion.h2>
             </div>
-            <span className="text-xs text-text-muted">
+            <motion.span variants={fadeUpVariants} className="text-xs text-text-muted">
               تم العثور على <strong className="text-gold-primary font-mono">{filteredProperties.length}</strong> وحدة مطروحة
-            </span>
+            </motion.span>
           </motion.div>
 
           {filteredProperties.length > 0 ? (
@@ -686,13 +692,22 @@ export default function HomePage() {
         <div className="relative w-full max-w-6xl mx-auto px-6 sm:px-8 z-10 flex flex-col md:flex-row items-center justify-center gap-10 md:gap-16 lg:gap-16">
 
           {/* Right Column: Text & Call to Action (Appears right on RTL) */}
-          <div className="flex-[0.5] w-full md:w-[25%] text-center md:text-right space-y-6 md:pr-18 z-10 flex flex-col items-center md:items-start">
-            <span className="inline-block py-1.5 px-4 text-[10px] font-extrabold text-gold-deep bg-gold-primary/10 border border-gold-primary/30 rounded-full">
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+            variants={{
+              hidden: {},
+              visible: { transition: { staggerChildren: 0.12 } }
+            }}
+            className="flex-[0.5] w-full md:w-[25%] text-center md:text-right space-y-6 md:pr-18 z-10 flex flex-col items-center md:items-start"
+          >
+            <motion.span variants={fadeUpVariants} className="inline-block py-1.5 px-4 text-[10px] font-extrabold text-gold-deep bg-gold-primary/10 border border-gold-primary/30 rounded-full">
               خدمة اطلب عقارك المتميزة
-            </span>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-bg-midnight mb-2">
+            </motion.span>
+            <motion.h2 variants={fadeUpVariants} className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-bg-midnight mb-2">
               اطلب عقارك
-            </h2>
+            </motion.h2>
 
             {/* Calligraphy Brush stroke style text */}
             <motion.div
@@ -727,11 +742,11 @@ export default function HomePage() {
               </span>
             </motion.div>
 
-            <p className="text-xs sm:text-sm text-slate-600 max-w-md leading-relaxed mt-4">
+            <motion.p variants={fadeUpVariants} className="text-xs sm:text-sm text-slate-600 max-w-md leading-relaxed mt-4">
               لا داعي للبحث الطويل والمجهد. حدد مواصفات منزلك أو استثمارك العقاري وسيقوم مستشارونا الماليون والعقاريون بتوفير أفضل الفرص المتوافقة مع تطلعاتك.
-            </p>
+            </motion.p>
 
-            <div className="pt-4">
+            <motion.div variants={fadeUpVariants} className="pt-4">
               <button
                 type="button"
                 onClick={() => setShowInquiryModal(true)}
@@ -739,8 +754,8 @@ export default function HomePage() {
               >
                 اطلب الآن
               </button>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
           {/* Left Column: Stunning 3D Render Image (Appears left on RTL) */}
           <motion.div
@@ -777,11 +792,14 @@ export default function HomePage() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-80px" }}
-            variants={fadeUpVariants}
+            variants={{
+              hidden: {},
+              visible: { transition: { staggerChildren: 0.1 } }
+            }}
             className="text-center mb-16"
           >
-            <span className="text-xs font-semibold text-gold-primary uppercase">مشاريعنا العقارية الكبرى</span>
-            <h2 className="text-xl sm:text-3xl font-extrabold text-text-primary mt-1">نسعى لإيجاد مجتمعات سكنية متكاملة</h2>
+            <motion.span variants={fadeUpVariants} className="block text-xs font-semibold text-gold-primary uppercase">مشاريعنا العقارية الكبرى</motion.span>
+            <motion.h2 variants={fadeUpVariants} className="text-xl sm:text-3xl font-extrabold text-text-primary mt-1">نسعى لإيجاد مجتمعات سكنية متكاملة</motion.h2>
           </motion.div>
 
           {/* Project Display details - Alternating (Amal Stars) */}
@@ -809,15 +827,18 @@ export default function HomePage() {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-80px" }}
-              variants={fadeUpVariants}
+              variants={{
+                hidden: {},
+                visible: { transition: { staggerChildren: 0.1 } }
+              }}
               className="space-y-6 text-right"
             >
-              <h3 className="text-2xl font-bold text-text-primary">{PROJECTS[0].name}</h3>
-              <p className="text-xs text-gold-primary font-semibold -mt-3">{PROJECTS[0].tagline}</p>
+              <motion.h3 variants={fadeUpVariants} className="text-2xl font-bold text-text-primary">{PROJECTS[0].name}</motion.h3>
+              <motion.p variants={fadeUpVariants} className="text-xs text-gold-primary font-semibold -mt-3">{PROJECTS[0].tagline}</motion.p>
 
-              <p className="text-sm text-text-secondary leading-relaxed">
+              <motion.p variants={fadeUpVariants} className="text-sm text-text-secondary leading-relaxed">
                 {PROJECTS[0].description}
-              </p>
+              </motion.p>
 
               {/* Bullet specs */}
               <div className="grid grid-cols-2 gap-4 py-4 px-5 rounded-xl bg-bg-royal/30 border border-border-white/5 text-xs">
@@ -878,16 +899,19 @@ export default function HomePage() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-80px" }}
-            variants={fadeUpVariants}
+            variants={{
+              hidden: {},
+              visible: { transition: { staggerChildren: 0.1 } }
+            }}
             className="lg:col-span-4 space-y-6 text-right z-10"
           >
-            <span className="inline-block py-1.5 px-4 text-[10px] font-extrabold text-gold-deep bg-gold-primary/10 border border-gold-primary/30 rounded-full">
+            <motion.span variants={fadeUpVariants} className="inline-block py-1.5 px-4 text-[10px] font-extrabold text-gold-deep bg-gold-primary/10 border border-gold-primary/30 rounded-full">
               تجربة غامرة فريدة
-            </span>
-            <h2 className="text-xl sm:text-3xl font-extrabold text-bg-midnight">جولة افتراضية تفاعلية 360°</h2>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-md">
+            </motion.span>
+            <motion.h2 variants={fadeUpVariants} className="text-xl sm:text-3xl font-extrabold text-bg-midnight">جولة افتراضية تفاعلية 360°</motion.h2>
+            <motion.p variants={fadeUpVariants} className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-md">
               عش تجربة التواجد الفعلي داخل أرقى مشاريعنا السكنية. اسحب الصورة البانورامية للمشاهدة حولك واكتشف التفاصيل الهندسية والتشطيبات الفاخرة للغرف المزدوجة والصالات الواسعة.
-            </p>
+            </motion.p>
             <div className="flex flex-wrap gap-4 pt-2">
               <button
                 type="button"
@@ -929,18 +953,21 @@ export default function HomePage() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: "-80px" }}
-                variants={fadeUpVariants}
+                variants={{
+                  hidden: {},
+                  visible: { transition: { staggerChildren: 0.1 } }
+                }}
                 className="space-y-4 text-right"
               >
-                <span className="inline-block px-4 py-1 text-[11px] font-bold text-gold-primary bg-bg-royal/40 border border-gold-primary/30 rounded-full shadow-[0_0_15px_rgba(212,175,55,0.2)]">
+                <motion.span variants={fadeUpVariants} className="inline-block px-4 py-1 text-[11px] font-bold text-gold-primary bg-bg-royal/40 border border-gold-primary/30 rounded-full shadow-[0_0_15px_rgba(212,175,55,0.2)]">
                   برنامج إتمام التمويلي
-                </span>
-                <h2 className="text-xl sm:text-2xl font-extrabold text-text-primary [text-shadow:0_2px_4px_rgba(0,0,0,0.3)]">
+                </motion.span>
+                <motion.h2 variants={fadeUpVariants} className="text-xl sm:text-2xl font-extrabold text-text-primary [text-shadow:0_2px_4px_rgba(0,0,0,0.3)]">
                   اطلب تمويلك العقاري بأقل نسبة هامش ربح
-                </h2>
-                <p className="text-xs sm:text-sm text-text-secondary leading-relaxed">
+                </motion.h2>
+                <motion.p variants={fadeUpVariants} className="text-xs sm:text-sm text-text-secondary leading-relaxed">
                   برنامج **إتمام** من شركة الغربية الذهبية يوفر لك حلولاً مالية متكاملة مخصصة لاحتياجاتك وطموحاتك السكنية، بالتعاون مع كبرى البنوك والمؤسسات التمويلية المعتمدة.
-                </p>
+                </motion.p>
               </motion.div>
 
               {/* Spec Submission Form (Compressed) */}
@@ -1034,13 +1061,16 @@ export default function HomePage() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-80px" }}
-            variants={fadeUpVariants}
+            variants={{
+              hidden: {},
+              visible: { transition: { staggerChildren: 0.1 } }
+            }}
             className="text-center mb-16"
           >
-            <span className="inline-block py-1.5 px-4 text-[10px] font-extrabold text-gold-deep bg-gold-primary/10 border border-gold-primary/30 rounded-full uppercase">
+            <motion.span variants={fadeUpVariants} className="inline-block py-1.5 px-4 text-[10px] font-extrabold text-gold-deep bg-gold-primary/10 border border-gold-primary/30 rounded-full uppercase">
               سر تميزنا
-            </span>
-            <h2 className="text-xl sm:text-3xl font-extrabold text-[#060D1A] mt-3">لماذا يختار العملاء شركة الغربية الذهبية؟</h2>
+            </motion.span>
+            <motion.h2 variants={fadeUpVariants} className="text-xl sm:text-3xl font-extrabold text-[#060D1A] mt-3">لماذا يختار العملاء شركة الغربية الذهبية؟</motion.h2>
           </motion.div>
 
           <motion.div
@@ -1156,15 +1186,18 @@ export default function HomePage() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-80px" }}
-            variants={fadeUpVariants}
+            variants={{
+              hidden: {},
+              visible: { transition: { staggerChildren: 0.1 } }
+            }}
             className="text-center mb-16"
           >
-            <span className="inline-block py-1.5 px-4 text-[10px] font-extrabold text-gold-primary bg-bg-royal/60 border border-border-gold/20 rounded-full uppercase">
+            <motion.span variants={fadeUpVariants} className="inline-block py-1.5 px-4 text-[10px] font-extrabold text-gold-primary bg-bg-royal/60 border border-border-gold/20 rounded-full uppercase">
               آراء عملائنا
-            </span>
-            <h2 className="text-xl sm:text-3xl font-extrabold text-text-primary mt-3">
+            </motion.span>
+            <motion.h2 variants={fadeUpVariants} className="text-xl sm:text-3xl font-extrabold text-text-primary mt-3">
               تجارب حقيقية لشركاء النجاح
-            </h2>
+            </motion.h2>
           </motion.div>
 
           {/* Carousel Container */}
