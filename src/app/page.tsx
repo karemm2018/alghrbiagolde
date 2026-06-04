@@ -479,7 +479,7 @@ export default function HomePage() {
           }}
           className="text-center mb-12"
         >
-          <motion.h2 variants={fadeUpVariants} className="text-xl sm:text-3xl font-extrabold text-text-primary mb-3">اختر وجهتك المفضلة في المملكة</motion.h2>
+          <motion.h2 variants={fadeUpVariants} className="text-xl sm:text-3xl font-extrabold text-text-primary mb-3 hover-premium-gold">اختر وجهتك المفضلة في المملكة</motion.h2>
           <motion.p variants={fadeUpVariants} className="text-sm text-text-secondary max-w-xl mx-auto">نساعدك على امتلاك منزل أحلامك في أرقى أحياء المدن الرئيسية</motion.p>
         </motion.div>
 
@@ -627,7 +627,7 @@ export default function HomePage() {
           >
             <div className="text-right mb-4 md:mb-0">
               <motion.span variants={fadeUpVariants} className="block text-xs font-semibold text-gold-primary uppercase">قائمتنا المحدثة</motion.span>
-              <motion.h2 variants={fadeUpVariants} className="text-xl sm:text-3xl font-extrabold text-text-primary mt-1">تصفح آخر العروض والفرص الحالية</motion.h2>
+              <motion.h2 variants={fadeUpVariants} className="text-xl sm:text-3xl font-extrabold text-text-primary mt-1 hover-premium-gold">تصفح آخر العروض والفرص الحالية</motion.h2>
             </div>
             <motion.span variants={fadeUpVariants} className="text-xs text-text-muted">
               تم العثور على <strong className="text-gold-primary font-mono">{filteredProperties.length}</strong> وحدة مطروحة
@@ -705,7 +705,7 @@ export default function HomePage() {
             <motion.span variants={fadeUpVariants} className="inline-block py-1.5 px-4 text-[10px] font-extrabold text-gold-deep bg-gold-primary/10 border border-gold-primary/30 rounded-full">
               خدمة اطلب عقارك المتميزة
             </motion.span>
-            <motion.h2 variants={fadeUpVariants} className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-bg-midnight mb-2">
+            <motion.h2 variants={fadeUpVariants} className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-bg-midnight mb-2 hover-premium-gold">
               اطلب عقارك
             </motion.h2>
 
@@ -799,7 +799,7 @@ export default function HomePage() {
             className="text-center mb-16"
           >
             <motion.span variants={fadeUpVariants} className="block text-xs font-semibold text-gold-primary uppercase">مشاريعنا العقارية الكبرى</motion.span>
-            <motion.h2 variants={fadeUpVariants} className="text-xl sm:text-3xl font-extrabold text-text-primary mt-1">نسعى لإيجاد مجتمعات سكنية متكاملة</motion.h2>
+            <motion.h2 variants={fadeUpVariants} className="text-xl sm:text-3xl font-extrabold text-text-primary mt-1 hover-premium-gold">نسعى لإيجاد مجتمعات سكنية متكاملة</motion.h2>
           </motion.div>
 
           {/* Project Display details - Alternating (Amal Stars) */}
@@ -833,7 +833,7 @@ export default function HomePage() {
               }}
               className="space-y-6 text-right"
             >
-              <motion.h3 variants={fadeUpVariants} className="text-2xl font-bold text-text-primary">{PROJECTS[0].name}</motion.h3>
+              <motion.h3 variants={fadeUpVariants} className="text-2xl font-bold text-text-primary hover-premium-gold">{PROJECTS[0].name}</motion.h3>
               <motion.p variants={fadeUpVariants} className="text-xs text-gold-primary font-semibold -mt-3">{PROJECTS[0].tagline}</motion.p>
 
               <motion.p variants={fadeUpVariants} className="text-sm text-text-secondary leading-relaxed">
@@ -908,7 +908,7 @@ export default function HomePage() {
             <motion.span variants={fadeUpVariants} className="inline-block py-1.5 px-4 text-[10px] font-extrabold text-gold-deep bg-gold-primary/10 border border-gold-primary/30 rounded-full">
               تجربة غامرة فريدة
             </motion.span>
-            <motion.h2 variants={fadeUpVariants} className="text-xl sm:text-3xl font-extrabold text-bg-midnight">جولة افتراضية تفاعلية 360°</motion.h2>
+            <motion.h2 variants={fadeUpVariants} className="text-xl sm:text-3xl font-extrabold text-bg-midnight hover-premium-gold">جولة افتراضية تفاعلية 360°</motion.h2>
             <motion.p variants={fadeUpVariants} className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-md">
               عش تجربة التواجد الفعلي داخل أرقى مشاريعنا السكنية. اسحب الصورة البانورامية للمشاهدة حولك واكتشف التفاصيل الهندسية والتشطيبات الفاخرة للغرف المزدوجة والصالات الواسعة.
             </motion.p>
@@ -962,7 +962,7 @@ export default function HomePage() {
                 <motion.span variants={fadeUpVariants} className="inline-block px-4 py-1 text-[11px] font-bold text-gold-primary bg-bg-royal/40 border border-gold-primary/30 rounded-full shadow-[0_0_15px_rgba(212,175,55,0.2)]">
                   برنامج إتمام التمويلي
                 </motion.span>
-                <motion.h2 variants={fadeUpVariants} className="text-xl sm:text-2xl font-extrabold text-text-primary [text-shadow:0_2px_4px_rgba(0,0,0,0.3)]">
+                <motion.h2 variants={fadeUpVariants} className="text-xl sm:text-2xl font-extrabold text-text-primary [text-shadow:0_2px_4px_rgba(0,0,0,0.3)] hover-premium-gold">
                   اطلب تمويلك العقاري بأقل نسبة هامش ربح
                 </motion.h2>
                 <motion.p variants={fadeUpVariants} className="text-xs sm:text-sm text-text-secondary leading-relaxed">
@@ -1070,7 +1070,7 @@ export default function HomePage() {
             <motion.span variants={fadeUpVariants} className="inline-block py-1.5 px-4 text-[10px] font-extrabold text-gold-deep bg-gold-primary/10 border border-gold-primary/30 rounded-full uppercase">
               سر تميزنا
             </motion.span>
-            <motion.h2 variants={fadeUpVariants} className="text-xl sm:text-3xl font-extrabold text-[#060D1A] mt-3">لماذا يختار العملاء شركة الغربية الذهبية؟</motion.h2>
+            <motion.h2 variants={fadeUpVariants} className="text-xl sm:text-3xl font-extrabold text-[#060D1A] mt-3 hover-premium-gold">لماذا يختار العملاء شركة الغربية الذهبية؟</motion.h2>
           </motion.div>
 
           <motion.div
@@ -1195,7 +1195,7 @@ export default function HomePage() {
             <motion.span variants={fadeUpVariants} className="inline-block py-1.5 px-4 text-[10px] font-extrabold text-gold-primary bg-bg-royal/60 border border-border-gold/20 rounded-full uppercase">
               آراء عملائنا
             </motion.span>
-            <motion.h2 variants={fadeUpVariants} className="text-xl sm:text-3xl font-extrabold text-text-primary mt-3">
+            <motion.h2 variants={fadeUpVariants} className="text-xl sm:text-3xl font-extrabold text-text-primary mt-3 hover-premium-gold">
               تجارب حقيقية لشركاء النجاح
             </motion.h2>
           </motion.div>

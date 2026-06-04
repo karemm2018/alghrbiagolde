@@ -358,8 +358,8 @@ html {
   background-repeat: no-repeat;
   background-size: contain;
   background-attachment: scroll;
-  opacity: 0.25;
-  
+  opacity: 0.2;
+
 }
 
 @media (min-width: 768px) {
@@ -367,4 +367,18 @@ html {
     background-attachment: fixed;
     background-position: center calc(100% + 20vh);
   }
+}
+
+/* Premium Hover Effect for Headings & Interactive Texts */
+.hover-premium-gold {
+  cursor: pointer;
+  transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+              transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+              text-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hover-premium-gold:hover {
+  color: var(--gold-primary) !important;
+  transform: translateY(-1px);
+  text-shadow: 0 0 12px rgba(201, 169, 110, 0.35);
 }

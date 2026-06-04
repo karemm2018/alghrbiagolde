@@ -3,6 +3,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 import { Property } from '@/lib/mockData';
 import { Bed, Bath, Ruler, MapPin, Phone, MessageCircle, X } from 'lucide-react';
 
@@ -10,6 +11,28 @@ interface PropertyCardProps {
   property: Property;
   onOpenCalculator?: (property: Property) => void;
 }
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: [0.16, 1, 0.3, 1],
+      staggerChildren: 0.08
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 10 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
+  }
+};
 
 export default function PropertyCard({ property, onOpenCalculator }: PropertyCardProps) {
   const [showCallModal, setShowCallModal] = useState(false);
@@ -78,7 +101,11 @@ export default function PropertyCard({ property, onOpenCalculator }: PropertyCar
 
   return (
     <>
-      <div 
+      <motion.div 
+        variants={cardVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-40px" }}
         className="group relative flex flex-col h-full bg-bg-navy/45 backdrop-blur-xl rounded-2xl overflow-hidden border border-white/22 transition-all duration-500 shadow-[0_12px_36px_rgba(0,0,0,0.3)] hover:-translate-y-2 hover:border-white/35 hover:bg-bg-navy/60 hover:shadow-[0_24px_50px_rgba(0,0,0,0.5),0_0_20px_rgba(255,255,255,0.08)] cursor-pointer"
         onClick={() => onOpenCalculator?.(property)}
       >
@@ -115,7 +142,7 @@ export default function PropertyCard({ property, onOpenCalculator }: PropertyCar
         {/* Card Body */}
         <div className="flex flex-col flex-1 p-6 text-right">
           {/* Project & Code Tag */}
-          <div className="flex justify-between items-center mb-2 text-xs font-semibold text-text-muted">
+          <motion.div variants={itemVariants} className="flex justify-between items-center mb-2 text-xs font-semibold text-text-muted">
             <span className="flex items-center gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-gold-primary"></span>
               {property.project.name}
@@ -123,21 +150,21 @@ export default function PropertyCard({ property, onOpenCalculator }: PropertyCar
             <span className="text-[10px] font-mono text-gold-light bg-gold-primary/10 px-2 py-0.5 rounded border border-border-gold/20">
               Ref: {property.slug.split('-')[0].toUpperCase()}
             </span>
-          </div>
+          </motion.div>
 
           {/* Title */}
-          <h3 className="text-sm sm:text-base font-extrabold text-text-primary mb-3 line-clamp-1 leading-snug group-hover:text-gold-primary transition-colors duration-300">
+          <motion.h3 variants={itemVariants} className="text-sm sm:text-base font-extrabold text-text-primary mb-3 line-clamp-1 leading-snug hover-premium-gold">
             {property.title}
-          </h3>
+          </motion.h3>
 
           {/* Address / Location */}
-          <div className="flex items-center gap-1.5 text-xs text-text-secondary mb-4">
+          <motion.div variants={itemVariants} className="flex items-center gap-1.5 text-xs text-text-secondary mb-4">
             <MapPin className="w-3.5 h-3.5 text-gold-primary shrink-0" />
             <span className="line-clamp-1">{property.location.district}، {property.location.city}</span>
-          </div>
+          </motion.div>
 
           {/* Key Specs Icons (Glass Theme styled) */}
-          <div className="grid grid-cols-3 gap-2 py-3 px-2 rounded-xl bg-white/[0.04] border border-white/10 mb-5 text-xs text-text-secondary">
+          <motion.div variants={itemVariants} className="grid grid-cols-3 gap-2 py-3 px-2 rounded-xl bg-white/[0.04] border border-white/10 mb-5 text-xs text-text-secondary">
             <div className="flex flex-col items-center justify-center gap-1">
               <span className="text-[10px] text-text-muted uppercase">الغرف</span>
               <div className="flex items-center gap-1">
@@ -159,10 +186,10 @@ export default function PropertyCard({ property, onOpenCalculator }: PropertyCar
                 <span className="font-bold text-text-primary font-mono">{formatArea(property.specs.area)}</span>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Financial Values */}
-          <div className="flex justify-between items-center mt-auto pt-4 border-t border-white/10">
+          <motion.div variants={itemVariants} className="flex justify-between items-center mt-auto pt-4 border-t border-white/10">
             <div>
               <p className="text-[9px] text-text-muted uppercase mb-0.5">السعر الإجمالي</p>
               <p className="text-lg font-extrabold text-gold-primary font-cairo">
@@ -177,11 +204,11 @@ export default function PropertyCard({ property, onOpenCalculator }: PropertyCar
                 </p>
               </div>
             )}
-          </div>
+          </motion.div>
         </div>
 
         {/* Card Footer (Actions) */}
-        <div className="flex border-t border-white/10 p-4 gap-3 bg-white/[0.02]" onClick={(e) => e.stopPropagation()}>
+        <motion.div variants={itemVariants} className="flex border-t border-white/10 p-4 gap-3 bg-white/[0.02]" onClick={(e) => e.stopPropagation()}>
           {/* Call button (Solid Red, Grow Hover) */}
           <button 
             type="button"
@@ -202,8 +229,8 @@ export default function PropertyCard({ property, onOpenCalculator }: PropertyCar
             <MessageCircle className="w-3.5 h-3.5" />
             <span>واتساب</span>
           </a>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {/* Call Dialog Popup Modal */}
       {showCallModal && (
