@@ -1,0 +1,370 @@
+/* src/styles/globals.css */
+
+@import "tailwindcss";
+
+/* ----------------------------------------------------
+   1. Brand Design Tokens & System Variables
+   ---------------------------------------------------- */
+:root {
+  direction: rtl;
+
+  /* Background Hierarchies - Midnight to Royal Blue */
+  --bg-midnight: #060D1A;
+  --bg-deep: #0A1628;
+  --bg-navy: #0F2040;
+  --bg-royal: #152A54;
+  --bg-surface: #1C3566;
+
+  /* Translucencies */
+  --bg-glass: rgba(15, 32, 64, 0.82);
+  --bg-overlay: rgba(6, 13, 26, 0.75);
+
+  /* Brand Blue Accent Palette */
+  --brand-deep: #0A2A6E;
+  --brand-primary: #1A5BA5;
+  --brand-royal: #2470C2;
+  --brand-bright: #3D8EE8;
+  --brand-light: #7BB8F5;
+  --brand-pale: #C5DDF8;
+
+  /* Premium Gold / Champagne Palette */
+  --gold-pale: #F5EDD8;
+  --gold-light: #E8C98A;
+  --gold-primary: #C9A96E;
+  --gold-warm: #B8945A;
+  --gold-deep: #9A7A40;
+  --gold-dark: #7A5E2A;
+
+  /* Typography Colors */
+  --text-primary: #FFFFFF;
+  --text-secondary: #D4E3F5;
+  --text-muted: #8AAED4;
+  --text-subtle: #4E7AAF;
+  --text-gold: #C9A96E;
+  --text-gold-pale: #E8C98A;
+
+  /* Borders & Dividers */
+  --border-gold: rgba(201, 169, 110, 0.30);
+  --border-gold-md: rgba(201, 169, 110, 0.55);
+  --border-blue: rgba(61, 142, 232, 0.20);
+  --border-blue-md: rgba(61, 142, 232, 0.40);
+  --border-white: rgba(255, 255, 255, 0.08);
+
+  /* Property Sales Status Colors */
+  --status-available: #22A96E;
+  --status-reserved: #D4883A;
+  --status-sold: #C0392B;
+  --status-soon: #2470C2;
+
+  /* Gradients */
+  --grad-gold: linear-gradient(135deg, #B8945A 0%, #E8C98A 45%, #C9A96E 70%, #9A7A40 100%);
+  --grad-navy: linear-gradient(180deg, #060D1A 0%, #0A1628 50%, #0F2040 100%);
+  --grad-hero: linear-gradient(to bottom,
+      rgba(6, 13, 26, 0.20) 0%,
+      rgba(6, 13, 26, 0.55) 50%,
+      rgba(6, 13, 26, 0.95) 85%,
+      #060D1A 100%);
+  --grad-card-top: linear-gradient(90deg, transparent 0%, #C9A96E 50%, transparent 100%);
+  --grad-shimmer: linear-gradient(120deg,
+      transparent 35%,
+      rgba(255, 255, 255, 0.35) 45%,
+      rgba(255, 255, 255, 0.35) 55%,
+      transparent 65%);
+
+  /* Shadows & Glows */
+  --shadow-card: 0 4px 24px rgba(6, 13, 26, 0.60);
+  --shadow-card-hover: 0 12px 48px rgba(6, 13, 26, 0.80), 0 0 0 1px rgba(201, 169, 110, 0.30);
+  --shadow-btn-gold: 0 4px 20px rgba(201, 169, 110, 0.25);
+  --shadow-btn-hover: 0 6px 28px rgba(201, 169, 110, 0.40);
+  --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* ----------------------------------------------------
+   Tailwind CSS v4 Theme Adaptations
+   ---------------------------------------------------- */
+@theme {
+  /* Colors */
+  --color-bg-midnight: var(--bg-midnight);
+  --color-bg-deep: var(--bg-deep);
+  --color-bg-navy: var(--bg-navy);
+  --color-bg-royal: var(--bg-royal);
+  --color-bg-surface: var(--bg-surface);
+
+  --color-bg-glass: var(--bg-glass);
+  --color-bg-overlay: var(--bg-overlay);
+
+  --color-brand-deep: var(--brand-deep);
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-royal: var(--brand-royal);
+  --color-brand-bright: var(--brand-bright);
+  --color-brand-light: var(--brand-light);
+  --color-brand-pale: var(--brand-pale);
+
+  --color-gold-pale: var(--gold-pale);
+  --color-gold-light: var(--gold-light);
+  --color-gold-primary: var(--gold-primary);
+  --color-gold-warm: var(--gold-warm);
+  --color-gold-deep: var(--gold-deep);
+  --color-gold-dark: var(--gold-dark);
+
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-text-subtle: var(--text-subtle);
+  --color-text-gold: var(--text-gold);
+  --color-text-gold-pale: var(--text-gold-pale);
+
+  --color-border-gold: var(--border-gold);
+  --color-border-gold-md: var(--border-gold-md);
+  --color-border-blue: var(--border-blue);
+  --color-border-blue-md: var(--border-blue-md);
+  --color-border-white: var(--border-white);
+
+  --color-status-available: var(--status-available);
+  --color-status-reserved: var(--status-reserved);
+  --color-status-sold: var(--status-sold);
+  --color-status-soon: var(--status-soon);
+
+  /* Fonts */
+  --font-cairo: var(--font-cairo), system-ui, -apple-system, sans-serif;
+  --font-tajawal: var(--font-tajawal), system-ui, -apple-system, sans-serif;
+  --font-aref-ruqaa: var(--font-aref-ruqaa), serif;
+
+  /* Transitions */
+  --transition-timing-function-luxury: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ----------------------------------------------------
+   2. Base Styles & Body Configuration
+   ---------------------------------------------------- */
+body {
+  background-color: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: var(--font-cairo), system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar Styles for the entire site & scrollable panels */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--bg-royal) var(--bg-midnight);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-midnight);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-royal);
+  border-radius: 9999px;
+  border: 2px solid var(--bg-midnight);
+  transition: background-color 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gold-primary);
+}
+
+/* ----------------------------------------------------
+   3. Pure CSS Animations & Keyframes
+   ---------------------------------------------------- */
+
+/* Button Shimmer Overlay Effect */
+@keyframes shimmer {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(200%);
+  }
+}
+
+.btn-shimmer-trigger {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shimmer-trigger::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--grad-shimmer);
+  transform: translateX(-100%);
+}
+
+.btn-shimmer-trigger:hover::after {
+  animation: shimmer 1s ease-out;
+}
+
+
+/* Pulsing Line Scroll Indicator */
+@keyframes pulse-height {
+
+  0%,
+  100% {
+    height: 10px;
+    opacity: 0.3;
+  }
+
+  50% {
+    height: 40px;
+    opacity: 1;
+  }
+}
+
+.indicator-pulse-line {
+  width: 2px;
+  background-color: var(--gold-primary);
+  animation: pulse-height 2s ease-in-out infinite;
+}
+
+/* Premium Gold Button */
+.btn-premium-gold {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--gold-deep) 0%, var(--gold-light) 50%, var(--gold-deep) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--bg-midnight) !important;
+  font-weight: 700;
+  border-radius: 9999px;
+  /* completely circular borders */
+  box-shadow: 0 4px 15px rgba(201, 169, 110, 0.2);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-premium-gold:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(201, 169, 110, 0.35);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.btn-premium-gold:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.btn-premium-gold::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(to right,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.3) 30%,
+      rgba(255, 255, 255, 0.3) 70%,
+      rgba(255, 255, 255, 0) 100%);
+  transform: skewX(-25deg);
+  transition: 0.75s ease;
+  opacity: 0;
+}
+
+.btn-premium-gold:hover::after {
+  opacity: 1;
+  left: 125%;
+  transition: all 0.75s ease-out;
+}
+
+/* Premium Glass/Secondary Button (Dark Button with distinct border) */
+.btn-premium-glass {
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.03);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1.5px solid rgba(255, 255, 255, 0.28);
+  /* clear distinct border */
+  color: var(--text-primary) !important;
+  font-weight: 700;
+  border-radius: 9999px;
+  /* completely circular borders */
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-premium-glass:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px) scale(1.02);
+  border-color: var(--gold-light);
+  /* distinct gold border on hover */
+  color: var(--gold-light) !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+.btn-premium-glass:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.btn-premium-glass::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(to right,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.15) 30%,
+      rgba(255, 255, 255, 0.15) 70%,
+      rgba(255, 255, 255, 0) 100%);
+  transform: skewX(-25deg);
+  transition: 0.75s ease;
+  opacity: 0;
+}
+
+.btn-premium-glass:hover::after {
+  opacity: 1;
+  left: 125%;
+  transition: all 0.75s ease-out;
+}
+
+/* ----------------------------------------------------
+   4. Accessibility & prefers-reduced-motion
+   ---------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Footer skyline parallax - fixed doesn't work on mobile browsers */
+.footer-parallax-bg {
+  background-image: url('/footer shape.webp');
+  background-position: center calc(100% + 4vh);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-attachment: scroll;
+  opacity: 0.25;
+  
+}
+
+@media (min-width: 768px) {
+  .footer-parallax-bg {
+    background-attachment: fixed;
+    background-position: center calc(100% + 20vh);
+  }
+}
