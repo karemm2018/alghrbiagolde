@@ -142,12 +142,22 @@ export default function HomePage() {
 
   // Slideshow state
   const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
+  const [animateZoom, setAnimateZoom] = useState(false);
 
   React.useEffect(() => {
+    // Trigger zoom-in immediately on mount
+    const zoomTimeout = setTimeout(() => {
+      setAnimateZoom(true);
+    }, 50);
+
     const timer = setInterval(() => {
       setCurrentHeroIndex((prevIndex) => (prevIndex + 1) % HERO_IMAGES.length);
-    }, 4000);
-    return () => clearInterval(timer);
+    }, 6000); // 6 seconds slide interval for smooth luxury transition
+
+    return () => {
+      clearTimeout(zoomTimeout);
+      clearInterval(timer);
+    };
   }, []);
 
   // Testimonial Carousel state and touch handlers
@@ -314,8 +324,9 @@ export default function HomePage() {
               fill
               priority={index === 0}
               sizes="100vw"
-              className={`object-fill transition-transform duration-[6500ms] ease-luxury ${index === currentHeroIndex ? 'scale-108' : 'scale-100'
-                }`}
+              className={`object-fill transition-transform duration-[6500ms] ease-luxury ${
+                index === currentHeroIndex && animateZoom ? 'scale-[1.08]' : 'scale-100'
+              }`}
             />
           </div>
         ))}
