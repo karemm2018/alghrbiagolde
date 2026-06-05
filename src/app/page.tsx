@@ -7,7 +7,6 @@ import Image from 'next/image';
 import { motion, useReducedMotion, AnimatePresence } from 'framer-motion';
 import { PROPERTIES, PROJECTS, Property, Project } from '@/lib/mockData';
 import PropertyCard from '@/components/property/PropertyCard';
-import MortgageCalculator from '@/components/property/MortgageCalculator';
 import {
   Search,
   MapPin,
@@ -50,7 +49,7 @@ const HERO_IMAGES = [
   '/hero-bg-3.webp',
   '/hero-bg-luxury.webp',
   '/hero-bg-2.webp',
-  
+
 ];
 
 const CITY_OPTIONS = [
@@ -125,6 +124,13 @@ const TESTIMONIALS = [
     initials: "س م",
     rating: 5
   }
+];
+
+const PARTNERS = [
+  { id: 1, src: '/1.png', alt: 'شركة الحالي للتطوير العقاري والمقاولات' },
+  { id: 2, src: '/2.png', alt: 'دهانات جوتن' },
+  { id: 3, src: '/3.png', alt: 'شركة سابك' },
+  { id: 4, src: '/4.png', alt: 'مصنع نخبة الغربية للبلك' },
 ];
 
 export default function HomePage() {
@@ -220,7 +226,6 @@ export default function HomePage() {
   }, [selectedCity, selectedType, selectedRooms, maxPrice]);
 
   // Interactive States
-  const [calculatorProperty, setCalculatorProperty] = useState<Property | null>(PROPERTIES[0]);
   const [showInquiryModal, setShowInquiryModal] = useState(false);
   const [inquirySuccess, setInquirySuccess] = useState(false);
 
@@ -264,12 +269,12 @@ export default function HomePage() {
           {/* Logo (Right side in RTL) */}
           <div className="flex items-center gap-3">
             <div className="relative w-12 h-12 flex items-center justify-center">
-              <Image 
-                src="/logo.webp" 
-                alt="الغربية الذهبية" 
-                width={48} 
-                height={48} 
-                className="object-contain" 
+              <Image
+                src="/logo.webp"
+                alt="الغربية الذهبية"
+                width={48}
+                height={48}
+                className="object-contain"
                 priority
               />
             </div>
@@ -288,8 +293,8 @@ export default function HomePage() {
             <a href="#" className="text-white border-b-2 border-gold-primary pb-1">الرئيسية</a>
             <a href="#listings-section" className="text-text-secondary hover:text-white transition-colors duration-200">العروض العقارية</a>
             <a href="#projects-section" className="text-text-secondary hover:text-white transition-colors duration-200">مشاريعنا المميزة</a>
-            <a href="#etmam-section" className="text-text-secondary hover:text-white transition-colors duration-200">حلول التمويل إتمام</a>
             <a href="#about-section" className="text-text-secondary hover:text-white transition-colors duration-200">لماذا نحن؟</a>
+            <a href="#contact-section" className="text-text-secondary hover:text-white transition-colors duration-200">تواصل معنا</a>
           </nav>
 
           {/* CTA Button (Left side in RTL) */}
@@ -324,60 +329,47 @@ export default function HomePage() {
               fill
               priority={index === 0}
               sizes="100vw"
-              className={`object-fill transition-transform duration-[6500ms] ease-luxury ${
-                index === currentHeroIndex && animateZoom ? 'scale-[1.08]' : 'scale-100'
-              }`}
+              className={`object-fill transition-transform duration-[6500ms] ease-luxury ${index === currentHeroIndex && animateZoom ? 'scale-[1.08]' : 'scale-100'
+                }`}
             />
           </div>
         ))}
         <div className="absolute inset-0 bg-gradient-to-t from-bg-midnight/80 via-transparent to-transparent z-10"></div>
 
-        {/* Hero Content Card */}
+        {/* Hero Content Container */}
         <motion.div
           initial="hidden"
           animate="visible"
           variants={{
             visible: { transition: { staggerChildren: 0.15 } }
           }}
-          className="relative max-w-3xl w-[92%] mx-auto px-6 py-8 sm:px-8 sm:py-10 md:px-12 md:py-10 text-center z-20 bg-bg-midnight/40 backdrop-blur-xl border border-border-gold/30 rounded-3xl shadow-[0_24px_60px_rgba(0,0,0,0.65)] hover:border-border-gold/50 transition-all duration-500"
+          className="relative max-w-5xl w-[92%] mx-auto text-center z-20 flex flex-col items-center justify-center"
         >
           <motion.span
             variants={fadeUpVariants}
-            className="inline-block py-1 px-3 mb-3 text-[10px] font-bold text-gold-primary bg-bg-royal/60 border border-border-gold/30 rounded-full animate-pulse"
+            className="inline-block py-1 px-3 mb-4 text-[10px] font-bold text-gold-primary bg-bg-royal/60 border border-border-gold/30 rounded-full animate-pulse"
           >
             الجيل الجديد من الفخامة العقارية بالسعودية
           </motion.span>
-          <motion.h1
-            variants={fadeUpVariants}
-            className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-text-primary leading-snug mb-3 hover-premium-gold"
-          >
-            نعتمد أحدث التقنيات تربط العملاء <br className="hidden sm:inline" />
-            <span className="bg-gradient-to-r from-gold-light via-gold-primary to-gold-deep bg-clip-text text-transparent">بأفضل الفرص السكنية والاستثمارية</span>
-          </motion.h1>
-          <motion.p
-            variants={fadeUpVariants}
-            className="text-xs sm:text-sm md:text-base text-text-secondary max-w-xl mx-auto mb-6 leading-relaxed"
-          >
-            حرفية تشييد وتميّز عقاري يلبي تطلعاتك. نقدم لك مجمعات سكنية متكاملة الخدمات في جدة والرياض ومكة بتشطيبات وتصاميم هندسية استثنائية.
-          </motion.p>
 
+          {/* Highly Transparent Inner Card for Title and Text */}
           <motion.div
             variants={fadeUpVariants}
-            className="flex flex-wrap items-center justify-center gap-4"
+            className="px-4 py-3 sm:px-6 sm:py-4 max-w-2xl w-full bg-bg-midnight/10 backdrop-blur-md border border-gold-primary/45 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center gap-2.5"
           >
-            <a
-              href="#listings-section"
-              className="py-2.5 px-6 text-xs btn-premium-gold min-w-[190px]"
+            <motion.h1
+              variants={fadeUpVariants}
+              className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-extrabold text-text-primary leading-snug liquid-gold-heading"
             >
-              استعرض الوحدات المتاحة
-            </a>
-            <button
-              type="button"
-              className="py-2.5 px-6 text-xs btn-premium-glass min-w-[190px]"
-              onClick={() => setShowInquiryModal(true)}
+              <span className="block text-gold-primary mb-2">نعتمد أحدث التقنيات</span>
+              <span className="block text-text-secondary font-bold text-[0.88em]">لنربطكم بأفضل الفرص السكنية والاستثمارية</span>
+            </motion.h1>
+            <motion.p
+              variants={fadeUpVariants}
+              className="text-xs sm:text-sm md:text-base text-text-secondary max-w-2xl mx-auto leading-relaxed"
             >
-              اطلب استشارة مجانية
-            </button>
+              مشاريع سكنية استثنائية وحلول تمويلية متكاملة تلبي تطلعاتكم العقارية في أرقى مدن المملكة.
+            </motion.p>
           </motion.div>
         </motion.div>
 
@@ -479,7 +471,7 @@ export default function HomePage() {
           }}
           className="text-center mb-12"
         >
-          <motion.h2 variants={fadeUpVariants} className="text-xl sm:text-3xl font-extrabold text-text-primary mb-3 hover-premium-gold">اختر وجهتك المفضلة في المملكة</motion.h2>
+          <motion.h2 variants={fadeUpVariants} className="text-xl sm:text-3xl font-extrabold text-text-primary mb-3 liquid-gold-heading">اختر وجهتك المفضلة في المملكة</motion.h2>
           <motion.p variants={fadeUpVariants} className="text-sm text-text-secondary max-w-xl mx-auto">نساعدك على امتلاك منزل أحلامك في أرقى أحياء المدن الرئيسية</motion.p>
         </motion.div>
 
@@ -627,7 +619,7 @@ export default function HomePage() {
           >
             <div className="text-right mb-4 md:mb-0">
               <motion.span variants={fadeUpVariants} className="block text-xs font-semibold text-gold-primary uppercase">قائمتنا المحدثة</motion.span>
-              <motion.h2 variants={fadeUpVariants} className="text-xl sm:text-3xl font-extrabold text-text-primary mt-1 hover-premium-gold">تصفح آخر العروض والفرص الحالية</motion.h2>
+              <motion.h2 variants={fadeUpVariants} className="text-xl sm:text-3xl font-extrabold text-text-primary mt-1 liquid-gold-heading">تصفح آخر العروض والفرص الحالية</motion.h2>
             </div>
             <motion.span variants={fadeUpVariants} className="text-xs text-text-muted">
               تم العثور على <strong className="text-gold-primary font-mono">{filteredProperties.length}</strong> وحدة مطروحة
@@ -641,10 +633,6 @@ export default function HomePage() {
                   <PropertyCard
                     key={property.id}
                     property={property}
-                    onOpenCalculator={(p) => {
-                      setCalculatorProperty(p);
-                      document.getElementById('etmam-section')?.scrollIntoView({ behavior: 'smooth' });
-                    }}
                   />
                 ))}
               </div>
@@ -692,7 +680,7 @@ export default function HomePage() {
         <div className="relative w-full max-w-6xl mx-auto px-6 sm:px-8 z-10 flex flex-col md:flex-row items-center justify-center gap-10 md:gap-16 lg:gap-16">
 
           {/* Right Column: Text & Call to Action (Appears right on RTL) */}
-          <motion.div 
+          <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-80px" }}
@@ -705,7 +693,7 @@ export default function HomePage() {
             <motion.span variants={fadeUpVariants} className="inline-block py-1.5 px-4 text-[10px] font-extrabold text-gold-deep bg-gold-primary/10 border border-gold-primary/30 rounded-full">
               خدمة اطلب عقارك المتميزة
             </motion.span>
-            <motion.h2 variants={fadeUpVariants} className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-bg-midnight mb-2 hover-premium-gold">
+            <motion.h2 variants={fadeUpVariants} className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-bg-midnight mb-2 liquid-gold-heading">
               اطلب عقارك
             </motion.h2>
 
@@ -799,7 +787,7 @@ export default function HomePage() {
             className="text-center mb-16"
           >
             <motion.span variants={fadeUpVariants} className="block text-xs font-semibold text-gold-primary uppercase">مشاريعنا العقارية الكبرى</motion.span>
-            <motion.h2 variants={fadeUpVariants} className="text-xl sm:text-3xl font-extrabold text-text-primary mt-1 hover-premium-gold">نسعى لإيجاد مجتمعات سكنية متكاملة</motion.h2>
+            <motion.h2 variants={fadeUpVariants} className="text-xl sm:text-3xl font-extrabold text-text-primary mt-1 liquid-gold-heading">نسعى لإيجاد مجتمعات سكنية متكاملة</motion.h2>
           </motion.div>
 
           {/* Project Display details - Alternating (Amal Stars) */}
@@ -833,7 +821,7 @@ export default function HomePage() {
               }}
               className="space-y-6 text-right"
             >
-              <motion.h3 variants={fadeUpVariants} className="text-2xl font-bold text-text-primary hover-premium-gold">{PROJECTS[0].name}</motion.h3>
+              <motion.h3 variants={fadeUpVariants} className="text-2xl font-bold text-text-primary liquid-gold-heading">{PROJECTS[0].name}</motion.h3>
               <motion.p variants={fadeUpVariants} className="text-xs text-gold-primary font-semibold -mt-3">{PROJECTS[0].tagline}</motion.p>
 
               <motion.p variants={fadeUpVariants} className="text-sm text-text-secondary leading-relaxed">
@@ -908,7 +896,7 @@ export default function HomePage() {
             <motion.span variants={fadeUpVariants} className="inline-block py-1.5 px-4 text-[10px] font-extrabold text-gold-deep bg-gold-primary/10 border border-gold-primary/30 rounded-full">
               تجربة غامرة فريدة
             </motion.span>
-            <motion.h2 variants={fadeUpVariants} className="text-xl sm:text-3xl font-extrabold text-bg-midnight hover-premium-gold">جولة افتراضية تفاعلية 360°</motion.h2>
+            <motion.h2 variants={fadeUpVariants} className="text-xl sm:text-3xl font-extrabold text-bg-midnight liquid-gold-heading">جولة افتراضية تفاعلية 360°</motion.h2>
             <motion.p variants={fadeUpVariants} className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-md">
               عش تجربة التواجد الفعلي داخل أرقى مشاريعنا السكنية. اسحب الصورة البانورامية للمشاهدة حولك واكتشف التفاصيل الهندسية والتشطيبات الفاخرة للغرف المزدوجة والصالات الواسعة.
             </motion.p>
@@ -923,8 +911,8 @@ export default function HomePage() {
             </div>
           </motion.div>
 
-          {/* Interactive Panorama Canvas with Premium White Framed Border */}
-          <div className="lg:col-span-8 w-full z-10 rounded-2xl overflow-hidden border-4 border-white shadow-[0_16px_40px_rgba(6,13,26,0.08)] bg-white p-1 hover:shadow-[0_24px_50px_rgba(6,13,26,0.14)] transition-all duration-500">
+          {/* Interactive Panorama Canvas with Premium Dark Framed Border */}
+          <div className="lg:col-span-8 w-full z-10 rounded-3xl overflow-hidden border border-gold-primary/30 shadow-[0_25px_60px_rgba(0,0,0,0.5)] bg-bg-royal/20 p-1 hover:border-gold-primary/50 transition-all duration-500">
             <PanoramaViewer
               imageSrc="/projects/panorama-penthouse.webp"
               heightClass="h-[400px] sm:h-[450px]"
@@ -933,116 +921,190 @@ export default function HomePage() {
         </div>
       </section>
 
-
-
       {/* ----------------------------------------------------
-         9. financing program "إتمام" / Mortgage Calculator Section
+         7.8. Contact Form Section (اتصل بنا)
          ---------------------------------------------------- */}
-      <section id="etmam-section" className="relative w-full overflow-hidden py-24 bg-gradient-to-b from-[#0A1628] via-[#112240] to-[#0A1628] border-y border-border-gold/15 scroll-mt-24 z-10">
-        {/* Decorative Glowing Orbs */}
-        <div className="absolute top-0 right-1/4 w-[400px] h-[400px] bg-gradient-to-br from-gold-primary/5 to-transparent rounded-full blur-3xl -z-10 animate-pulse duration-[8000ms]"></div>
-        <div className="absolute bottom-0 left-1/4 w-[400px] h-[400px] bg-gradient-to-tr from-brand-primary/5 to-transparent rounded-full blur-3xl -z-10 animate-pulse duration-[10000ms]"></div>
+      <section id="contact-section" className="relative w-full overflow-hidden py-24 bg-gradient-to-b from-bg-navy via-bg-deep to-bg-navy border-y border-border-gold/15 z-10">
+        {/* Ambient Radial Gold/Blue Glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-gold-primary/10 via-brand-primary/10 to-gold-primary/10 rounded-full blur-3xl z-0 pointer-events-none opacity-80 animate-pulse duration-[8000ms]"></div>
 
-        <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-stretch">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10 text-center">
 
-            {/* Right Column: Info Details + Compressed Form (matches calculator height) */}
-            <div className="lg:col-span-5 flex flex-col justify-between gap-6 h-full">
-              {/* Info details */}
-              <motion.div
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-80px" }}
-                variants={{
-                  hidden: {},
-                  visible: { transition: { staggerChildren: 0.1 } }
+          {/* Centered Header */}
+          <div className="space-y-4 max-w-3xl mx-auto">
+            <div className="flex items-center justify-center gap-3">
+              <div className="h-[2px] w-12 bg-gold-primary"></div>
+              <span className="text-sm font-extrabold text-gold-primary font-tajawal uppercase tracking-wider">اتصل بنا</span>
+              <div className="h-[2px] w-12 bg-gold-primary"></div>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-black text-white leading-tight font-tajawal">أبق على اتصال</h2>
+            <p className="text-xs sm:text-sm text-text-secondary leading-relaxed max-w-xl mx-auto font-cairo">
+              تمتلك شركتنا العقارية عدداً من القوائم الفاخرة والحصرية المثالية للعملاء الدوليين.
+            </p>
+          </div>
+
+          {/* Centered Glassmorphic Form Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="w-full max-w-4xl mx-auto mt-12 z-10"
+          >
+            <div className="relative bg-bg-navy/70 backdrop-blur-xl border border-gold-primary/45 p-6 sm:p-10 rounded-3xl shadow-[0_30px_70px_rgba(0,0,0,0.6)]">
+              {/* Form header decoration line */}
+              <div className="absolute top-0 left-10 right-10 h-[2px] bg-gradient-to-r from-transparent via-gold-primary to-transparent"></div>
+
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  alert('شكراً لتواصلك معنا. سيقوم مستشارنا العقاري بالاتصال بك قريباً.');
                 }}
-                className="space-y-4 text-right"
+                className="space-y-6 text-right"
               >
-                <motion.span variants={fadeUpVariants} className="inline-block px-4 py-1 text-[11px] font-bold text-gold-primary bg-bg-royal/40 border border-gold-primary/30 rounded-full shadow-[0_0_15px_rgba(212,175,55,0.2)]">
-                  برنامج إتمام التمويلي
-                </motion.span>
-                <motion.h2 variants={fadeUpVariants} className="text-xl sm:text-2xl font-extrabold text-text-primary [text-shadow:0_2px_4px_rgba(0,0,0,0.3)] hover-premium-gold">
-                  اطلب تمويلك العقاري بأقل نسبة هامش ربح
-                </motion.h2>
-                <motion.p variants={fadeUpVariants} className="text-xs sm:text-sm text-text-secondary leading-relaxed">
-                  برنامج **إتمام** من شركة الغربية الذهبية يوفر لك حلولاً مالية متكاملة مخصصة لاحتياجاتك وطموحاتك السكنية، بالتعاون مع كبرى البنوك والمؤسسات التمويلية المعتمدة.
-                </motion.p>
-              </motion.div>
+                {/* Group 1: معلومات شخصية */}
+                <div className="space-y-4">
+                  <h3 className="text-xs font-bold text-gold-primary border-r-2 border-gold-primary pr-2.5">معلومات شخصية</h3>
 
-              {/* Spec Submission Form (Compressed) */}
-              <motion.div
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                variants={fadeUpVariants}
-                className="w-full bg-bg-royal/35 backdrop-blur-md border border-border-gold/25 rounded-2xl p-5 shadow-xl text-right flex-1 flex flex-col justify-center"
-              >
-                <h3 className="text-xs sm:text-sm font-extrabold text-white mb-1 font-cairo">
-                  هل تبحث عن مواصفات محددة؟ اطلب عقارك الآن
-                </h3>
-                <p className="text-[10px] sm:text-[11px] text-text-muted mb-4">
-                  قم بتسجيل مواصفاتك، وسيتواصل معك مستشارنا العقاري في أقل من 24 ساعة.
-                </p>
-
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    setInquirySuccess(true);
-                  }}
-                  className="space-y-3 text-right"
-                >
-                  <div className="grid grid-cols-2 gap-3">
-                    {/* Input Name */}
+                  {/* Row 1: اللقب (يختار), الاسم الأول, اسم العائلة */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
-                      <label className="block text-[9px] font-bold text-text-muted mb-1">الاسم بالكامل</label>
+                      <select
+                        title="اللقب"
+                        defaultValue="يختار"
+                        className="w-full bg-[#0F2040]/70 border border-white/20 focus:border-gold-primary/70 focus:bg-[#152A54]/80 rounded-xl px-4 py-3 text-xs text-text-primary focus:outline-none focus:ring-1 focus:ring-gold-primary/50 transition-all duration-300"
+                      >
+                        <option value="يختار" disabled>يختار</option>
+                        <option value="السيد">السيد</option>
+                        <option value="السيدة">السيدة</option>
+                        <option value="شركة">شركة / جهة</option>
+                      </select>
+                    </div>
+                    <div>
                       <input
                         type="text"
                         required
-                        className="w-full bg-bg-navy/60 border border-border-blue/20 focus:border-gold-primary rounded-lg px-3 py-2 text-xs text-text-primary focus:outline-none"
-                        placeholder="مثال: كريم أحمد"
+                        placeholder="الاسم الأول"
+                        className="w-full bg-bg-royal/40 border border-white/20 focus:border-gold-primary/70 focus:bg-bg-royal/60 rounded-xl px-4 py-3 text-xs text-text-primary placeholder:text-text-muted/65 focus:outline-none focus:ring-1 focus:ring-gold-primary/50 transition-all duration-300"
                       />
                     </div>
-
-                    {/* Input Phone */}
                     <div>
-                      <label className="block text-[9px] font-bold text-text-muted mb-1">رقم الجوال السعودي</label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="اسم العائلة"
+                        className="w-full bg-bg-royal/40 border border-white/20 focus:border-gold-primary/70 focus:bg-bg-royal/60 rounded-xl px-4 py-3 text-xs text-text-primary placeholder:text-text-muted/65 focus:outline-none focus:ring-1 focus:ring-gold-primary/50 transition-all duration-300"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Row 2: عنوان البريد الإلكتروني, رقم التليفون */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <input
+                        type="email"
+                        required
+                        placeholder="عنوان البريد الإلكتروني"
+                        className="w-full bg-bg-royal/40 border border-white/20 focus:border-gold-primary/70 focus:bg-bg-royal/60 rounded-xl px-4 py-3 text-xs text-text-primary placeholder:text-text-muted/65 focus:outline-none focus:ring-1 focus:ring-gold-primary/50 transition-all duration-300"
+                      />
+                    </div>
+                    <div>
                       <input
                         type="tel"
                         required
-                        pattern="^(05|009665|\+9665)\d{8}$"
-                        className="w-full bg-bg-navy/60 border border-border-blue/20 focus:border-gold-primary rounded-lg px-3 py-2 text-xs text-left font-mono text-text-primary focus:outline-none"
-                        placeholder="05xxxxxxxx"
+                        placeholder="رقم التليفون"
+                        className="w-full bg-bg-royal/40 border border-white/20 focus:border-gold-primary/70 focus:bg-bg-royal/60 rounded-xl px-4 py-3 text-xs text-text-primary placeholder:text-text-muted/65 focus:outline-none focus:ring-1 focus:ring-gold-primary/50 transition-all duration-300 text-left font-mono"
+                        dir="ltr"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Group 2: معلومات الملكية */}
+                <div className="space-y-4 pt-2">
+                  <h3 className="text-xs font-bold text-gold-primary border-r-2 border-gold-primary pr-2.5">معلومات الملكية</h3>
+
+                  {/* Row 1: يكتب (نوع العقار المفضّل), الرمز البريدي, مدينة */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <select
+                        title="نوع العقار / المشروع المفضل"
+                        defaultValue="يكتب"
+                        className="w-full bg-[#0F2040]/70 border border-white/20 focus:border-gold-primary/70 focus:bg-[#152A54]/80 rounded-xl px-4 py-3 text-xs text-text-primary focus:outline-none focus:ring-1 focus:ring-gold-primary/50 transition-all duration-300"
+                      >
+                        <option value="يكتب">يكتب</option>
+                        <option value="شقة">شقة</option>
+                        <option value="فيلا">فيلا</option>
+                        <option value="مشروع ابو هايل افينيو">مشروع ابو هايل افينيو</option>
+                        <option value="مشروع امل ستارز">مشروع امل ستارز</option>
+                        <option value="مشروع ريناد غاليري">مشروع ريناد غاليري</option>
+                        <option value="مشروع هتان التيسير">مشروع هتان التيسير</option>
+                        <option value="ملحق">ملحق</option>
+                      </select>
+                    </div>
+                    <div>
+                      <input
+                        type="text"
+                        placeholder="الرمز البريدي"
+                        className="w-full bg-bg-royal/40 border border-white/20 focus:border-gold-primary/70 focus:bg-bg-royal/60 rounded-xl px-4 py-3 text-xs text-text-primary placeholder:text-text-muted/65 focus:outline-none focus:ring-1 focus:ring-gold-primary/50 transition-all duration-300 font-mono"
+                      />
+                    </div>
+                    <div>
+                      <input
+                        type="text"
+                        placeholder="مدينة"
+                        className="w-full bg-bg-royal/40 border border-white/20 focus:border-gold-primary/70 focus:bg-bg-royal/60 rounded-xl px-4 py-3 text-xs text-text-primary placeholder:text-text-muted/65 focus:outline-none focus:ring-1 focus:ring-gold-primary/50 transition-all duration-300"
                       />
                     </div>
                   </div>
 
-                  {/* Submit */}
+                  {/* Row 2: غرف النوم, الحمامات, ميزانيتك */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                      <select
+                        title="غرف النوم"
+                        defaultValue="غرف نوم"
+                        className="w-full bg-[#0F2040]/70 border border-white/20 focus:border-gold-primary/70 focus:bg-[#152A54]/80 rounded-xl px-4 py-3 text-xs text-text-primary focus:outline-none focus:ring-1 focus:ring-gold-primary/50 transition-all duration-300"
+                      >
+                        <option value="غرف نوم" disabled>غرف نوم</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6+">6+</option>
+                      </select>
+                    </div>
+                    <div>
+                      <input
+                        type="number"
+                        placeholder="الحمامات"
+                        className="w-full bg-bg-royal/40 border border-white/20 focus:border-gold-primary/70 focus:bg-bg-royal/60 rounded-xl px-4 py-3 text-xs text-text-primary placeholder:text-text-muted/65 focus:outline-none focus:ring-1 focus:ring-gold-primary/50 transition-all duration-300"
+                      />
+                    </div>
+                    <div>
+                      <input
+                        type="text"
+                        placeholder="ميزانيتك"
+                        className="w-full bg-bg-royal/40 border border-white/20 focus:border-gold-primary/70 focus:bg-bg-royal/60 rounded-xl px-4 py-3 text-xs text-text-primary placeholder:text-text-muted/65 focus:outline-none focus:ring-1 focus:ring-gold-primary/50 transition-all duration-300"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Submit Button */}
+                <div className="pt-4">
                   <button
                     type="submit"
-                    className="w-full py-2.5 px-4 text-xs btn-premium-gold cursor-pointer"
+                    className="w-full py-4 text-xs font-bold text-white bg-gold-primary hover:bg-gold-warm rounded-xl transition-all duration-300 shadow-md hover:scale-[1.01] active:scale-[0.99] cursor-pointer"
                   >
-                    اطلب عقارك الآن
+                    إرسال
                   </button>
-                </form>
-
-                {inquirySuccess && (
-                  <div className="mt-3 p-2 bg-status-available/10 border border-status-available/20 rounded-lg text-status-available text-[10px] font-bold text-center">
-                    ✓ تم إرسال طلبك بنجاح! سيتصل بك مستشارنا العقاري قريباً.
-                  </div>
-                )}
-              </motion.div>
+                </div>
+              </form>
             </div>
+          </motion.div>
 
-            {/* Left Column: Calculator Panel */}
-            <div className="lg:col-span-7">
-              <MortgageCalculator
-                selectedProperty={calculatorProperty}
-                onClose={() => setCalculatorProperty(null)}
-              />
-            </div>
-
-          </div>
         </div>
       </section>
 
@@ -1065,12 +1127,12 @@ export default function HomePage() {
               hidden: {},
               visible: { transition: { staggerChildren: 0.1 } }
             }}
-            className="text-center mb-16"
+            className="flex flex-col items-center text-center mb-16"
           >
-            <motion.span variants={fadeUpVariants} className="inline-block py-1.5 px-4 text-[10px] font-extrabold text-gold-deep bg-gold-primary/10 border border-gold-primary/30 rounded-full uppercase">
+            <motion.span variants={fadeUpVariants} className="inline-block py-1.5 px-4 text-[10px] font-extrabold text-gold-deep bg-gold-primary/10 border border-gold-primary/30 rounded-full uppercase mb-3.5">
               سر تميزنا
             </motion.span>
-            <motion.h2 variants={fadeUpVariants} className="text-xl sm:text-3xl font-extrabold text-[#060D1A] mt-3 hover-premium-gold">لماذا يختار العملاء شركة الغربية الذهبية؟</motion.h2>
+            <motion.h2 variants={fadeUpVariants} className="text-xl sm:text-3xl font-extrabold text-[#060D1A] liquid-gold-heading leading-tight font-tajawal">لماذا يختار العملاء شركة الغربية الذهبية؟</motion.h2>
           </motion.div>
 
           <motion.div
@@ -1084,8 +1146,8 @@ export default function HomePage() {
           >
 
             {/* Card 1 */}
-            <motion.div 
-              variants={fadeUpVariants} 
+            <motion.div
+              variants={fadeUpVariants}
               whileHover={shouldReduceMotion ? {} : { scale: 1.04, y: -6 }}
               transition={{ type: "spring", stiffness: 400, damping: 20 }}
               className="group relative p-8 bg-white border border-gold-primary/50 rounded-3xl shadow-[0_25px_60px_rgba(201,169,110,0.12)] hover:shadow-[0_30px_70px_rgba(201,169,110,0.18)] transition-all duration-300 flex flex-col justify-between h-full cursor-pointer"
@@ -1105,8 +1167,8 @@ export default function HomePage() {
             </motion.div>
 
             {/* Card 2 */}
-            <motion.div 
-              variants={fadeUpVariants} 
+            <motion.div
+              variants={fadeUpVariants}
               whileHover={shouldReduceMotion ? {} : { scale: 1.04, y: -6 }}
               transition={{ type: "spring", stiffness: 400, damping: 20 }}
               className="group relative p-8 bg-white border border-gold-primary/50 rounded-3xl shadow-[0_25px_60px_rgba(201,169,110,0.12)] hover:shadow-[0_30px_70px_rgba(201,169,110,0.18)] transition-all duration-300 flex flex-col justify-between h-full cursor-pointer"
@@ -1126,8 +1188,8 @@ export default function HomePage() {
             </motion.div>
 
             {/* Card 3 */}
-            <motion.div 
-              variants={fadeUpVariants} 
+            <motion.div
+              variants={fadeUpVariants}
               whileHover={shouldReduceMotion ? {} : { scale: 1.04, y: -6 }}
               transition={{ type: "spring", stiffness: 400, damping: 20 }}
               className="group relative p-8 bg-white border border-gold-primary/50 rounded-3xl shadow-[0_25px_60px_rgba(201,169,110,0.12)] hover:shadow-[0_30px_70px_rgba(201,169,110,0.18)] transition-all duration-300 flex flex-col justify-between h-full cursor-pointer"
@@ -1147,8 +1209,8 @@ export default function HomePage() {
             </motion.div>
 
             {/* Card 4 */}
-            <motion.div 
-              variants={fadeUpVariants} 
+            <motion.div
+              variants={fadeUpVariants}
               whileHover={shouldReduceMotion ? {} : { scale: 1.04, y: -6 }}
               transition={{ type: "spring", stiffness: 400, damping: 20 }}
               className="group relative p-8 bg-white border border-gold-primary/50 rounded-3xl shadow-[0_25px_60px_rgba(201,169,110,0.12)] hover:shadow-[0_30px_70px_rgba(201,169,110,0.18)] transition-all duration-300 flex flex-col justify-between h-full cursor-pointer"
@@ -1190,21 +1252,21 @@ export default function HomePage() {
               hidden: {},
               visible: { transition: { staggerChildren: 0.1 } }
             }}
-            className="text-center mb-16"
+            className="flex flex-col items-center text-center mb-16"
           >
-            <motion.span variants={fadeUpVariants} className="inline-block py-1.5 px-4 text-[10px] font-extrabold text-gold-primary bg-bg-royal/60 border border-border-gold/20 rounded-full uppercase">
+            <motion.span variants={fadeUpVariants} className="inline-block py-1.5 px-4 text-[10px] font-extrabold text-gold-primary bg-bg-royal/60 border border-border-gold/20 rounded-full uppercase mb-3.5">
               آراء عملائنا
             </motion.span>
-            <motion.h2 variants={fadeUpVariants} className="text-xl sm:text-3xl font-extrabold text-text-primary mt-3 hover-premium-gold">
+            <motion.h2 variants={fadeUpVariants} className="text-xl sm:text-3xl font-extrabold text-text-primary liquid-gold-heading leading-tight font-tajawal">
               تجارب حقيقية لشركاء النجاح
             </motion.h2>
           </motion.div>
 
           {/* Carousel Container */}
           <div className="relative max-w-4xl mx-auto px-4 sm:px-12">
-            
+
             {/* Main Card with Swipe support & Premium Lighter Blue Glassmorphism */}
-            <motion.div 
+            <motion.div
               whileHover={shouldReduceMotion ? {} : { scale: 1.02, y: -4 }}
               transition={{ type: "spring", stiffness: 400, damping: 22 }}
               className="relative bg-bg-royal/45 backdrop-blur-2xl border border-gold-primary/30 rounded-[2.5rem] p-8 sm:p-12 md:p-16 shadow-[0_45px_90px_rgba(0,0,0,0.55)] hover:shadow-[0_55px_100px_rgba(201,169,110,0.15)] transition-all duration-500 overflow-hidden text-center min-h-[380px] sm:min-h-[340px] flex flex-col justify-between cursor-pointer"
@@ -1295,17 +1357,100 @@ export default function HomePage() {
                   key={idx}
                   type="button"
                   onClick={() => setCurrentTestimonialIndex(idx)}
-                  className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
-                    idx === currentTestimonialIndex 
-                      ? 'bg-gold-primary shadow-[0_0_8px_rgba(201,169,110,0.6)] w-6' 
-                      : 'bg-gold-primary/20 hover:bg-gold-primary/40 w-1.5'
-                  }`}
+                  className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${idx === currentTestimonialIndex
+                    ? 'bg-gold-primary shadow-[0_0_8px_rgba(201,169,110,0.6)] w-6'
+                    : 'bg-gold-primary/20 hover:bg-gold-primary/40 w-1.5'
+                    }`}
                   aria-label={`الانتقال إلى التقييم ${idx + 1}`}
                 />
               ))}
             </div>
 
           </div>
+        </div>
+      </section>
+
+      {/* ----------------------------------------------------
+         11.5. Success Partners Section (شركاء النجاح) - Light Premium Theme with Infinite Marquee
+         ---------------------------------------------------- */}
+      <section className="relative w-full overflow-hidden py-28 bg-gradient-to-br from-[#FAF8F5] via-[#FFFFFF] to-[#F7F3EB] border-b border-slate-200/40 z-10">
+        
+        {/* Luxury Architectural Grid Pattern */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(201,169,110,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(201,169,110,0.02)_1px,transparent_1px)] bg-[size:45px_45px] pointer-events-none -z-10 opacity-70" />
+
+        {/* Soft elegant background glow shapes */}
+        <div className="absolute top-0 left-[10%] w-[500px] h-[500px] bg-gradient-to-br from-gold-primary/6 to-transparent rounded-full blur-3xl -z-10 animate-pulse duration-[12000ms]"></div>
+        <div className="absolute bottom-0 right-[10%] w-[500px] h-[500px] bg-gradient-to-tl from-gold-warm/6 to-transparent rounded-full blur-3xl -z-10 animate-pulse duration-[15000ms]"></div>
+        
+        <div className="relative w-full mx-auto z-10">
+          
+          {/* Centered Header */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+            variants={{
+              hidden: {},
+              visible: { transition: { staggerChildren: 0.1 } }
+            }}
+            className="flex flex-col items-center text-center mb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+          >
+            <motion.span variants={fadeUpVariants} className="inline-block py-1.5 px-4 text-[10px] font-extrabold text-gold-deep bg-gold-primary/10 border border-gold-primary/30 rounded-full uppercase mb-3.5 tracking-wider">
+              شركاء النجاح
+            </motion.span>
+            <motion.h2 variants={fadeUpVariants} className="text-xl sm:text-3xl font-extrabold text-[#060D1A] liquid-gold-heading leading-tight font-tajawal">نعتز بثقتهم لبناء مستقبل واعد</motion.h2>
+            
+            {/* Elegant luxury gold separator */}
+            <motion.div 
+              variants={fadeUpVariants}
+              className="mt-5 flex items-center justify-center gap-2"
+            >
+              <div className="w-16 h-[1px] bg-gradient-to-r from-transparent to-gold-primary/60"></div>
+              <div className="w-2.5 h-2.5 rotate-45 border border-gold-primary/70 bg-[#FAF8F5] shadow-sm"></div>
+              <div className="w-16 h-[1px] bg-gradient-to-l from-transparent to-gold-primary/60"></div>
+            </motion.div>
+          </motion.div>
+
+          {/* Centered Partners Grid Container - Displays all 4 cards statically with staggered spring entrance animations */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-80px" }}
+            variants={{
+              hidden: {},
+              visible: { transition: { staggerChildren: 0.12 } }
+            }}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8"
+            dir="rtl"
+          >
+            {PARTNERS.map((partner) => (
+              <motion.div
+                key={partner.id}
+                variants={{
+                  hidden: { opacity: 0, y: 30, scale: 0.96 },
+                  visible: { 
+                    opacity: 1, 
+                    y: 0, 
+                    scale: 1,
+                    transition: { type: "spring", stiffness: 100, damping: 18 }
+                  }
+                }}
+                whileHover={{ scale: 1.03 }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                className="group relative flex items-center justify-center p-6 bg-white border border-gold-primary/30 hover:border-gold-primary/60 rounded-3xl h-[130px] transition-all duration-300 cursor-pointer overflow-hidden"
+              >
+                <div className="relative w-full h-full flex items-center justify-center">
+                  <Image
+                    src={partner.src}
+                    alt={partner.alt}
+                    width={140}
+                    height={70}
+                    className="object-contain transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </section>
 
@@ -1329,11 +1474,11 @@ export default function HomePage() {
             <div className="flex flex-col space-y-6">
               <div className="flex items-center gap-3 text-right">
                 <div className="relative w-14 h-14 flex items-center justify-center">
-                  <Image 
-                    src="/logo.webp" 
-                    alt="الغربية الذهبية" 
-                    width={52} 
-                    height={52} 
+                  <Image
+                    src="/logo.webp"
+                    alt="الغربية الذهبية"
+                    width={52}
+                    height={52}
                     className="object-contain"
                   />
                 </div>
@@ -1380,8 +1525,8 @@ export default function HomePage() {
                 <li><a href="#" className="hover:text-gold-primary hover:ps-1 transition-all duration-300 block">الرئيسية</a></li>
                 <li><a href="#listings-section" className="hover:text-gold-primary hover:ps-1 transition-all duration-300 block">الوحدات العقارية المعروضة</a></li>
                 <li><a href="#projects-section" className="hover:text-gold-primary hover:ps-1 transition-all duration-300 block">مشاريعنا المميزة</a></li>
-                <li><a href="#etmam-section" className="hover:text-gold-primary hover:ps-1 transition-all duration-300 block">حلول التمويل إتمام</a></li>
                 <li><a href="#about-section" className="hover:text-gold-primary hover:ps-1 transition-all duration-300 block">لماذا الغربية الذهبية؟</a></li>
+                <li><a href="#contact-section" className="hover:text-gold-primary hover:ps-1 transition-all duration-300 block">اتصل بنا</a></li>
               </ul>
             </div>
 
@@ -1416,6 +1561,16 @@ export default function HomePage() {
                   <Phone className="w-4 h-4 text-gold-primary animate-pulse" />
                   <span className="font-bold text-white font-mono" dir="ltr">0558837846</span>
                 </a>
+
+                <a href="tel:920016581" className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10 hover:border-gold-primary/40 hover:bg-white/10 transition-all duration-300 shadow-sm">
+                  <Phone className="w-4 h-4 text-gold-primary" />
+                  <span className="font-bold text-white font-mono" dir="ltr">الرقم الموحد: 920016581</span>
+                </a>
+
+                <div className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10 shadow-sm hover:border-gold-primary/30 transition-all duration-300">
+                  <MapPin className="w-4 h-4 text-gold-primary" />
+                  <span className="font-bold text-white">جدة ، حي الصفا</span>
+                </div>
 
                 <a href="mailto:info@alghrbia.sa" className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10 hover:border-gold-primary/40 hover:bg-white/10 transition-all duration-300 shadow-sm">
                   <Mail className="w-4 h-4 text-gold-primary" />

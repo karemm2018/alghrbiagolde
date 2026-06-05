@@ -9,7 +9,6 @@ import { Bed, Bath, Ruler, MapPin, Phone, MessageCircle, X } from 'lucide-react'
 
 interface PropertyCardProps {
   property: Property;
-  onOpenCalculator?: (property: Property) => void;
 }
 
 const cardVariants = {
@@ -34,7 +33,7 @@ const itemVariants = {
   }
 };
 
-export default function PropertyCard({ property, onOpenCalculator }: PropertyCardProps) {
+export default function PropertyCard({ property }: PropertyCardProps) {
   const [showCallModal, setShowCallModal] = useState(false);
 
   // Format currency with English numerals
@@ -106,8 +105,7 @@ export default function PropertyCard({ property, onOpenCalculator }: PropertyCar
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-40px" }}
-        className="group relative flex flex-col h-full bg-bg-navy/45 backdrop-blur-xl rounded-2xl overflow-hidden border border-white/22 transition-all duration-500 shadow-[0_12px_36px_rgba(0,0,0,0.3)] hover:-translate-y-2 hover:border-white/35 hover:bg-bg-navy/60 hover:shadow-[0_24px_50px_rgba(0,0,0,0.5),0_0_20px_rgba(255,255,255,0.08)] cursor-pointer"
-        onClick={() => onOpenCalculator?.(property)}
+        className="group relative flex flex-col h-full bg-bg-navy/45 backdrop-blur-xl rounded-2xl overflow-hidden border border-white/22 transition-all duration-500 shadow-[0_12px_36px_rgba(0,0,0,0.3)] hover:-translate-y-2 hover:border-white/35 hover:bg-bg-navy/60 hover:shadow-[0_24px_50px_rgba(0,0,0,0.5),0_0_20px_rgba(255,255,255,0.08)]"
       >
         {/* Top Gold Shimmer Bar */}
         <div className="absolute top-0 left-0 w-full h-[2.5px] bg-gradient-to-r from-transparent via-gold-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20"></div>
