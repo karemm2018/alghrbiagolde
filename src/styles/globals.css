@@ -129,12 +129,14 @@
   --font-cairo: var(--font-cairo), system-ui, -apple-system, sans-serif;
   --font-tajawal: var(--font-tajawal), system-ui, -apple-system, sans-serif;
   --font-aref-ruqaa: var(--font-aref-ruqaa), serif;
+  --font-el-messiri: var(--font-el-messiri), system-ui, sans-serif;
 
   /* Transitions */
   --transition-timing-function-luxury: cubic-bezier(0.22, 1, 0.36, 1);
 
   /* Animations */
-  --animate-marquee: marquee 32s linear infinite;
+  --animate-marquee: marquee 80s linear infinite;
+  --animate-marquee-ltr: marquee-ltr 120s linear infinite;
 
   @keyframes marquee {
     0% {
@@ -142,6 +144,15 @@
     }
     100% {
       transform: translateX(-50%);
+    }
+  }
+
+  @keyframes marquee-ltr {
+    0% {
+      transform: translateX(-50%);
+    }
+    100% {
+      transform: translateX(0%);
     }
   }
 }
@@ -152,7 +163,7 @@
 body {
   background-color: var(--bg-deep);
   color: var(--text-primary);
-  font-family: var(--font-cairo), system-ui, -apple-system, sans-serif;
+  font-family: var(--font-el-messiri), system-ui, sans-serif;
   overflow-x: hidden;
 }
 

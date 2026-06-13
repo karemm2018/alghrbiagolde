@@ -7,7 +7,7 @@ import { Home, ArrowLeft } from 'lucide-react';
 
 export default function NotFound() {
   return (
-    <div className="relative min-h-screen bg-bg-midnight text-text-primary flex flex-col items-center justify-center px-4 overflow-hidden font-cairo" dir="rtl">
+    <div className="relative min-h-screen bg-bg-midnight text-text-primary flex flex-col items-center justify-center px-4 overflow-hidden font-el-messiri" dir="rtl">
       {/* Background gradients */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-brand-deep/15 via-bg-midnight/70 to-bg-midnight/90 z-0"></div>
       

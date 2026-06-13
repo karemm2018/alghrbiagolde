@@ -1,6 +1,6 @@
 // src/app/layout.tsx
 import type { Metadata } from 'next';
-import { Cairo, Tajawal, Aref_Ruqaa } from 'next/font/google';
+import { Cairo, Tajawal, Aref_Ruqaa, El_Messiri } from 'next/font/google';
 import '../styles/globals.css';
 
 const cairo = Cairo({
@@ -24,6 +24,13 @@ const arefRuqaa = Aref_Ruqaa({
   weight: ['400', '700'],
 });
 
+const elMessiri = El_Messiri({
+  subsets: ['arabic'],
+  variable: '--font-el-messiri',
+  display: 'swap',
+  weight: ['400', '500', '600', '700'],
+});
+
 export const metadata: Metadata = {
   title: { 
     default: 'شركة الغربية الذهبية | عقارات فاخرة بالسعودية', 
@@ -39,7 +46,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ar" dir="rtl" className="scroll-smooth" suppressHydrationWarning>
-      <body className={`${cairo.variable} ${tajawal.variable} ${arefRuqaa.variable} font-cairo bg-bg-midnight antialiased text-text-primary`}>
+      <body className={`${cairo.variable} ${tajawal.variable} ${arefRuqaa.variable} ${elMessiri.variable} font-el-messiri bg-bg-midnight antialiased text-text-primary`}>
         {children}
       </body>
     </html>

@@ -180,7 +180,7 @@ export default function MortgageCalculator({ selectedProperty, onClose }: Mortga
             <h4 className="text-xs font-bold text-text-muted uppercase mb-1">
               القسط الشهري المتوقع
             </h4>
-             <p className="text-3xl md:text-4xl font-extrabold text-gold-primary font-cairo my-2">
+             <p className="text-3xl md:text-4xl font-extrabold text-gold-primary font-el-messiri my-2">
               {new Intl.NumberFormat('en-US').format(monthlyInstallment)} ر.س
             </p>
             <p className="text-[10px] text-text-subtle">
