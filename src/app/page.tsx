@@ -834,7 +834,7 @@ export default function HomePage() {
       {/* ----------------------------------------------------
          2. Hero Section (FullScreen Visual - Clean & Premium)
          ---------------------------------------------------- */}
-      <section className="relative h-screen w-full flex items-center justify-center bg-bg-deep overflow-hidden">
+      <section className="relative h-[100vh] w-full flex items-center justify-center bg-bg-deep overflow-hidden">
         {/* Dark luxury fallback background & overlay structure */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-brand-deep/15 via-bg-midnight/70 to-bg-midnight/90 z-0"></div>
 
