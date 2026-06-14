@@ -1057,7 +1057,7 @@ export default function HomePage() {
       {/* ----------------------------------------------------
          4. Cities Quick Grid - Premium Destinations
          ---------------------------------------------------- */}
-      <div className="w-full bg-gradient-to-b from-bg-deep via-bg-navy to-bg-deep border-t border-border-gold/15 py-24">
+      <div className="w-full bg-gradient-to-b from-bg-deep via-bg-navy to-bg-deep border-t border-border-gold/15 pt-[calc(6rem+5vh)] pb-24 md:py-24">
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial="hidden"
