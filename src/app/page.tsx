@@ -1367,7 +1367,7 @@ export default function HomePage() {
       {/* ----------------------------------------------------
          6.5. Request Property Custom Banner (اطلب عقارك بخطوة) - Full Width & Light Background
          ---------------------------------------------------- */}
-      <section className="relative w-full md:h-[70vh] min-h-[600px] overflow-hidden py-16 md:py-0 my-16 bg-transparent flex items-center">
+      <section className="relative w-full md:h-[70vh] min-h-[600px] overflow-hidden py-16 md:py-0 bg-bg-deep flex items-center">
         {/* Slanted Premium Light Background Divider */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#FAF8F5] via-[#FFFFFF] to-[#F5EFE4] -skew-y-2 origin-top-right border-y border-border-gold/25 z-0 shadow-inner"></div>
 
