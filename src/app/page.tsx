@@ -1518,7 +1518,7 @@ export default function HomePage() {
       {/* ----------------------------------------------------
          7.5. Interactive 360° Virtual Tour - Full Width & Light Background
          ---------------------------------------------------- */}
-      <section className="relative w-full overflow-hidden py-24 my-16 bg-transparent">
+      <section className="relative w-full overflow-hidden py-24 bg-bg-deep">
         {/* Premium Light Background Divider */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#FAF8F5] via-[#FFFFFF] to-[#F5EFE4] border-y border-slate-200/50 z-0 shadow-inner"></div>
 
@@ -1532,7 +1532,7 @@ export default function HomePage() {
               hidden: {},
               visible: { transition: { staggerChildren: 0.1 } }
             }}
-            className="lg:col-span-4 space-y-6 text-right z-10"
+            className="lg:col-span-4 flex flex-col items-center lg:items-start text-center lg:text-right space-y-4 lg:space-y-6 z-10"
           >
             <motion.span variants={fadeUpVariants} className="inline-block py-1.5 px-4 text-[10px] font-extrabold text-gold-deep bg-gold-primary/10 border border-gold-primary/30 rounded-full">
               تجربة غامرة فريدة
