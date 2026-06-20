@@ -39,6 +39,7 @@ import {
   Ruler
 } from 'lucide-react';
 import CustomSelect from '@/components/ui/CustomSelect';
+import { useInquiryStore } from '../store/useInquiryStore';
 
 const PanoramaViewer = dynamic(() => import('@/components/ui/PanoramaViewer'), {
   ssr: false,
@@ -611,14 +612,11 @@ export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [showMobileFilters, setShowMobileFilters] = useState<boolean>(false);
   const [isFiltersOpenComplete, setIsFiltersOpenComplete] = useState<boolean>(false);
-  const [showMobileMenu, setShowMobileMenu] = useState<boolean>(false);
-
-
-
-
-  // Interactive States
-  const [showInquiryModal, setShowInquiryModal] = useState(false);
-  const [inquirySuccess, setInquirySuccess] = useState(false);
+  const [showLocalFilters, setShowLocalFilters] = useState<boolean>(false);
+  const [isLocalFiltersOpenComplete, setIsLocalFiltersOpenComplete] = useState<boolean>(false);
+  const [propertiesViewMode, setPropertiesViewMode] = useState<'grid' | 'table'>('grid');
+  const [projectsViewMode, setProjectsViewMode] = useState<'grid' | 'table'>('grid');
+  const openInquiry = useInquiryStore((state) => state.open);
 
   // Search Submit Handler
   const handleSearch = (e: React.FormEvent) => {
@@ -712,124 +710,7 @@ export default function HomePage() {
   return (
     <div className="relative min-h-screen bg-bg-midnight text-text-primary overflow-x-hidden font-el-messiri" dir="rtl">
 
-      {/* ----------------------------------------------------
-         1. Fixed Glassmorphic Navigation Header (Navbar)
-         ---------------------------------------------------- */}
-      <header className="fixed top-4 left-1/2 -translate-x-1/2 w-[92%] max-w-6xl z-45 bg-white/10 backdrop-blur-xl border border-border-gold/30 rounded-[2rem] sm:rounded-full transition-all duration-500 shadow-[0_20px_50px_rgba(0,0,0,0.5)] hover:border-border-gold/50">
-        <div className="px-4 sm:px-10 h-16 sm:h-20 flex items-center justify-between">
 
-          {/* Logo (Right side in RTL) */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            <div className="relative w-9 h-9 sm:w-12 sm:h-12 flex items-center justify-center">
-              <Image
-                src="/logo.webp"
-                alt="الغربية الذهبية"
-                width={48}
-                height={48}
-                className="object-contain w-full h-full"
-                priority
-              />
-            </div>
-            <div className="text-right flex flex-col justify-center">
-              <span className="block text-xs sm:text-sm font-extrabold text-white leading-tight font-el-messiri">
-                الغربية <span className="bg-gradient-to-r from-gold-light via-gold-primary to-gold-warm bg-clip-text text-transparent font-black">الذهبية</span>
-              </span>
-              <span className="block text-[6px] sm:text-[8px] text-gold-primary/90 tracking-[0.2em] font-serif uppercase font-medium -mt-0.5">
-                AL GHRBIA GOLDEN
-              </span>
-            </div>
-          </div>
-
-          {/* Navigation links (Center) */}
-          <nav className="hidden md:flex items-center gap-8 text-sm font-semibold">
-            <Link href="/" className="text-white border-b-2 border-gold-primary pb-1">الرئيسية</Link>
-            <Link href="/properties" className="text-text-secondary hover:text-white transition-colors duration-200">العقارات</Link>
-            <Link href="/projects" className="text-text-secondary hover:text-white transition-colors duration-200">مشاريعنا</Link>
-            <Link href="/about" className="text-text-secondary hover:text-white transition-colors duration-200">من نحن</Link>
-            <Link href="/contact" className="text-text-secondary hover:text-white transition-colors duration-200">التواصل</Link>
-          </nav>
-
-          {/* CTA Button & Mobile Trigger (Left side in RTL) */}
-          <div className="flex items-center gap-1.5 sm:gap-3">
-            <button
-              type="button"
-              className="py-1.5 px-3 sm:py-2.5 sm:px-5 text-[10px] sm:text-xs font-bold btn-premium-gold shrink-0 font-el-messiri"
-              onClick={() => setShowInquiryModal(true)}
-            >
-              <span>احجز جولتك <span className="hidden sm:inline">الخاصة</span></span>
-            </button>
-
-            {/* Mobile Menu Toggle Button */}
-            <button
-              type="button"
-              onClick={() => setShowMobileMenu(!showMobileMenu)}
-              className="md:hidden w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center border border-border-gold/20 text-text-secondary hover:text-white transition-colors cursor-pointer shrink-0"
-              title="القائمة"
-              aria-label="القائمة"
-            >
-              {showMobileMenu ? (
-                <X className="w-5 h-5 text-gold-primary" />
-              ) : (
-                <svg className="w-5 h-5 text-gold-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              )}
-            </button>
-          </div>
-        </div>
-
-        {/* Mobile Navigation Drawer Dropdown */}
-        <AnimatePresence>
-          {showMobileMenu && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-              className="absolute top-full left-0 right-0 w-full mt-2.5 md:hidden z-40 overflow-hidden"
-            >
-              <div className="p-5 bg-bg-navy/95 backdrop-blur-2xl border border-border-gold/25 rounded-3xl shadow-2xl flex flex-col gap-3">
-                <Link 
-                  href="/" 
-                  onClick={() => setShowMobileMenu(false)}
-                  className="px-4 py-3 text-xs sm:text-sm text-white font-bold bg-white/5 rounded-xl border border-border-gold/15 flex items-center justify-between"
-                >
-                  <span>الرئيسية</span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-gold-primary"></span>
-                </Link>
-                <Link 
-                  href="/properties" 
-                  onClick={() => setShowMobileMenu(false)}
-                  className="px-4 py-3 text-xs sm:text-sm text-text-secondary hover:text-white transition-colors duration-200 border-b border-white/5"
-                >
-                  العقارات
-                </Link>
-                <Link 
-                  href="/projects" 
-                  onClick={() => setShowMobileMenu(false)}
-                  className="px-4 py-3 text-xs sm:text-sm text-text-secondary hover:text-white transition-colors duration-200 border-b border-white/5"
-                >
-                  مشاريعنا
-                </Link>
-                <Link 
-                  href="/about" 
-                  onClick={() => setShowMobileMenu(false)}
-                  className="px-4 py-3 text-xs sm:text-sm text-text-secondary hover:text-white transition-colors duration-200 border-b border-white/5"
-                >
-                  من نحن
-                </Link>
-                <Link 
-                  href="/contact" 
-                  onClick={() => setShowMobileMenu(false)}
-                  className="px-4 py-3 text-xs sm:text-sm text-text-secondary hover:text-white transition-colors duration-200"
-                >
-                  التواصل
-                </Link>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </header>
 
       {/* ----------------------------------------------------
          2. Hero Section (FullScreen Visual - Clean & Premium)
@@ -959,7 +840,7 @@ export default function HomePage() {
                   isFiltersOpenComplete ? 'overflow-visible' : 'overflow-hidden'
                 }`}
               >
-                <div className="p-5 sm:p-7 bg-bg-navy/95 backdrop-blur-2xl border border-border-gold/25 rounded-3xl shadow-2xl flex flex-col gap-4">
+                <div className="p-5 sm:p-7 bg-white/10 backdrop-blur-xl border border-border-gold/30 rounded-3xl shadow-2xl flex flex-col gap-4">
                   {/* Grid of inputs - exactly matching the old layout */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
                     {/* Filter 1: City */}
@@ -1289,46 +1170,248 @@ export default function HomePage() {
             </div>
             <motion.div
               variants={fadeUpVariants}
-              className="flex items-center gap-2 text-xs text-text-muted"
+              className="flex flex-wrap items-center gap-3 text-xs text-text-muted mt-2 md:mt-0"
             >
+              {/* View Switcher */}
+              <div className="flex items-center bg-bg-royal/40 border border-border-gold/15 rounded-lg p-0.5 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setPropertiesViewMode('grid')}
+                  className={`px-3 py-1.5 rounded-md transition-all duration-300 cursor-pointer text-xs font-semibold font-el-messiri ${
+                    propertiesViewMode === 'grid'
+                      ? 'bg-gold-primary text-bg-midnight font-bold shadow-md shadow-gold-primary/10'
+                      : 'text-text-muted hover:text-white'
+                  }`}
+                >
+                  كروت العرض
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPropertiesViewMode('table')}
+                  className={`px-3 py-1.5 rounded-md transition-all duration-300 cursor-pointer text-xs font-semibold font-el-messiri ${
+                    propertiesViewMode === 'table'
+                      ? 'bg-gold-primary text-bg-midnight font-bold shadow-md shadow-gold-primary/10'
+                      : 'text-text-muted hover:text-white'
+                  }`}
+                >
+                  جدول التفاصيل
+                </button>
+              </div>
+
+              {/* Local Filter Toggle */}
               <button
                 type="button"
-                onClick={() => {
-                  const filterSection = document.getElementById('search-filter-section');
-                  filterSection?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                  setShowMobileFilters(true);
-                }}
-                className="flex items-center justify-center p-1.5 rounded-lg bg-bg-royal/30 text-gold-primary border border-border-gold/15 hover:border-gold-primary hover:bg-gold-primary/10 transition-all duration-300 cursor-pointer shrink-0"
+                onClick={() => setShowLocalFilters(!showLocalFilters)}
+                className={`flex items-center justify-center p-1.5 rounded-lg border transition-all duration-300 cursor-pointer shrink-0 ${
+                  showLocalFilters
+                    ? 'bg-gold-primary text-bg-midnight border-gold-primary shadow-lg shadow-gold-primary/20 scale-95'
+                    : 'bg-bg-royal/30 text-gold-primary border border-border-gold/15 hover:border-gold-primary hover:bg-gold-primary/10'
+                }`}
                 title="تصفية العقارات"
               >
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
                 </svg>
               </button>
+
               <span>
                 تم العثور على <strong className="text-gold-primary font-mono">{filteredProperties.length}</strong> وحدة مطروحة
               </span>
             </motion.div>
           </motion.div>
 
+          {/* Local Filters Dropdown */}
+          <AnimatePresence>
+            {showLocalFilters && (
+              <motion.div
+                initial={{ opacity: 0, height: 0, y: -10 }}
+                animate={{ opacity: 1, height: 'auto', y: 0 }}
+                exit={{ opacity: 0, height: 0, y: -10 }}
+                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                onAnimationStart={() => setIsLocalFiltersOpenComplete(false)}
+                onAnimationComplete={() => {
+                  if (showLocalFilters) setIsLocalFiltersOpenComplete(true);
+                }}
+                className={`w-full mb-8 relative z-30 ${
+                  isLocalFiltersOpenComplete ? 'overflow-visible' : 'overflow-hidden'
+                }`}
+              >
+                <div className="p-5 sm:p-7 bg-white/10 backdrop-blur-xl border border-border-gold/30 rounded-3xl shadow-2xl flex flex-col gap-4">
+                  {/* Grid of inputs */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+                    {/* Filter 1: City */}
+                    <div className="space-y-1.5 font-sans text-right">
+                      <label htmlFor="local-filter-city" className="block text-xs font-bold text-text-muted mb-2 flex items-center gap-1 font-el-messiri justify-start dir-rtl">
+                        <MapPin className="w-3.5 h-3.5 text-gold-primary" /> المدينة
+                      </label>
+                      <CustomSelect
+                        id="local-filter-city"
+                        title="تصفية بالمدينة"
+                        options={CITY_OPTIONS}
+                        value={selectedCity}
+                        onChange={setSelectedCity}
+                      />
+                    </div>
+
+                    {/* Filter 2: Type */}
+                    <div className="space-y-1.5 font-sans text-right">
+                      <label htmlFor="local-filter-type" className="block text-xs font-bold text-text-muted mb-2 flex items-center gap-1 font-el-messiri justify-start dir-rtl">
+                        <Building className="w-3.5 h-3.5 text-gold-primary" /> نوع العقار
+                      </label>
+                      <CustomSelect
+                        id="local-filter-type"
+                        title="تصفية بنوع العقار"
+                        options={TYPE_OPTIONS}
+                        value={selectedType}
+                        onChange={setSelectedType}
+                      />
+                    </div>
+
+                    {/* Filter 3: Rooms */}
+                    <div className="space-y-1.5 font-sans text-right">
+                      <label htmlFor="local-filter-rooms" className="block text-xs font-bold text-text-muted mb-2 flex items-center gap-1 font-el-messiri justify-start dir-rtl">
+                        <Layers className="w-3.5 h-3.5 text-gold-primary" /> عدد الغرف
+                      </label>
+                      <CustomSelect
+                        id="local-filter-rooms"
+                        title="تصفية بعدد الغرف"
+                        options={ROOMS_OPTIONS}
+                        value={selectedRooms}
+                        onChange={setSelectedRooms}
+                      />
+                    </div>
+
+                    {/* Filter 4: Max Price */}
+                    <div className="space-y-1.5 font-sans text-right">
+                      <label htmlFor="local-filter-price" className="block text-xs font-bold text-text-muted mb-2 flex items-center gap-1 font-el-messiri justify-start dir-rtl">
+                        <DollarSign className="w-3.5 h-3.5 text-gold-primary" /> السعر الأقصى
+                      </label>
+                      <CustomSelect
+                        id="local-filter-price"
+                        title="تصفية بالحد الأقصى للسعر"
+                        options={PRICE_OPTIONS}
+                        value={maxPrice}
+                        onChange={setMaxPrice}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Reset filters action link below if any active */}
+                  {(selectedCity !== 'all' || selectedType !== 'all' || selectedRooms !== 'all' || maxPrice !== 'all') && (
+                    <div className="flex justify-end pt-1">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedCity('all');
+                          setSelectedType('all');
+                          setSelectedRooms('all');
+                          setMaxPrice('all');
+                        }}
+                        className="text-xs text-text-muted hover:text-white transition-colors duration-200 underline cursor-pointer font-el-messiri"
+                      >
+                        إعادة تعيين الفلاتر
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
           {filteredProperties.length > 0 ? (
             <div className="space-y-12">
-              {/* Featured Property Card (Static) */}
-              {featuredProperty && (
-                <FeaturedPropertyCard property={featuredProperty} />
-              )}
+              {propertiesViewMode === 'table' ? (
+                <div className="w-full overflow-auto max-h-[70vh] rounded-2xl border-2 border-gold-primary/50 bg-[#0F2342]/90 backdrop-blur-xl shadow-2xl scrollbar-thin scrollbar-thumb-gold-primary scrollbar-track-transparent" dir="ltr">
+                  <table className="w-full min-w-[950px] border-collapse text-right text-xs sm:text-[13px]" dir="rtl">
+                    <thead className="sticky top-0 z-10 bg-[#18325C]/95 backdrop-blur-md">
+                      <tr className="border-b border-border-gold/30 text-gold-primary font-el-messiri">
+                        <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0">الصورة</th>
+                        <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0">اسم الوحدة</th>
+                        <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0">النوع</th>
+                        <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0">الموقع</th>
+                        <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0">المساحة</th>
+                        <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0">الغرف / الحمامات</th>
+                        <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0">السعر</th>
+                        <th className="py-4 px-5 font-bold whitespace-nowrap text-center border-x border-border-gold/15 first:border-r-0 last:border-l-0">التفاصيل</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-border-gold/15 text-white">
+                      {filteredProperties.map((property) => {
+                        // Translate type
+                        let typeLabel = '';
+                        if (property.type === 'apartment') typeLabel = 'شقة';
+                        else if (property.type === 'villa') typeLabel = 'فيلا';
+                        else if (property.type === 'annex') typeLabel = 'ملحق';
+                        else if (property.type === 'penthouse') typeLabel = 'بنتهاوس';
+                        else if (property.type === 'duplex') typeLabel = 'دوبلكس';
 
-              {/* Carousel of Simplified Property Cards */}
-              {carouselProperties.length > 0 && (
-                <div className="w-full relative overflow-hidden py-4 select-none" dir="ltr">
-                  <div className="flex flex-row flex-nowrap gap-4 sm:gap-6 w-max animate-marquee-ltr hover:[animation-play-state:paused] cursor-pointer">
-                    {getMarqueeItems(carouselProperties).map((property, idx) => (
-                      <div key={`${property.id}-marquee-${idx}`} dir="rtl">
-                        <SimplifiedPropertyCard property={property} />
-                      </div>
-                    ))}
-                  </div>
+                        return (
+                          <tr key={property.id} className="odd:bg-[#0F2342]/40 even:bg-[#142B4E]/60 hover:bg-gold-primary/[0.08] transition-colors duration-150">
+                            <td className="py-3 px-5 border-x border-border-gold/10 first:border-r-0 last:border-l-0">
+                              <div className="relative w-14 h-10 rounded-lg overflow-hidden border border-border-gold/20 shadow-sm shrink-0">
+                                <Image
+                                  src={property.media.thumbnail}
+                                  alt={property.title}
+                                  fill
+                                  sizes="56px"
+                                  className="object-cover"
+                                />
+                              </div>
+                            </td>
+                            <td className="py-3 px-5 font-semibold text-white whitespace-nowrap border-x border-border-gold/10 first:border-r-0 last:border-l-0">
+                              {property.title}
+                            </td>
+                            <td className="py-3 px-5 text-text-secondary whitespace-nowrap border-x border-border-gold/10 first:border-r-0 last:border-l-0">
+                              <span className="inline-block py-0.5 px-2.5 text-[11px] font-medium text-gold-primary bg-gold-primary/10 border border-gold-primary/20 rounded-full">
+                                {typeLabel}
+                              </span>
+                            </td>
+                            <td className="py-3 px-5 text-text-secondary whitespace-nowrap border-x border-border-gold/10 first:border-r-0 last:border-l-0">
+                              {property.location.city}، {property.location.district}
+                            </td>
+                            <td className="py-3 px-5 font-mono text-gold-primary whitespace-nowrap border-x border-border-gold/10 first:border-r-0 last:border-l-0 font-semibold">
+                              {property.specs.area} م²
+                            </td>
+                            <td className="py-3 px-5 text-text-secondary whitespace-nowrap border-x border-border-gold/10 first:border-r-0 last:border-l-0">
+                              {property.specs.bedrooms} غرف / {property.specs.bathrooms} حمام
+                            </td>
+                            <td className="py-3 px-5 font-bold text-gold-primary font-mono whitespace-nowrap border-x border-border-gold/10 first:border-r-0 last:border-l-0">
+                              {property.pricing.price.toLocaleString()} ر.س
+                            </td>
+                            <td className="py-3 px-5 text-center border-x border-border-gold/10 first:border-r-0 last:border-l-0">
+                              <Link
+                                href={`/properties/${property.slug}`}
+                                className="py-1.5 px-5 text-xs font-bold btn-premium-gold rounded-md inline-block font-el-messiri whitespace-nowrap min-w-[125px] text-center"
+                              >
+                                عرض كامل التفاصيل
+                              </Link>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
                 </div>
+              ) : (
+                <>
+                  {/* Featured Property Card (Static) */}
+                  {featuredProperty && (
+                    <FeaturedPropertyCard property={featuredProperty} />
+                  )}
+
+                  {/* Carousel of Simplified Property Cards */}
+                  {carouselProperties.length > 0 && (
+                    <div className="w-full relative overflow-hidden py-4 select-none" dir="ltr">
+                      <div className="flex flex-row flex-nowrap gap-4 sm:gap-6 w-max animate-marquee-ltr hover:[animation-play-state:paused] cursor-pointer">
+                        {getMarqueeItems(carouselProperties).map((property, idx) => (
+                          <div key={`${property.id}-marquee-${idx}`} dir="rtl">
+                            <SimplifiedPropertyCard property={property} />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </>
               )}
 
               {/* View All Properties Golden CTA Button */}
@@ -1431,7 +1514,7 @@ export default function HomePage() {
             <motion.div variants={fadeUpVariants} className="pt-4">
               <button
                 type="button"
-                onClick={() => setShowInquiryModal(true)}
+                onClick={openInquiry}
                 className="py-3.5 px-12 text-xs sm:text-sm font-extrabold bg-bg-midnight hover:bg-gold-primary text-white hover:text-bg-midnight border border-border-gold/30 rounded-full cursor-pointer hover:scale-[1.03] active:scale-[0.97] transition-all duration-300 shadow-md hover:shadow-xl shadow-bg-midnight/10"
               >
                 اطلب الآن
@@ -1482,24 +1565,118 @@ export default function HomePage() {
           >
             <motion.span variants={fadeUpVariants} className="block text-xs font-semibold text-gold-primary uppercase">مشاريعنا العقارية الكبرى</motion.span>
             <motion.h2 variants={fadeUpVariants} className="text-xl sm:text-3xl font-extrabold text-text-primary mt-1 liquid-gold-heading">نسعى لإيجاد مجتمعات سكنية متكاملة</motion.h2>
-          </motion.div>
-
-          {/* Featured Project Card (Static) */}
-          {featuredProject && (
-            <FeaturedProjectCard project={featuredProject} onExplore={handleExploreProjectCity} />
-          )}
-
-          {/* Carousel of Simplified Project Cards */}
-          {carouselProjects.length > 0 && (
-            <div className="w-full relative overflow-hidden py-4 select-none" dir="ltr">
-              <div className="flex flex-row flex-nowrap gap-4 sm:gap-6 w-max animate-marquee-ltr hover:[animation-play-state:paused] cursor-pointer">
-                {getProjectMarqueeItems(carouselProjects).map((project, idx) => (
-                  <div key={`${project.id}-marquee-${idx}`} dir="rtl">
-                    <SimplifiedProjectCard project={project} onExplore={handleExploreProjectCity} />
-                  </div>
-                ))}
+            
+            {/* Projects View Switcher */}
+            <div className="flex justify-center mt-6">
+              <div className="flex items-center bg-bg-royal/40 border border-border-gold/15 rounded-lg p-0.5 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setProjectsViewMode('grid')}
+                  className={`px-4 py-1.5 rounded-md transition-all duration-300 cursor-pointer text-xs font-semibold font-el-messiri ${
+                    projectsViewMode === 'grid'
+                      ? 'bg-gold-primary text-bg-midnight font-bold shadow-md shadow-gold-primary/10'
+                      : 'text-text-muted hover:text-white'
+                  }`}
+                >
+                  كروت العرض
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setProjectsViewMode('table')}
+                  className={`px-4 py-1.5 rounded-md transition-all duration-300 cursor-pointer text-xs font-semibold font-el-messiri ${
+                    projectsViewMode === 'table'
+                      ? 'bg-gold-primary text-bg-midnight font-bold shadow-md shadow-gold-primary/10'
+                      : 'text-text-muted hover:text-white'
+                  }`}
+                >
+                  جدول التفاصيل
+                </button>
               </div>
             </div>
+          </motion.div>
+
+          {/* Projects Content Render */}
+          {projectsViewMode === 'table' ? (
+            <div className="w-full overflow-auto max-h-[70vh] rounded-2xl border-2 border-gold-primary/50 bg-[#0F2342]/90 backdrop-blur-xl shadow-2xl scrollbar-thin scrollbar-thumb-gold-primary scrollbar-track-transparent mb-12" dir="ltr">
+              <table className="w-full min-w-[950px] border-collapse text-right text-xs sm:text-[13px]" dir="rtl">
+                <thead className="sticky top-0 z-10 bg-[#18325C]/95 backdrop-blur-md">
+                  <tr className="border-b border-border-gold/30 text-gold-primary font-el-messiri">
+                    <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0">الصورة</th>
+                    <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0">اسم المشروع</th>
+                    <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0">الموقع</th>
+                    <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0">إجمالي الوحدات</th>
+                    <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0">الوحدات المتاحة</th>
+                    <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0">نطاق الأسعار</th>
+                    <th className="py-4 px-5 font-bold whitespace-nowrap text-center border-x border-border-gold/15 first:border-r-0 last:border-l-0">التفاصيل</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border-gold/15 text-white">
+                  {PROJECTS.map((project) => {
+                    return (
+                      <tr key={project.id} className="odd:bg-[#0F2342]/40 even:bg-[#142B4E]/60 hover:bg-gold-primary/[0.08] transition-colors duration-150">
+                        <td className="py-3 px-5 border-x border-border-gold/10 first:border-r-0 last:border-l-0">
+                          <div className="relative w-14 h-10 rounded-lg overflow-hidden border border-border-gold/20 shadow-sm shrink-0">
+                            <Image
+                              src={project.media.hero}
+                              alt={project.name}
+                              fill
+                              sizes="56px"
+                              className="object-cover"
+                            />
+                          </div>
+                        </td>
+                        <td className="py-3 px-5 font-semibold border-x border-border-gold/10 first:border-r-0 last:border-l-0">
+                          <div className="flex flex-col gap-0.5 text-right">
+                            <span className="font-bold text-white whitespace-nowrap">{project.name}</span>
+                            {project.tagline && <span className="text-[11px] text-text-muted whitespace-nowrap">{project.tagline}</span>}
+                          </div>
+                        </td>
+                        <td className="py-3 px-5 text-text-secondary whitespace-nowrap border-x border-border-gold/10 first:border-r-0 last:border-l-0">
+                          {project.location.city}، {project.location.district}
+                        </td>
+                        <td className="py-3 px-5 text-text-secondary whitespace-nowrap border-x border-border-gold/10 first:border-r-0 last:border-l-0">{project.specs.totalUnits} وحدة</td>
+                        <td className="py-3 px-5 text-gold-primary font-bold whitespace-nowrap border-x border-border-gold/10 first:border-r-0 last:border-l-0">
+                          <span className="inline-block py-0.5 px-2.5 text-[11px] font-bold text-gold-primary bg-gold-primary/10 border border-gold-primary/20 rounded-full">
+                            {project.specs.availableUnits} متاح
+                          </span>
+                        </td>
+                        <td className="py-3 px-5 font-bold text-gold-primary font-mono whitespace-nowrap border-x border-border-gold/10 first:border-r-0 last:border-l-0">
+                          من {project.priceRange.min.toLocaleString()} إلى {project.priceRange.max.toLocaleString()} ر.س
+                        </td>
+                        <td className="py-3 px-5 text-center border-x border-border-gold/10 first:border-r-0 last:border-l-0">
+                          <Link
+                            href={`/projects/${project.slug}`}
+                            className="py-1.5 px-5 text-xs font-bold btn-premium-gold rounded-md inline-block font-el-messiri whitespace-nowrap min-w-[125px] text-center"
+                          >
+                            عرض كامل التفاصيل
+                          </Link>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <>
+              {/* Featured Project Card (Static) */}
+              {featuredProject && (
+                <FeaturedProjectCard project={featuredProject} onExplore={handleExploreProjectCity} />
+              )}
+
+              {/* Carousel of Simplified Project Cards */}
+              {carouselProjects.length > 0 && (
+                <div className="w-full relative overflow-hidden py-4 select-none" dir="ltr">
+                  <div className="flex flex-row flex-nowrap gap-4 sm:gap-6 w-max animate-marquee-ltr hover:[animation-play-state:paused] cursor-pointer">
+                    {getProjectMarqueeItems(carouselProjects).map((project, idx) => (
+                      <div key={`${project.id}-marquee-${idx}`} dir="rtl">
+                        <SimplifiedProjectCard project={project} onExplore={handleExploreProjectCity} />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </>
           )}
 
           {/* View All Projects Golden CTA Button */}
@@ -1545,7 +1722,7 @@ export default function HomePage() {
               <button
                 type="button"
                 className="py-3 px-6 text-xs btn-premium-gold min-w-[200px]"
-                onClick={() => setShowInquiryModal(true)}
+                onClick={openInquiry}
               >
                 احجز جولة حضورية خاصة
               </button>
@@ -2083,324 +2260,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ----------------------------------------------------
-         12. Bottom Footer - Centered & Ultra-Premium with Layered Skyline SVG
-         ---------------------------------------------------- */}
-      <footer className="relative bg-gradient-to-b from-bg-deep via-bg-navy to-bg-deep pt-24 pb-0 overflow-hidden flex flex-col justify-between" dir="rtl">
-        {/* Premium gradient top divider */}
-        <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-[#C9A96E]/50 to-transparent z-20" />
-        {/* Glow overlay */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[200px] bg-gradient-to-r from-brand-primary/10 via-gold-primary/10 to-brand-primary/10 rounded-full blur-3xl -z-10"></div>
 
-        {/* Skyline Background - Parallax */}
-        <div className="absolute inset-0 select-none pointer-events-none z-0 footer-parallax-bg" />
-
-        <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16 text-right">
-
-            {/* Column 1: Brand & Credentials */}
-            <div className="flex flex-col space-y-6">
-              <div className="flex items-center gap-3 text-right">
-                <div className="relative w-14 h-14 flex items-center justify-center">
-                  <Image
-                    src="/logo.webp"
-                    alt="الغربية الذهبية"
-                    width={52}
-                    height={52}
-                    className="object-contain"
-                  />
-                </div>
-                <div>
-                  <h4 className="text-md font-extrabold text-white leading-tight font-el-messiri">
-                    الغربية <span className="bg-gradient-to-r from-gold-light via-gold-primary to-gold-warm bg-clip-text text-transparent font-black">الذهبية</span>
-                  </h4>
-                  <p className="text-[8px] text-gold-primary/90 tracking-[0.2em] font-serif uppercase font-medium -mt-0.5">
-                    AL GHRBIA GOLDEN
-                  </p>
-                </div>
-              </div>
-
-              <p className="text-xs text-slate-300 leading-relaxed font-el-messiri">
-                أرقى المجمعات السكنية والفلل الفاخرة in المملكة العربية السعودية. نجسّد الفخامة في كل تفصيل إنشائي وتصميمي لنقدم تجربة عيش تليق بتطلعات عملائنا.
-              </p>
-
-              {/* License Cards */}
-              <div className="space-y-3 pt-2">
-                {/* Fal Card */}
-                <div className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/10 shadow-sm hover:border-gold-primary/30 transition-all duration-300">
-                  <div className="text-right">
-                    <span className="block text-[8px] text-slate-400">الترخيص العقاري (فال)</span>
-                    <span className="block text-[11px] font-bold text-white font-mono">1200021665</span>
-                  </div>
-                  <div className="px-2.5 py-1 rounded bg-gold-primary/10 border border-gold-primary/20 text-gold-light text-[9px] font-extrabold font-mono">FAL</div>
-                </div>
-
-                {/* Rega Card */}
-                <div className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/10 shadow-sm hover:border-gold-primary/30 transition-all duration-300">
-                  <div className="text-right">
-                    <span className="block text-[8px] text-slate-400">الهيئة العامة للعقار</span>
-                    <span className="block text-[11px] font-bold text-white font-mono">الترخيص: 1100018593</span>
-                  </div>
-                  <div className="px-2 py-1 rounded bg-brand-primary/10 border border-brand-primary/20 text-brand-light text-[9px] font-extrabold font-mono">REGA</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Column 2: Quick Links */}
-            <div className="flex flex-col space-y-5">
-              <h3 className="text-sm font-bold text-white border-r-2 border-gold-primary pr-3 leading-none font-el-messiri">روابط سريعة</h3>
-              <ul className="space-y-3 text-xs text-slate-300">
-                <li><a href="#" className="hover:text-gold-primary hover:ps-1 transition-all duration-300 block">الرئيسية</a></li>
-                <li><a href="#listings-section" className="hover:text-gold-primary hover:ps-1 transition-all duration-300 block">الوحدات العقارية المعروضة</a></li>
-                <li><a href="#projects-section" className="hover:text-gold-primary hover:ps-1 transition-all duration-300 block">مشاريعنا المميزة</a></li>
-                <li><a href="#about-section" className="hover:text-gold-primary hover:ps-1 transition-all duration-300 block">لماذا الغربية الذهبية؟</a></li>
-                <li><a href="#contact-section" className="hover:text-gold-primary hover:ps-1 transition-all duration-300 block">اتصل بنا</a></li>
-              </ul>
-            </div>
-
-            {/* Column 3: Featured Projects */}
-            <div className="flex flex-col space-y-5">
-              <h3 className="text-sm font-bold text-white border-r-2 border-gold-primary pr-3 leading-none font-el-messiri">مشاريعنا الفاخرة</h3>
-              <ul className="space-y-3.5 text-xs text-slate-300">
-                <li className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-status-available"></span>
-                  <a href="#projects-section" className="hover:text-gold-primary transition-colors duration-200 font-el-messiri">مجمع أبو هايل نورت (متاح)</a>
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-status-available"></span>
-                  <a href="#projects-section" className="hover:text-gold-primary transition-colors duration-200 font-el-messiri">فيلا مخطط السعيد (متاح)</a>
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-status-soon"></span>
-                  <a href="#projects-section" className="hover:text-gold-primary transition-colors duration-200 font-el-messiri">ملحق روف أمل ستارز (قريباً)</a>
-                </li>
-              </ul>
-            </div>
-
-            {/* Column 4: Private Consultation */}
-            <div className="flex flex-col space-y-5">
-              <h3 className="text-sm font-bold text-white border-r-2 border-gold-primary pr-3 leading-none font-el-messiri">الاستشارات العقارية</h3>
-              <p className="text-xs text-slate-300 leading-relaxed font-el-messiri">
-                تواصل مباشر مع مستشارك العقاري لحجز جولات معاينة خاصة ومناقشة تفاصيل الحجز.
-              </p>
-
-              <div className="space-y-3 text-xs text-slate-300">
-                <a href="tel:0558837846" className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10 hover:border-gold-primary/40 hover:bg-white/10 transition-all duration-300 shadow-sm">
-                  <Phone className="w-4 h-4 text-gold-primary animate-pulse" />
-                  <span className="font-bold text-white font-mono" dir="ltr">0558837846</span>
-                </a>
-
-                <a href="tel:920016581" className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10 hover:border-gold-primary/40 hover:bg-white/10 transition-all duration-300 shadow-sm">
-                  <Phone className="w-4 h-4 text-gold-primary" />
-                  <span className="font-bold text-white font-mono" dir="ltr">الرقم الموحد: 920016581</span>
-                </a>
-
-                <div className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10 shadow-sm hover:border-gold-primary/30 transition-all duration-300">
-                  <MapPin className="w-4 h-4 text-gold-primary" />
-                  <span className="font-bold text-white">جدة ، حي الصفا</span>
-                </div>
-
-                <a href="mailto:info@alghrbia.sa" className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10 hover:border-gold-primary/40 hover:bg-white/10 transition-all duration-300 shadow-sm">
-                  <Mail className="w-4 h-4 text-gold-primary" />
-                  <span className="font-mono text-white">info@alghrbia.sa</span>
-                </a>
-              </div>
-
-              <button
-                type="button"
-                onClick={() => setShowInquiryModal(true)}
-                className="w-full py-3 px-4 text-xs btn-premium-gold cursor-pointer"
-              >
-                طلب جولة معاينة خاصة
-              </button>
-            </div>
-
-          </div>
-
-          {/* Social Row & Corporate details */}
-          <div className="pt-8 flex flex-col md:flex-row justify-between items-center gap-6 mb-16">
-            {/* Social circle buttons */}
-            <div className="flex items-center gap-4">
-              {/* WhatsApp */}
-              <a href="https://api.whatsapp.com/send?phone=966558837846" target="_blank" rel="noopener noreferrer" className="w-11 h-11 rounded-full bg-bg-royal/60 border border-gold-primary/35 flex items-center justify-center hover:bg-bg-royal hover:border-gold-primary text-gold-primary hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-[0_0_15px_rgba(201,169,110,0.4)] shadow-md" aria-label="WhatsApp">
-                <MessageCircle className="w-5 h-5" />
-              </a>
-              {/* Instagram */}
-              <a href="#" className="w-11 h-11 rounded-full bg-bg-royal/60 border border-gold-primary/35 flex items-center justify-center hover:bg-bg-royal hover:border-gold-primary text-gold-primary hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-[0_0_15px_rgba(201,169,110,0.4)] shadow-md" aria-label="Instagram">
-                <Instagram className="w-5 h-5" />
-              </a>
-              {/* X / Twitter */}
-              <a href="#" className="w-11 h-11 rounded-full bg-bg-royal/60 border border-gold-primary/35 flex items-center justify-center hover:bg-bg-royal hover:border-gold-primary text-gold-primary hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-[0_0_15px_rgba(201,169,110,0.4)] shadow-md" aria-label="X (Twitter)">
-                <svg className="w-4.5 h-4.5 fill-current" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                </svg>
-              </a>
-              {/* LinkedIn */}
-              <a href="#" className="w-11 h-11 rounded-full bg-bg-royal/60 border border-gold-primary/35 flex items-center justify-center hover:bg-bg-royal hover:border-gold-primary text-gold-primary hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-[0_0_15px_rgba(201,169,110,0.4)] shadow-md" aria-label="LinkedIn">
-                <Linkedin className="w-5 h-5" />
-              </a>
-              {/* Facebook */}
-              <a href="#" className="w-11 h-11 rounded-full bg-bg-royal/60 border border-gold-primary/35 flex items-center justify-center hover:bg-bg-royal hover:border-gold-primary text-gold-primary hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-[0_0_15px_rgba(201,169,110,0.4)] shadow-md" aria-label="Facebook">
-                <Facebook className="w-5 h-5" />
-              </a>
-              {/* YouTube */}
-              <a href="#" className="w-11 h-11 rounded-full bg-bg-royal/60 border border-gold-primary/35 flex items-center justify-center hover:bg-bg-royal hover:border-gold-primary text-gold-primary hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-[0_0_15px_rgba(201,169,110,0.4)] shadow-md" aria-label="YouTube">
-                <Youtube className="w-5 h-5" />
-              </a>
-            </div>
-
-            {/* Corporate Registration Info */}
-            <div className="text-right text-[10px] text-slate-400 leading-relaxed font-el-messiri">
-              <p className="font-semibold text-slate-300">شركة الغربية الذهبية للتطوير العقاري | سجل تجاري: 4030489953 | الرقم الموحد: 920016581</p>
-              <p>جدة، حي السلامة، طريق الأمير سلطان | البريد الإلكتروني: info@alghrbia.sa | Alghrbia Golden Real Estate Development</p>
-            </div>
-          </div>
-
-        </div>
-
-        {/* Bottom copyright bar */}
-        <div className="relative w-full bg-[#060D1A]/90 backdrop-blur-sm py-4 z-10 text-center pointer-events-auto">
-          {/* Premium gradient divider */}
-          <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#C9A96E]/35 to-transparent" />
-          <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center text-[10px] text-slate-400">
-            <p className="mb-2 sm:mb-0">
-              © {new Date().getFullYear()} شركة الغربية الذهبية للتطوير العقاري. جميع الحقوق محفوظة.
-            </p>
-            <p className="opacity-75 font-el-messiri">
-              صُمم بالفخامة الرقمية لتلبية تطلعات الكود السعودي للبناء.
-            </p>
-          </div>
-        </div>
-      </footer>
-
-      {/* ----------------------------------------------------
-         13. General Inquiry Popup Modal
-         ---------------------------------------------------- */}
-      {showInquiryModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#060D1A]/85 backdrop-blur-md transition-all duration-500 animate-fade-in" onClick={() => setShowInquiryModal(false)}>
-          <div
-            className="relative w-full max-w-3xl bg-[#0A1628]/85 backdrop-blur-3xl border border-gold-primary/35 shadow-[0_40px_80px_rgba(0,0,0,0.9),0_0_40px_rgba(201,169,110,0.2)] rounded-3xl p-10 text-right transform transition-all duration-500 animate-scale-up"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Ambient Background Glows */}
-            <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-gold-primary/10 to-transparent blur-3xl pointer-events-none rounded-full" />
-            <div className="absolute bottom-0 left-0 w-40 h-40 bg-gradient-to-tr from-brand-primary/10 to-transparent blur-3xl pointer-events-none rounded-full" />
-
-            {/* Close Button */}
-            <button
-              type="button"
-              className="absolute top-6 left-6 p-2.5 text-slate-400 hover:text-gold-primary bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 transition-all duration-300 cursor-pointer"
-              onClick={() => setShowInquiryModal(false)}
-              aria-label="إغلاق"
-              title="إغلاق نافذة الحجز"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            {/* Header */}
-            <div className="mb-8 pb-4 border-b border-white/10">
-              <span className="text-[10px] font-bold text-gold-primary tracking-widest block mb-1.5 font-serif uppercase">
-                PRIVATE RESERVATION
-              </span>
-              <h4 className="text-xl sm:text-2xl font-extrabold text-white leading-tight font-el-messiri">
-                حجز جولتك الخاصة / <span className="bg-gradient-to-r from-gold-light via-gold-primary to-gold-warm bg-clip-text text-transparent">طلب معاينة عقارية فاخرة</span>
-              </h4>
-            </div>
-
-            {/* Form */}
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                setInquirySuccess(true);
-                setTimeout(() => {
-                  setShowInquiryModal(false);
-                  setInquirySuccess(false);
-                }, 2000);
-              }}
-              className="space-y-6"
-            >
-              {/* Row 1: Name, Phone, City */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-2">الاسم بالكامل</label>
-                  <input
-                    type="text"
-                    required
-                    className="w-full bg-white/5 border border-white/15 focus:border-gold-primary/70 focus:bg-white/10 rounded-xl px-5 py-3.5 text-xs sm:text-sm text-text-primary placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-gold-primary/50 transition-all duration-300"
-                    placeholder="الاسم الثلاثي"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-2">رقم الجوال</label>
-                  <input
-                    type="tel"
-                    required
-                    pattern="^(05|009665|\+9665)\d{8}$"
-                    className="w-full bg-white/5 border border-white/15 focus:border-gold-primary/70 focus:bg-white/10 rounded-xl px-5 py-3.5 text-xs sm:text-sm text-left font-mono text-text-primary placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-gold-primary/50 transition-all duration-300"
-                    placeholder="05xxxxxxxx"
-                    dir="ltr"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="inquiry-city" className="block text-xs font-semibold text-slate-300 mb-2">المدينة</label>
-                  <select
-                    id="inquiry-city"
-                    title="اختر المدينة لحجز الجولة"
-                    className="w-full bg-[#0F2040] border border-white/15 focus:border-gold-primary/70 focus:bg-[#152A54] rounded-xl px-5 py-3.5 text-xs sm:text-sm text-text-primary focus:outline-none focus:ring-1 focus:ring-gold-primary/50 transition-all duration-300"
-                  >
-                    <option value="جدة">جدة</option>
-                    <option value="الرياض">الرياض</option>
-                    <option value="مكة">مكة المكرمة</option>
-                  </select>
-                </div>
-              </div>
-
-              {/* Row 2: Property Type, Additional Notes */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-end">
-                <div>
-                  <label htmlFor="inquiry-type" className="block text-xs font-semibold text-slate-300 mb-2">نوع العقار المفضل</label>
-                  <select
-                    id="inquiry-type"
-                    title="اختر نوع العقار المفضل لجولتك"
-                    className="w-full bg-[#0F2040] border border-white/15 focus:border-gold-primary/70 focus:bg-[#152A54] rounded-xl px-5 py-3.5 text-xs sm:text-sm text-text-primary focus:outline-none focus:ring-1 focus:ring-gold-primary/50 transition-all duration-300"
-                  >
-                    <option value="شقة">شقة سكينة</option>
-                    <option value="فيلا">فيلا مستقلة</option>
-                    <option value="ملحق">ملحق / روف</option>
-                  </select>
-                </div>
-
-                <div className="md:col-span-2">
-                  <label className="block text-xs font-semibold text-slate-300 mb-2">ملاحظات إضافية</label>
-                  <textarea
-                    rows={1}
-                    className="w-full bg-white/5 border border-white/15 focus:border-gold-primary/70 focus:bg-white/10 rounded-xl px-5 py-3 text-xs sm:text-sm text-text-primary placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-gold-primary/50 transition-all duration-300 resize-none"
-                    placeholder="تفاصيل إضافية لطلب المعاينة..."
-                  ></textarea>
-                </div>
-              </div>
-
-              <div className="pt-4">
-                <button
-                  type="submit"
-                  className="w-full py-4 px-6 text-xs sm:text-sm font-bold btn-premium-gold !rounded-xl"
-                >
-                  تأكيد حجز الجولة العقارية الفاخرة
-                </button>
-              </div>
-            </form>
-
-            {inquirySuccess && (
-              <div className="mt-4 p-4 bg-status-available/10 border border-status-available/20 rounded-md text-status-available text-xs font-bold text-center animate-pulse">
-                ✓ تم تسجيل طلب الجولة بنجاح!
-              </div>
-            )}
-          </div>
-        </div>
-      )}
 
     </div>
   );

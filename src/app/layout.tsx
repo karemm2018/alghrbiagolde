@@ -39,6 +39,10 @@ export const metadata: Metadata = {
   description: 'حرفية تشييد وتميّز عقاري — نعتمد أحدث التقنيات لربط عملائنا بأفضل الفرص السكنية والاستثمارية في جدة والرياض ومكة.',
 };
 
+import Navbar from '../components/layout/Navbar';
+import Footer from '../components/layout/Footer';
+import InquiryModal from '../components/layout/InquiryModal';
+
 export default function RootLayout({
   children,
 }: {
@@ -47,7 +51,10 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl" className="scroll-smooth" suppressHydrationWarning>
       <body className={`${cairo.variable} ${tajawal.variable} ${arefRuqaa.variable} ${elMessiri.variable} font-el-messiri bg-bg-midnight antialiased text-text-primary`}>
+        <Navbar />
         {children}
+        <Footer />
+        <InquiryModal />
       </body>
     </html>
   );
