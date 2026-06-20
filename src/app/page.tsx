@@ -1321,21 +1321,21 @@ export default function HomePage() {
           {filteredProperties.length > 0 ? (
             <div className="space-y-12">
               {propertiesViewMode === 'table' ? (
-                <div className="w-full overflow-auto max-h-[70vh] rounded-2xl border-2 border-gold-primary/50 bg-[#0F2342]/90 backdrop-blur-xl shadow-2xl scrollbar-thin scrollbar-thumb-gold-primary scrollbar-track-transparent" dir="ltr">
-                  <table className="w-full min-w-[950px] border-collapse text-right text-xs sm:text-[13px]" dir="rtl">
-                    <thead className="sticky top-0 z-10 bg-[#18325C]/95 backdrop-blur-md">
-                      <tr className="border-b border-border-gold/30 text-gold-primary font-el-messiri">
-                        <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0">الصورة</th>
-                        <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0">اسم الوحدة</th>
-                        <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0">النوع</th>
-                        <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0">الموقع</th>
-                        <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0">المساحة</th>
-                        <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0">الغرف / الحمامات</th>
-                        <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0">السعر</th>
-                        <th className="py-4 px-5 font-bold whitespace-nowrap text-center border-x border-border-gold/15 first:border-r-0 last:border-l-0">التفاصيل</th>
+                <div className="w-full overflow-x-auto rounded-2xl border-2 border-gold-primary/50 bg-[#0F2342]/90 backdrop-blur-xl shadow-2xl scrollbar-thin scrollbar-thumb-gold-primary scrollbar-track-transparent" dir="ltr">
+                  <table className="w-full min-w-[950px] text-right text-xs sm:text-[13px] flex flex-col" dir="rtl">
+                    <thead className="bg-[#18325C]/95 backdrop-blur-md w-full block shrink-0">
+                      <tr className="grid grid-cols-[80px_2.2fr_1fr_1.5fr_1fr_1.5fr_1.2fr_1.5fr] w-full border-b border-border-gold/30 text-gold-primary font-el-messiri items-stretch">
+                        <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0 flex items-center justify-start">الصورة</th>
+                        <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0 flex items-center justify-start">اسم الوحدة</th>
+                        <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0 flex items-center justify-start">النوع</th>
+                        <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0 flex items-center justify-start">الموقع</th>
+                        <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0 flex items-center justify-start">المساحة</th>
+                        <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0 flex items-center justify-start">الغرف / الحمامات</th>
+                        <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0 flex items-center justify-start">السعر</th>
+                        <th className="py-4 px-5 font-bold whitespace-nowrap text-center border-x border-border-gold/15 first:border-r-0 last:border-l-0 flex items-center justify-center">التفاصيل</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-border-gold/15 text-white">
+                    <tbody className="divide-y divide-border-gold/15 text-white block w-full max-h-[50vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gold-primary scrollbar-track-transparent">
                       {filteredProperties.map((property) => {
                         // Translate type
                         let typeLabel = '';
@@ -1346,8 +1346,8 @@ export default function HomePage() {
                         else if (property.type === 'duplex') typeLabel = 'دوبلكس';
 
                         return (
-                          <tr key={property.id} className="odd:bg-[#0F2342]/40 even:bg-[#142B4E]/60 hover:bg-gold-primary/[0.08] transition-colors duration-150">
-                            <td className="py-3 px-5 border-x border-border-gold/10 first:border-r-0 last:border-l-0">
+                          <tr key={property.id} className="grid grid-cols-[80px_2.2fr_1fr_1.5fr_1fr_1.5fr_1.2fr_1.5fr] w-full items-stretch odd:bg-[#0F2342]/40 even:bg-[#142B4E]/60 hover:bg-gold-primary/[0.08] transition-colors duration-150">
+                            <td className="py-3 px-5 border-x border-border-gold/10 first:border-r-0 last:border-l-0 flex items-center justify-start">
                               <div className="relative w-14 h-10 rounded-lg overflow-hidden border border-border-gold/20 shadow-sm shrink-0">
                                 <Image
                                   src={property.media.thumbnail}
@@ -1358,18 +1358,18 @@ export default function HomePage() {
                                 />
                               </div>
                             </td>
-                            <td className="py-3 px-5 font-semibold text-white whitespace-nowrap border-x border-border-gold/10 first:border-r-0 last:border-l-0">
+                            <td className="py-3 px-5 font-semibold text-white border-x border-border-gold/10 first:border-r-0 last:border-l-0 flex items-center justify-start">
                               {property.title}
                             </td>
-                            <td className="py-3 px-5 text-text-secondary whitespace-nowrap border-x border-border-gold/10 first:border-r-0 last:border-l-0">
+                            <td className="py-3 px-5 text-text-secondary border-x border-border-gold/10 first:border-r-0 last:border-l-0 flex items-center justify-start">
                               <span className="inline-block py-0.5 px-2.5 text-[11px] font-medium text-gold-primary bg-gold-primary/10 border border-gold-primary/20 rounded-full">
                                 {typeLabel}
                               </span>
                             </td>
-                            <td className="py-3 px-5 text-text-secondary whitespace-nowrap border-x border-border-gold/10 first:border-r-0 last:border-l-0">
+                            <td className="py-3 px-5 text-text-secondary border-x border-border-gold/10 first:border-r-0 last:border-l-0 flex items-center justify-start">
                               {property.location.city}، {property.location.district}
                             </td>
-                            <td className="py-3 px-5 font-mono text-gold-primary whitespace-nowrap border-x border-border-gold/10 first:border-r-0 last:border-l-0 font-semibold">
+                            <td className="py-3 px-5 font-mono text-gold-primary border-x border-border-gold/10 first:border-r-0 last:border-l-0 font-semibold flex items-center justify-start">
                               {property.specs.area} م²
                             </td>
                             <td className="py-3 px-5 text-text-secondary whitespace-nowrap border-x border-border-gold/10 first:border-r-0 last:border-l-0">
@@ -1597,24 +1597,24 @@ export default function HomePage() {
 
           {/* Projects Content Render */}
           {projectsViewMode === 'table' ? (
-            <div className="w-full overflow-auto max-h-[70vh] rounded-2xl border-2 border-gold-primary/50 bg-[#0F2342]/90 backdrop-blur-xl shadow-2xl scrollbar-thin scrollbar-thumb-gold-primary scrollbar-track-transparent mb-12" dir="ltr">
-              <table className="w-full min-w-[950px] border-collapse text-right text-xs sm:text-[13px]" dir="rtl">
-                <thead className="sticky top-0 z-10 bg-[#18325C]/95 backdrop-blur-md">
-                  <tr className="border-b border-border-gold/30 text-gold-primary font-el-messiri">
-                    <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0">الصورة</th>
-                    <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0">اسم المشروع</th>
-                    <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0">الموقع</th>
-                    <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0">إجمالي الوحدات</th>
-                    <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0">الوحدات المتاحة</th>
-                    <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0">نطاق الأسعار</th>
-                    <th className="py-4 px-5 font-bold whitespace-nowrap text-center border-x border-border-gold/15 first:border-r-0 last:border-l-0">التفاصيل</th>
+            <div className="w-full overflow-x-auto rounded-2xl border-2 border-gold-primary/50 bg-[#0F2342]/90 backdrop-blur-xl shadow-2xl scrollbar-thin scrollbar-thumb-gold-primary scrollbar-track-transparent mb-12" dir="ltr">
+              <table className="w-full min-w-[950px] text-right text-xs sm:text-[13px] flex flex-col" dir="rtl">
+                <thead className="bg-[#18325C]/95 backdrop-blur-md w-full block shrink-0">
+                  <tr className="grid grid-cols-[80px_2.5fr_1.5fr_1fr_1.2fr_1.8fr_1.5fr] w-full border-b border-border-gold/30 text-gold-primary font-el-messiri items-stretch">
+                    <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0 flex items-center justify-start">الصورة</th>
+                    <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0 flex items-center justify-start">اسم المشروع</th>
+                    <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0 flex items-center justify-start">الموقع</th>
+                    <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0 flex items-center justify-start">إجمالي الوحدات</th>
+                    <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0 flex items-center justify-start">الوحدات المتاحة</th>
+                    <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0 flex items-center justify-start">نطاق الأسعار</th>
+                    <th className="py-4 px-5 font-bold whitespace-nowrap text-center border-x border-border-gold/15 first:border-r-0 last:border-l-0 flex items-center justify-center">التفاصيل</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-border-gold/15 text-white">
+                <tbody className="divide-y divide-border-gold/15 text-white block w-full max-h-[50vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gold-primary scrollbar-track-transparent">
                   {PROJECTS.map((project) => {
                     return (
-                      <tr key={project.id} className="odd:bg-[#0F2342]/40 even:bg-[#142B4E]/60 hover:bg-gold-primary/[0.08] transition-colors duration-150">
-                        <td className="py-3 px-5 border-x border-border-gold/10 first:border-r-0 last:border-l-0">
+                      <tr key={project.id} className="grid grid-cols-[80px_2.5fr_1.5fr_1fr_1.2fr_1.8fr_1.5fr] w-full items-stretch odd:bg-[#0F2342]/40 even:bg-[#142B4E]/60 hover:bg-gold-primary/[0.08] transition-colors duration-150">
+                        <td className="py-3 px-5 border-x border-border-gold/10 first:border-r-0 last:border-l-0 flex items-center justify-start">
                           <div className="relative w-14 h-10 rounded-lg overflow-hidden border border-border-gold/20 shadow-sm shrink-0">
                             <Image
                               src={project.media.hero}
@@ -1625,25 +1625,25 @@ export default function HomePage() {
                             />
                           </div>
                         </td>
-                        <td className="py-3 px-5 font-semibold border-x border-border-gold/10 first:border-r-0 last:border-l-0">
+                        <td className="py-3 px-5 font-semibold border-x border-border-gold/10 first:border-r-0 last:border-l-0 flex items-center justify-start">
                           <div className="flex flex-col gap-0.5 text-right">
                             <span className="font-bold text-white whitespace-nowrap">{project.name}</span>
                             {project.tagline && <span className="text-[11px] text-text-muted whitespace-nowrap">{project.tagline}</span>}
                           </div>
                         </td>
-                        <td className="py-3 px-5 text-text-secondary whitespace-nowrap border-x border-border-gold/10 first:border-r-0 last:border-l-0">
+                        <td className="py-3 px-5 text-text-secondary border-x border-border-gold/10 first:border-r-0 last:border-l-0 flex items-center justify-start">
                           {project.location.city}، {project.location.district}
                         </td>
-                        <td className="py-3 px-5 text-text-secondary whitespace-nowrap border-x border-border-gold/10 first:border-r-0 last:border-l-0">{project.specs.totalUnits} وحدة</td>
-                        <td className="py-3 px-5 text-gold-primary font-bold whitespace-nowrap border-x border-border-gold/10 first:border-r-0 last:border-l-0">
+                        <td className="py-3 px-5 text-text-secondary border-x border-border-gold/10 first:border-r-0 last:border-l-0 flex items-center justify-start">{project.specs.totalUnits} وحدة</td>
+                        <td className="py-3 px-5 text-gold-primary font-bold border-x border-border-gold/10 first:border-r-0 last:border-l-0 flex items-center justify-start">
                           <span className="inline-block py-0.5 px-2.5 text-[11px] font-bold text-gold-primary bg-gold-primary/10 border border-gold-primary/20 rounded-full">
                             {project.specs.availableUnits} متاح
                           </span>
                         </td>
-                        <td className="py-3 px-5 font-bold text-gold-primary font-mono whitespace-nowrap border-x border-border-gold/10 first:border-r-0 last:border-l-0">
+                        <td className="py-3 px-5 font-bold text-gold-primary font-mono border-x border-border-gold/10 first:border-r-0 last:border-l-0 flex items-center justify-start">
                           من {project.priceRange.min.toLocaleString()} إلى {project.priceRange.max.toLocaleString()} ر.س
                         </td>
-                        <td className="py-3 px-5 text-center border-x border-border-gold/10 first:border-r-0 last:border-l-0">
+                        <td className="py-3 px-5 text-center border-x border-border-gold/10 first:border-r-0 last:border-l-0 flex items-center justify-center">
                           <Link
                             href={`/projects/${project.slug}`}
                             className="py-1.5 px-5 text-xs font-bold btn-premium-gold rounded-md inline-block font-el-messiri whitespace-nowrap min-w-[125px] text-center"
