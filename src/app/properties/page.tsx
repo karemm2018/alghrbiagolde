@@ -502,7 +502,7 @@ export default function PropertiesPage() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="text-[11px] font-extrabold text-gold-primary tracking-widest uppercase block mb-4 font-serif"
+            className="text-[11px] font-extrabold text-gold-primary tracking-widest uppercase block mb-4 font-serif text-center"
           >
             LIVING GOLDEN LUXURY
           </motion.span>
@@ -510,7 +510,7 @@ export default function PropertiesPage() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="text-3xl sm:text-5xl lg:text-6xl font-black text-white leading-tight font-el-messiri mb-6 drop-shadow-xl"
+            className="text-3xl sm:text-5xl lg:text-6xl font-black text-white leading-tight font-el-messiri mb-6 drop-shadow-xl text-center"
           >
             استكشف <span className="bg-gradient-to-r from-gold-light via-gold-primary to-gold-warm bg-clip-text text-transparent">الوحدات العقارية الفاخرة</span>
           </motion.h1>
@@ -518,7 +518,7 @@ export default function PropertiesPage() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="text-xs sm:text-base text-text-secondary leading-relaxed mb-10 max-w-2xl drop-shadow-md"
+            className="text-xs sm:text-base text-text-secondary leading-relaxed mb-10 max-w-2xl drop-shadow-md text-center"
           >
             مجموعتنا الفاخرة والمنتقاة بعناية فائقة من الشقق، الفلل والملحقات الفاخرة (الروف) المصممة بأعلى معايير جودة البناء والتشطيب في أرقى أحياء جدة.
           </motion.p>
