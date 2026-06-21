@@ -1,0 +1,182 @@
+// src/components/ui/MediaGallery.tsx
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
+import { Camera, Video, ChevronRight, ChevronLeft } from 'lucide-react';
+
+interface MediaGalleryProps {
+  images: string[];
+  videos?: string[];
+  title: string;
+}
+
+export default function MediaGallery({ images, videos = [], title }: MediaGalleryProps) {
+  const [activeTab, setActiveTab] = useState<'photos' | 'video'>('photos');
+  const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const [animateZoom, setAnimateZoom] = useState(false);
+
+  const hasVideo = videos && videos.length > 0;
+  const activeVideoUrl = hasVideo ? videos[0] : null;
+
+  // Autoplay slideshow for photos
+  useEffect(() => {
+    if (activeTab !== 'photos' || images.length <= 1 || isHovered) return;
+
+    const timer = setInterval(() => {
+      setCurrentPhotoIndex((prev) => (prev + 1) % images.length);
+    }, 6000); // 6 seconds interval matching hero slider
+
+    return () => clearInterval(timer);
+  }, [activeTab, images.length, isHovered]);
+
+  // Cinematic zoom transition effect on index change
+  useEffect(() => {
+    setAnimateZoom(false);
+    const zoomTimeout = setTimeout(() => {
+      setAnimateZoom(true);
+    }, 100);
+    return () => clearTimeout(zoomTimeout);
+  }, [currentPhotoIndex]);
+
+  const handlePrevImage = () => {
+    setCurrentPhotoIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+  };
+
+  const handleNextImage = () => {
+    setCurrentPhotoIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+  };
+
+  return (
+    <div className="h-[60vh] md:h-[80vh] flex flex-col bg-[#0F2342]/40 backdrop-blur-xl border border-gold-primary/35 rounded-3xl overflow-hidden shadow-2xl">
+      {/* Media Switcher Header */}
+      <div className="flex border-b border-white/10 bg-black/20 p-2 gap-2 shrink-0">
+        <button
+          type="button"
+          onClick={() => setActiveTab('photos')}
+          className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+            activeTab === 'photos'
+              ? 'bg-gold-primary text-bg-midnight font-extrabold shadow-md shadow-gold-primary/10'
+              : 'text-text-muted hover:text-white'
+          }`}
+        >
+          <Camera className="w-4 h-4" />
+          <span>معرض الصور ({images.length})</span>
+        </button>
+
+        {hasVideo && (
+          <button
+            type="button"
+            onClick={() => setActiveTab('video')}
+            className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+              activeTab === 'video'
+                ? 'bg-gold-primary text-bg-midnight font-extrabold shadow-md shadow-gold-primary/10'
+                : 'text-text-muted hover:text-white'
+            }`}
+          >
+            <Video className="w-4 h-4" />
+            <span>فيديو العرض</span>
+          </button>
+        )}
+      </div>
+
+      {/* Media Display Container */}
+      <div 
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        className="relative flex-1 min-h-0 bg-black/40 overflow-hidden"
+      >
+        {activeTab === 'photos' ? (
+          <div className="relative w-full h-full">
+            {images.map((img, index) => (
+              <div
+                key={index}
+                className={`absolute inset-0 transition-opacity duration-1000 ${
+                  index === currentPhotoIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
+                }`}
+              >
+                <Image
+                  src={img}
+                  alt={`${title} - صورة ${index + 1}`}
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 66vw"
+                  priority={index === 0}
+                  className={`object-cover transition-transform duration-[6500ms] ease-luxury ${
+                    index === currentPhotoIndex && animateZoom ? 'scale-[1.08]' : 'scale-100'
+                  }`}
+                />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="w-full h-full bg-black flex items-center justify-center relative z-20">
+            {activeVideoUrl && (
+              <video
+                src={activeVideoUrl}
+                controls
+                autoPlay
+                playsInline
+                className="w-full h-full object-contain"
+              />
+            )}
+          </div>
+        )}
+
+        {/* Left/Right Control Arrows */}
+        {activeTab === 'photos' && images.length > 1 && (
+          <>
+            <button
+              type="button"
+              onClick={handlePrevImage}
+              className="absolute top-1/2 -translate-y-1/2 start-4 p-2.5 rounded-full bg-black/60 hover:bg-gold-primary text-white hover:text-bg-midnight border border-white/10 hover:border-gold-primary transition-all duration-300 cursor-pointer z-20"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+            <button
+              type="button"
+              onClick={handleNextImage}
+              className="absolute top-1/2 -translate-y-1/2 end-4 p-2.5 rounded-full bg-black/60 hover:bg-gold-primary text-white hover:text-bg-midnight border border-white/10 hover:border-gold-primary transition-all duration-300 cursor-pointer z-20"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+          </>
+        )}
+
+        {/* Image Counter Label */}
+        {activeTab === 'photos' && (
+          <div className="absolute bottom-4 start-4 bg-black/75 px-3 py-1.5 rounded-lg border border-white/10 text-[10px] sm:text-xs text-slate-100 font-bold z-20 font-sans">
+            {currentPhotoIndex + 1} / {images.length}
+          </div>
+        )}
+      </div>
+
+      {/* Thumbnails list */}
+      {activeTab === 'photos' && images.length > 1 && (
+        <div className="p-4 bg-black/10 flex items-center gap-3 overflow-x-auto custom-scrollbar shrink-0">
+          {images.map((img, idx) => {
+            const isSelected = idx === currentPhotoIndex;
+            return (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => setCurrentPhotoIndex(idx)}
+                className={`relative w-20 sm:w-24 aspect-[16/10] rounded-xl overflow-hidden shrink-0 border-2 transition-all duration-300 cursor-pointer ${
+                  isSelected ? 'border-gold-primary scale-102 shadow-md shadow-gold-primary/10' : 'border-transparent opacity-65 hover:opacity-100'
+                }`}
+              >
+                <Image
+                  src={img}
+                  alt="صورة مصغرة للمشروع"
+                  fill
+                  sizes="96px"
+                  className="object-cover"
+                />
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}

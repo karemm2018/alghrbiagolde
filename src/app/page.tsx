@@ -398,9 +398,11 @@ function FeaturedProjectCard({ project, onExplore }: { project: Project; onExplo
             </div>
 
             {/* Title */}
-            <h3 className="text-xl sm:text-2xl font-extrabold text-text-primary mb-4 leading-snug font-el-messiri group-hover:text-gold-primary transition-colors duration-300">
-              {project.name}
-            </h3>
+            <Link href={`/projects/${project.slug}`}>
+              <h3 className="text-xl sm:text-2xl font-extrabold text-text-primary mb-4 leading-snug font-el-messiri group-hover:text-gold-primary transition-colors duration-300">
+                {project.name}
+              </h3>
+            </Link>
 
             {/* Location */}
             <div className="flex items-center gap-1.5 text-xs text-text-secondary mb-5">
@@ -444,13 +446,12 @@ function FeaturedProjectCard({ project, onExplore }: { project: Project; onExplo
               <Download className="w-4 h-4" />
               <span>تحميل البروفايل (PDF)</span>
             </a>
-            <button
-              type="button"
-              onClick={() => onExplore(project.location.city)}
-              className="py-3.5 px-6 text-[10px] sm:text-xs font-extrabold btn-premium-glass flex items-center gap-2 cursor-pointer font-el-messiri flex-1 justify-center"
+            <Link
+              href={`/projects/${project.slug}`}
+              className="py-3.5 px-6 text-[10px] sm:text-xs font-extrabold btn-premium-glass flex items-center gap-2 cursor-pointer font-el-messiri flex-1 justify-center text-center"
             >
               <span>استعرض المشروع</span>
-            </button>
+            </Link>
           </div>
         </div>
       </div>
@@ -485,9 +486,11 @@ function SimplifiedProjectCard({ project, onExplore }: { project: Project; onExp
       {/* Body info */}
       <div className="p-3 sm:p-4 md:p-5 flex flex-col flex-1 text-right">
         {/* Title */}
-        <h4 className="text-xs sm:text-sm font-extrabold text-text-primary line-clamp-1 mb-1 sm:mb-2 group-hover:text-gold-light transition-colors duration-300 font-el-messiri">
-          {project.name}
-        </h4>
+        <Link href={`/projects/${project.slug}`}>
+          <h4 className="text-xs sm:text-sm font-extrabold text-text-primary line-clamp-1 mb-1 sm:mb-2 group-hover:text-gold-light transition-colors duration-300 font-el-messiri">
+            {project.name}
+          </h4>
+        </Link>
 
         {/* Location */}
         <div className="flex items-center gap-1 text-[10px] text-text-muted mb-2 sm:mb-3 font-el-messiri">
@@ -520,14 +523,13 @@ function SimplifiedProjectCard({ project, onExplore }: { project: Project; onExp
             >
               <Download className="w-3.5 h-3.5" />
             </a>
-            <button
-              type="button"
-              onClick={() => onExplore(project.location.city)}
-              className="py-1.5 px-4 text-[10px] font-extrabold btn-premium-gold flex items-center gap-1 cursor-pointer font-el-messiri"
+            <Link
+              href={`/projects/${project.slug}`}
+              className="py-1.5 px-4 text-[10px] font-extrabold btn-premium-gold flex items-center gap-1 cursor-pointer font-el-messiri text-center"
             >
               <span>استعرض</span>
               <ArrowLeft className="w-3 h-3" />
-            </button>
+            </Link>
           </div>
         </div>
       </div>
@@ -1410,7 +1412,7 @@ export default function HomePage() {
                             </td>
                             <td className="py-3 px-5 text-center border-x border-border-gold/10 first:border-r-0 last:border-l-0">
                               <Link
-                                href={`/properties/${property.slug}`}
+                                href={`/property/${property.slug}`}
                                 className="py-1.5 px-5 text-xs font-bold btn-premium-gold rounded-md inline-block font-el-messiri whitespace-nowrap min-w-[125px] text-center"
                               >
                                 عرض كامل التفاصيل

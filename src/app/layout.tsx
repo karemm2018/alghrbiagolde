@@ -50,7 +50,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ar" dir="rtl" className="scroll-smooth" suppressHydrationWarning>
-      <body className={`${cairo.variable} ${tajawal.variable} ${arefRuqaa.variable} ${elMessiri.variable} font-el-messiri bg-bg-midnight antialiased text-text-primary`}>
+      <body className={`${cairo.variable} ${tajawal.variable} ${arefRuqaa.variable} ${elMessiri.variable} font-el-messiri bg-bg-deep antialiased text-text-primary`}>
         <Navbar />
         {children}
         <Footer />

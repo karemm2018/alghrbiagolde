@@ -61,6 +61,7 @@ export interface Project {
   media: {
     hero: string;
     gallery: string[];
+    videos?: string[];
   };
   priceRange: { min: number; max: number; currency: 'SAR' };
   specs: {
@@ -86,7 +87,8 @@ export const PROJECTS: Project[] = [
     description: "مجمع سكني معاصر يوفر مساحات خضراء شاسعة، ومسابح خاصة، ومواقف سيارات آمنة، بالإضافة إلى نظام أمني ذكي على مدار الساعة. صُمم المشروع ليمنح العائلات خصوصية مطلقة وجودة حياة لا تضاهى.",
     media: {
       hero: "/projects/amal-stars-showcase.webp",
-      gallery: []
+      gallery: [],
+      videos: ["https://assets.mixkit.co/videos/preview/mixkit-luxury-home-interior-41582-large.mp4"]
     },
     priceRange: { min: 730000, max: 980000, currency: "SAR" },
     specs: {
@@ -110,7 +112,8 @@ export const PROJECTS: Project[] = [
     description: "بموقعه الاستراتيجي وتصميمه الهندسي الفاخر، يُعد مشروع أبو هايل أفينيو الخيار الأول للمستثمرين والعائلات الباحثة عن توازن مثالي بين الفخامة والعملية.",
     media: {
       hero: "/properties/penthouse.webp",
-      gallery: []
+      gallery: [],
+      videos: ["https://assets.mixkit.co/videos/preview/mixkit-modern-apartment-interior-41584-large.mp4"]
     },
     priceRange: { min: 489000, max: 17000000, currency: "SAR" },
     specs: {
@@ -228,7 +231,8 @@ export const PROPERTIES: Property[] = [
     },
     media: {
       images: ["/properties/penthouse.webp"],
-      thumbnail: "/properties/penthouse.webp"
+      thumbnail: "/properties/penthouse.webp",
+      videos: ["https://assets.mixkit.co/videos/preview/mixkit-luxury-home-interior-41582-large.mp4"]
     },
     description: "ملحق رائع يحتوي على 4 غرف نوم واسعة و4 دورات مياه مجهزة بالكامل. يتضمن موقف سيارات خاص ومصعد مستقل، بالإضافة إلى غرفة مخصصة للسائق وأخرى للخادمة. تشطيبات الترا سوبر لوكس تناسب معايير الفخامة العائلية.",
     publishedAt: "2026-05-10",
@@ -267,7 +271,8 @@ export const PROPERTIES: Property[] = [
     },
     media: {
       images: ["/properties/villa.webp"],
-      thumbnail: "/properties/villa.webp"
+      thumbnail: "/properties/villa.webp",
+      videos: ["https://assets.mixkit.co/videos/preview/mixkit-modern-apartment-interior-41584-large.mp4"]
     },
     description: "فيلا قمة في الفخامة والرقي بحي الروضة بجدة. تمتد على مساحة 320 متر مربع وتضم 5 أجنحة نوم رئيسية بمصعد داخلي ومسبح خاص دافئ وجناح متكامل للخدم والحراسة وموقف آمن مغطى لسيارتين.",
     publishedAt: "2026-05-15",

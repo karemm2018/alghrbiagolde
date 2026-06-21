@@ -87,9 +87,11 @@ const DetailedProjectCard = ({ project, openInquiry }: { project: Project; openI
                 <MapPin className="w-3.5 h-3.5 text-gold-primary shrink-0" />
                 <span>{project.location.city} • {project.location.district}</span>
               </div>
-              <h3 className="text-base sm:text-lg font-extrabold text-white leading-tight font-el-messiri group-hover:text-gold-primary transition-colors">
-                {project.name}
-              </h3>
+              <Link href={`/projects/${project.slug}`}>
+                <h3 className="text-base sm:text-lg font-extrabold text-white leading-tight font-el-messiri group-hover:text-gold-primary transition-colors">
+                  {project.name}
+                </h3>
+              </Link>
             </div>
             <div className="text-right lg:text-left">
               <span className="text-[9px] text-text-muted block mb-0.5">نطاق الأسعار</span>
@@ -219,9 +221,11 @@ const ProjectCard = ({ project, openInquiry }: { project: Project; openInquiry: 
             <span>{project.location.city} • {project.location.district}</span>
           </div>
 
-          <h3 className="text-lg font-extrabold text-white mb-2 leading-tight font-el-messiri group-hover:text-gold-primary transition-colors">
-            {project.name}
-          </h3>
+          <Link href={`/projects/${project.slug}`}>
+            <h3 className="text-lg font-extrabold text-white mb-2 leading-tight font-el-messiri group-hover:text-gold-primary transition-colors">
+              {project.name}
+            </h3>
+          </Link>
 
           <p className="text-xs text-text-secondary leading-relaxed mb-4 line-clamp-2">
             {project.tagline || project.description}
@@ -258,13 +262,12 @@ const ProjectCard = ({ project, openInquiry }: { project: Project; openInquiry: 
               >
                 <Download className="w-4 h-4" />
               </a>
-              <button
-                type="button"
-                onClick={openInquiry}
-                className="py-2 px-4 text-xs font-bold btn-premium-gold rounded-xl cursor-pointer font-el-messiri transition-all hover:scale-102 active:scale-98 shadow-md"
+              <Link
+                href={`/projects/${project.slug}`}
+                className="py-2 px-4 text-xs font-bold btn-premium-gold rounded-xl cursor-pointer font-el-messiri transition-all hover:scale-102 active:scale-98 shadow-md text-center"
               >
                 تفاصيل
-              </button>
+              </Link>
             </div>
           </div>
         </div>
