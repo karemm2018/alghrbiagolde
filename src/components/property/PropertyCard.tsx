@@ -102,7 +102,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
       className="group relative flex flex-col h-full bg-bg-navy/45 backdrop-blur-xl rounded-2xl overflow-hidden border border-white/22 transition-all duration-500 shadow-[0_12px_36px_rgba(0,0,0,0.3)] hover:-translate-y-2 hover:border-white/35 hover:bg-bg-navy/60 hover:shadow-[0_24px_50px_rgba(0,0,0,0.5),0_0_20px_rgba(255,255,255,0.08)]"
     >
       {/* Top Gold Shimmer Bar */}
-      <div className="absolute top-0 left-0 w-full h-[2.5px] bg-gradient-to-r from-transparent via-gold-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20"></div>
+      <div className="absolute top-0 start-0 w-full h-[2.5px] bg-gradient-to-r from-transparent via-gold-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20"></div>
 
       {/* Thumbnail Image Container */}
       <div className="relative aspect-[4/3] overflow-hidden bg-bg-deep">
@@ -110,12 +110,12 @@ export default function PropertyCard({ property }: PropertyCardProps) {
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent z-10"></div>
         
         {/* Status Badge */}
-        <div className="absolute top-4 right-4 z-20">
+        <div className="absolute top-4 start-4 z-20">
           {renderStatusBadge(property.status)}
         </div>
 
         {/* Type tag overlay */}
-        <div className="absolute bottom-4 right-4 z-20">
+        <div className="absolute bottom-4 start-4 z-20">
           <span className="px-2.5 py-1 text-[9px] font-extrabold text-white bg-slate-900/80 backdrop-blur-md border border-white/10 rounded-md uppercase">
             {property.type === 'annex' ? 'ملحق روف' : property.type === 'villa' ? 'فيلا مستقلة' : property.type === 'penthouse' ? 'بنتهاوس' : 'شقة سكنية'}
           </span>
@@ -184,7 +184,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
             </p>
           </div>
           {property.pricing.monthlyInstallment && (
-            <div className="text-left">
+            <div className="text-end">
               <p className="text-[9px] text-text-muted uppercase mb-0.5">قسط شهري متوقع</p>
               <p className="text-sm font-bold text-text-primary font-mono">
                 {new Intl.NumberFormat('en-US').format(property.pricing.monthlyInstallment)} ر.س

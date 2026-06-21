@@ -511,14 +511,24 @@ function SimplifiedProjectCard({ project, onExplore }: { project: Project; onExp
             </p>
           </div>
 
-          <button
-            type="button"
-            onClick={() => onExplore(project.location.city)}
-            className="py-1.5 px-4 text-[10px] font-extrabold btn-premium-gold flex items-center gap-1 cursor-pointer font-el-messiri shrink-0"
-          >
-            <span>استعرض</span>
-            <ArrowLeft className="w-3 h-3" />
-          </button>
+          <div className="flex items-center gap-1.5 shrink-0">
+            <a
+              href={`/brochure-${project.slug}.pdf`}
+              download
+              title="تحميل البروفايل PDF"
+              className="p-1.5 rounded-lg bg-white/5 hover:bg-gold-primary/10 border border-white/10 text-text-secondary hover:text-gold-primary transition-all cursor-pointer"
+            >
+              <Download className="w-3.5 h-3.5" />
+            </a>
+            <button
+              type="button"
+              onClick={() => onExplore(project.location.city)}
+              className="py-1.5 px-4 text-[10px] font-extrabold btn-premium-gold flex items-center gap-1 cursor-pointer font-el-messiri"
+            >
+              <span>استعرض</span>
+              <ArrowLeft className="w-3 h-3" />
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -1341,7 +1351,7 @@ export default function HomePage() {
           {filteredProperties.length > 0 ? (
             <div className="space-y-12">
               {propertiesViewMode === 'table' ? (
-                <div ref={propertiesTableRef} className="custom-table-wrapper w-full max-h-[60vh] overflow-auto rounded-2xl border-2 border-gold-primary/50 bg-[#0F2342]/90 backdrop-blur-xl shadow-2xl scrollbar-thin scrollbar-thumb-gold-primary scrollbar-track-transparent" dir="ltr">
+                <div ref={propertiesTableRef} className="custom-table-wrapper w-full max-h-[60vh] overflow-auto rounded-2xl border-2 border-gold-primary/50 bg-[#0F2342]/90 backdrop-blur-xl shadow-2xl scrollbar-thin scrollbar-thumb-gold-primary scrollbar-track-transparent" dir="rtl">
                   <table className="w-full min-w-[950px] text-right text-xs sm:text-[13px] table-auto border-collapse" dir="rtl">
                     <thead className="sticky top-0 z-20 shadow-md">
                       <tr className="border-b border-border-gold/30 text-gold-primary font-el-messiri bg-[#18325C]">
@@ -1615,7 +1625,7 @@ export default function HomePage() {
 
           {/* Projects Content Render */}
           {projectsViewMode === 'table' ? (
-            <div ref={projectsTableRef} className="custom-table-wrapper w-full max-h-[60vh] overflow-auto rounded-2xl border-2 border-gold-primary/50 bg-[#0F2342]/90 backdrop-blur-xl shadow-2xl scrollbar-thin scrollbar-thumb-gold-primary scrollbar-track-transparent mb-12" dir="ltr">
+            <div ref={projectsTableRef} className="custom-table-wrapper w-full max-h-[60vh] overflow-auto rounded-2xl border-2 border-gold-primary/50 bg-[#0F2342]/90 backdrop-blur-xl shadow-2xl scrollbar-thin scrollbar-thumb-gold-primary scrollbar-track-transparent mb-12" dir="rtl">
               <table className="w-full min-w-[950px] text-right text-xs sm:text-[13px] table-auto border-collapse" dir="rtl">
                 <thead className="sticky top-0 z-20 shadow-md">
                   <tr className="border-b border-border-gold/30 text-gold-primary font-el-messiri bg-[#18325C]">
@@ -1662,12 +1672,22 @@ export default function HomePage() {
                           من {project.priceRange.min.toLocaleString()} إلى {project.priceRange.max.toLocaleString()} ر.س
                         </td>
                         <td className="py-3 px-5 text-center border-x border-border-gold/10 first:border-r-0 last:border-l-0">
-                          <Link
-                            href={`/projects/${project.slug}`}
-                            className="py-1.5 px-5 text-xs font-bold btn-premium-gold rounded-md inline-block font-el-messiri whitespace-nowrap min-w-[125px] text-center"
-                          >
-                            عرض كامل التفاصيل
-                          </Link>
+                          <div className="flex items-center justify-center gap-2">
+                            <a
+                              href={`/brochure-${project.slug}.pdf`}
+                              download
+                              title="تحميل البروفايل PDF"
+                              className="p-1.5 rounded-lg bg-white/5 hover:bg-gold-primary/10 border border-white/10 text-text-secondary hover:text-gold-primary transition-all cursor-pointer"
+                            >
+                              <Download className="w-3.5 h-3.5" />
+                            </a>
+                            <Link
+                              href={`/projects/${project.slug}`}
+                              className="py-1.5 px-5 text-xs font-bold btn-premium-gold rounded-md inline-block font-el-messiri whitespace-nowrap min-w-[125px] text-center"
+                            >
+                              عرض كامل التفاصيل
+                            </Link>
+                          </div>
                         </td>
                       </tr>
                     );

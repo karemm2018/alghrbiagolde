@@ -36,13 +36,13 @@ export default function InquiryModal() {
             onClick={(e) => e.stopPropagation()}
           >
             {/* Ambient Background Glows */}
-            <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-gold-primary/5 to-transparent blur-3xl pointer-events-none rounded-full" />
-            <div className="absolute bottom-0 left-0 w-40 h-40 bg-gradient-to-tr from-gold-primary/5 to-transparent blur-3xl pointer-events-none rounded-full" />
+            <div className="absolute top-0 end-0 w-40 h-40 bg-gradient-to-br from-gold-primary/5 to-transparent blur-3xl pointer-events-none rounded-full" />
+            <div className="absolute bottom-0 start-0 w-40 h-40 bg-gradient-to-tr from-gold-primary/5 to-transparent blur-3xl pointer-events-none rounded-full" />
 
             {/* Close Button */}
             <button
               type="button"
-              className="absolute top-6 left-6 p-2.5 text-slate-500 hover:text-gold-primary bg-slate-100 hover:bg-slate-200/80 rounded-xl border border-slate-200/60 transition-all duration-300 cursor-pointer"
+              className="absolute top-6 end-6 p-2.5 text-slate-500 hover:text-gold-primary bg-slate-100 hover:bg-slate-200/80 rounded-xl border border-slate-200/60 transition-all duration-300 cursor-pointer"
               onClick={close}
               aria-label="إغلاق"
               title="إغلاق نافذة الحجز"

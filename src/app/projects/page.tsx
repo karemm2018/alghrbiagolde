@@ -135,7 +135,7 @@ const DetailedProjectCard = ({ project, openInquiry }: { project: Project; openI
           </Link>
 
           <a
-            href="/brochure-placeholder.pdf"
+            href={`/brochure-${project.slug}.pdf`}
             download
             className="w-full sm:w-auto py-2.5 px-6 text-xs font-bold bg-gold-primary/10 hover:bg-gold-primary/20 text-gold-primary border border-gold-primary/25 hover:border-gold-primary/50 rounded-xl flex items-center justify-center gap-1.5 transition-all text-center"
           >
@@ -251,7 +251,7 @@ const ProjectCard = ({ project, openInquiry }: { project: Project; openInquiry: 
             
             <div className="flex items-center gap-2">
               <a
-                href="/brochure-placeholder.pdf"
+                href={`/brochure-${project.slug}.pdf`}
                 download
                 title="تحميل البروفايل PDF"
                 className="p-2 rounded-xl bg-white/5 hover:bg-gold-primary/10 border border-white/10 hover:border-gold-primary/40 text-text-secondary hover:text-gold-primary transition-all cursor-pointer"
@@ -285,6 +285,7 @@ export default function ProjectsPage() {
   const [minPrice, setMinPrice] = useState<string>('all');
   const [maxPrice, setMaxPrice] = useState<string>('all');
   const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
+  const [isAdvancedOpenComplete, setIsAdvancedOpenComplete] = useState<boolean>(false);
   const [viewMode, setViewMode] = useState<'grid' | 'detailed' | 'carousel' | 'table'>('grid');
 
   // DOM Refs
@@ -554,7 +555,7 @@ export default function ProjectsPage() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="ابحث باسم المشروع، الحي، أو المدينة..."
-                    className="w-full bg-white/10 border border-border-gold/30 hover:border-gold-primary/50 focus:border-gold-primary rounded-xl px-4 py-3 pe-12 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-1 focus:ring-gold-primary transition-all duration-300"
+                    className="w-full bg-white/10 border border-border-gold/30 hover:border-gold-primary/50 focus:border-gold-primary rounded-xl ps-12 pe-4 py-3 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-1 focus:ring-gold-primary transition-all duration-300"
                   />
                   <Search className="w-5 h-5 text-text-muted absolute top-1/2 start-4 -translate-y-1/2" />
                 </div>
@@ -594,7 +595,11 @@ export default function ProjectsPage() {
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                  className="overflow-hidden"
+                  onAnimationStart={() => setIsAdvancedOpenComplete(false)}
+                  onAnimationComplete={() => {
+                    if (showAdvanced) setIsAdvancedOpenComplete(true);
+                  }}
+                  className={`w-full ${isAdvancedOpenComplete ? 'overflow-visible' : 'overflow-hidden'}`}
                 >
                   <div className="border-t border-white/10 pt-6 flex flex-col gap-6">
                     
@@ -674,6 +679,8 @@ export default function ProjectsPage() {
 
         {/* Display modes switcher row */}
         <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
+          <h2 className="text-lg font-bold text-white font-el-messiri border-r-2 border-gold-primary pr-3 border-e-2 pe-3 border-r-0">مشاريعنا العقارية</h2>
+
           <div className="flex items-center gap-2 bg-[#0F2040]/50 backdrop-blur-md p-1 border border-white/5 rounded-2xl shadow-lg">
             {/* Grid view button */}
             <button 
@@ -731,8 +738,6 @@ export default function ProjectsPage() {
               <TableProperties className="w-4 h-4" />
             </button>
           </div>
-
-          <h2 className="text-lg font-bold text-white font-el-messiri border-r-2 border-gold-primary pr-3 border-e-2 pe-3 border-r-0">مشاريعنا العقارية</h2>
         </div>
 
         {/* ----------------------------------------------------
@@ -843,22 +848,22 @@ export default function ProjectsPage() {
                 {/* Scrollable table container */}
                 <div 
                   ref={tableWrapperRef} 
-                  className="w-full overflow-x-auto border border-white/10 rounded-2xl custom-table-wrapper bg-[#0F2040]/40 backdrop-blur-xl"
+                  className="custom-table-wrapper w-full max-h-[60vh] overflow-auto rounded-2xl border-2 border-gold-primary/50 bg-[#0F2342]/90 backdrop-blur-xl shadow-2xl scrollbar-thin scrollbar-thumb-gold-primary scrollbar-track-transparent"
                   dir="rtl"
                 >
-                  <table className="w-full border-collapse text-right text-xs sm:text-sm">
-                    <thead>
-                      <tr className="border-b border-white/10 bg-white/[0.02] text-text-muted font-bold">
-                        <th className="p-4 border-x border-white/5 first:border-s-0 last:border-e-0">اسم المشروع</th>
-                        <th className="p-4 border-x border-white/5 first:border-s-0 last:border-e-0">المدينة</th>
-                        <th className="p-4 border-x border-white/5 first:border-s-0 last:border-e-0">الحي</th>
-                        <th className="p-4 border-x border-white/5 first:border-s-0 last:border-e-0">تاريخ التسليم</th>
-                        <th className="p-4 border-x border-white/5 first:border-s-0 last:border-e-0">الوحدات المتاحة</th>
-                        <th className="p-4 border-x border-white/5 first:border-s-0 last:border-e-0">نطاق الأسعار</th>
-                        <th className="p-4 text-left border-x border-white/5 first:border-s-0 last:border-e-0">الإجراءات</th>
+                  <table className="w-full min-w-[950px] text-right text-xs sm:text-[13px] table-auto border-collapse">
+                    <thead className="sticky top-0 z-20 shadow-md">
+                      <tr className="border-b border-border-gold/30 text-gold-primary font-el-messiri bg-[#18325C]">
+                        <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-s-0 last:border-e-0 text-right bg-[#18325C]">اسم المشروع</th>
+                        <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-s-0 last:border-e-0 text-right bg-[#18325C]">المدينة</th>
+                        <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-s-0 last:border-e-0 text-right bg-[#18325C]">الحي</th>
+                        <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-s-0 last:border-e-0 text-right bg-[#18325C]">تاريخ التسليم</th>
+                        <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-s-0 last:border-e-0 text-right bg-[#18325C]">الوحدات المتاحة</th>
+                        <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-s-0 last:border-e-0 text-right bg-[#18325C]">نطاق الأسعار</th>
+                        <th className="py-4 px-5 font-bold whitespace-nowrap text-center border-x border-border-gold/15 first:border-s-0 last:border-e-0 bg-[#18325C]">الإجراءات</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-white/5 text-text-secondary font-medium">
+                    <tbody className="divide-y divide-border-gold/15 text-white bg-[#0F2342]/40">
                       {filteredProjects.map((project) => {
                         let statusText = '';
                         if (project.status === 'completed') statusText = 'جاهز للتسليم';
@@ -868,45 +873,47 @@ export default function ProjectsPage() {
                         return (
                           <tr 
                             key={project.id} 
-                            className="hover:bg-white/[0.02] transition-colors duration-200"
+                            className="odd:bg-[#0F2342]/40 even:bg-[#142B4E]/60 hover:bg-gold-primary/[0.08] transition-colors duration-150 border-b border-border-gold/10 last:border-b-0"
                           >
                             {/* Project Name & Thumbnail */}
-                            <td className="p-4 flex items-center gap-3 border-x border-white/5 first:border-s-0 last:border-e-0">
-                              <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-bg-deep shrink-0 border border-white/10">
-                                <Image 
-                                  src={project.media.hero || '/properties/apartment.webp'} 
-                                  alt={project.name}
-                                  fill
-                                  sizes="40px"
-                                  className="object-cover"
-                                />
-                              </div>
-                              <div>
-                                <span className="block font-bold text-white text-xs sm:text-sm">{project.name}</span>
-                                <span className="block text-[10px] text-text-muted mt-0.5">{statusText}</span>
+                            <td className="py-3 px-5 border-x border-border-gold/10 first:border-s-0 last:border-e-0 text-right">
+                              <div className="flex items-center gap-3">
+                                <div className="relative w-14 h-10 rounded-lg overflow-hidden bg-bg-deep shrink-0 border border-white/10">
+                                  <Image 
+                                    src={project.media.hero || '/properties/apartment.webp'} 
+                                    alt={project.name}
+                                    fill
+                                    sizes="56px"
+                                    className="object-cover"
+                                  />
+                                </div>
+                                <div className="text-right">
+                                  <span className="block font-bold text-white text-xs sm:text-sm">{project.name}</span>
+                                  <span className="block text-[10px] text-text-muted mt-0.5">{statusText}</span>
+                                </div>
                               </div>
                             </td>
 
                             {/* Location */}
-                            <td className="p-4 text-xs sm:text-sm border-x border-white/5 first:border-s-0 last:border-e-0">{project.location.city}</td>
-                            <td className="p-4 text-xs sm:text-sm border-x border-white/5 first:border-s-0 last:border-e-0">{project.location.district}</td>
+                            <td className="py-3 px-5 text-xs sm:text-sm border-x border-border-gold/10 first:border-s-0 last:border-e-0 text-right whitespace-nowrap">{project.location.city}</td>
+                            <td className="py-3 px-5 text-xs sm:text-sm border-x border-border-gold/10 first:border-s-0 last:border-e-0 text-right whitespace-nowrap">{project.location.district}</td>
 
                             {/* Specs */}
-                            <td className="p-4 text-xs sm:text-sm border-x border-white/5 first:border-s-0 last:border-e-0">{project.specs.completionDate}</td>
-                            <td className="p-4 font-mono text-xs sm:text-sm text-gold-light border-x border-white/5 first:border-s-0 last:border-e-0">
+                            <td className="py-3 px-5 text-xs sm:text-sm border-x border-border-gold/10 first:border-s-0 last:border-e-0 text-right whitespace-nowrap">{project.specs.completionDate}</td>
+                            <td className="py-3 px-5 font-mono text-xs sm:text-sm text-gold-light border-x border-border-gold/10 first:border-s-0 last:border-e-0 text-right whitespace-nowrap">
                               {project.specs.availableUnits} / {project.specs.totalUnits}
                             </td>
 
                             {/* Price */}
-                            <td className="p-4 font-bold text-gold-primary text-xs sm:text-sm font-el-messiri border-x border-white/5 first:border-s-0 last:border-e-0">
+                            <td className="py-3 px-5 font-bold text-gold-primary text-xs sm:text-sm font-el-messiri border-x border-border-gold/10 first:border-s-0 last:border-e-0 text-right whitespace-nowrap">
                               {formatPriceRange(project.priceRange.min, project.priceRange.max)}
                             </td>
 
                             {/* Actions */}
-                            <td className="p-4 text-left border-x border-white/5 first:border-s-0 last:border-e-0">
-                              <div className="inline-flex items-center gap-2">
+                            <td className="py-3 px-5 text-center border-x border-border-gold/10 first:border-s-0 last:border-e-0">
+                              <div className="inline-flex items-center gap-2 justify-center">
                                 <a
-                                  href="/brochure-placeholder.pdf"
+                                  href={`/brochure-${project.slug}.pdf`}
                                   download
                                   title="تحميل البروفايل PDF"
                                   className="p-1.5 rounded-lg bg-white/5 hover:bg-gold-primary/10 border border-white/10 text-text-secondary hover:text-gold-primary transition-all cursor-pointer"

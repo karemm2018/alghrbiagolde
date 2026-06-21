@@ -220,17 +220,22 @@ export default function PropertiesPage() {
   const [maxArea, setMaxArea] = useState('all');
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [isAdvancedOpenComplete, setIsAdvancedOpenComplete] = useState(false);
 
   // References
   const tableWrapperRef = useRef<HTMLDivElement>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
 
   // Dynamic lists extraction
-  const cityOptions = useMemo(() => [
-    { value: 'all', label: 'كل المدن' },
-    { value: 'جدة', label: 'جدة' },
-    { value: 'الرياض', label: 'الرياض' }
-  ], []);
+  const cityOptions = useMemo(() => {
+    const citiesSet = new Set<string>();
+    PROPERTIES.forEach(p => citiesSet.add(p.location.city));
+    const citiesArray = Array.from(citiesSet);
+    return [
+      { value: 'all', label: 'كل المدن' },
+      ...citiesArray.map(c => ({ value: c, label: c }))
+    ];
+  }, []);
 
   const typeOptions = useMemo(() => [
     { value: 'all', label: 'كل الأنواع' },
@@ -541,7 +546,7 @@ export default function PropertiesPage() {
             transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             className="text-xs sm:text-base text-text-secondary leading-relaxed mb-10 max-w-2xl drop-shadow-md text-center"
           >
-            مجموعتنا الفاخرة والمنتقاة بعناية فائقة من الشقق، الفلل والملحقات الفاخرة (الروف) المصممة بأعلى معايير جودة البناء والتشطيب في أرقى أحياء جدة.
+            مجموعتنا الفريدة من الوحدات السكنية الفاخرة المصممة خصيصاً لتلبي تطلعاتكم في العيش الراقي، بمواقع استراتيجية وتشطيبات عالمية الجودة في أفضل مناطق التوسع العمراني.
           </motion.p>
 
           {/* Call To Actions */}
@@ -594,7 +599,7 @@ export default function PropertiesPage() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="ابحث باسم الوحدة، الحي، أو المشروع..."
-                    className="w-full bg-white/10 border border-border-gold/30 hover:border-gold-primary/50 focus:border-gold-primary rounded-xl px-4 py-3 pe-12 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-1 focus:ring-gold-primary transition-all duration-300"
+                    className="w-full bg-white/10 border border-border-gold/30 hover:border-gold-primary/50 focus:border-gold-primary rounded-xl ps-12 pe-4 py-3 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-1 focus:ring-gold-primary transition-all duration-300"
                   />
                   <Search className="w-5 h-5 text-text-muted absolute top-1/2 start-4 -translate-y-1/2" />
                 </div>
@@ -634,7 +639,11 @@ export default function PropertiesPage() {
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                  className="overflow-hidden"
+                  onAnimationStart={() => setIsAdvancedOpenComplete(false)}
+                  onAnimationComplete={() => {
+                    if (showAdvanced) setIsAdvancedOpenComplete(true);
+                  }}
+                  className={`w-full ${isAdvancedOpenComplete ? 'overflow-visible' : 'overflow-hidden'}`}
                 >
                   <div className="border-t border-white/10 pt-6 flex flex-col gap-6">
                     
