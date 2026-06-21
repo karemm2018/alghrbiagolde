@@ -486,7 +486,7 @@ export default function PropertiesPage() {
         {/* Background Image with Slow Zoom effect */}
         <div className="absolute inset-0 z-0 select-none">
           <Image 
-            src="/hero-bg-luxury.webp" 
+            src="/hero-bg-properties.png" 
             alt="Luxury properties background"
             fill
             priority
@@ -496,8 +496,8 @@ export default function PropertiesPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-[#060D1A] via-[#060D1A]/70 to-[#060D1A]/35"></div>
         </div>
 
-        {/* Banner Contents */}
-        <div className="relative z-10 max-w-5xl w-[90%] mx-auto text-center flex flex-col items-center justify-center">
+        {/* Banner Contents (Centered vertically with pt-16/pt-20 offset to balance navbar height) */}
+        <div className="relative z-10 max-w-5xl w-[90%] mx-auto text-center flex flex-col items-center justify-center pt-16 sm:pt-20">
           <motion.span 
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
