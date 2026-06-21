@@ -70,7 +70,7 @@ export default function AboutPage() {
 
   // Animation variants
   const fadeUpVariants = {
-    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : '10vh' },
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 16 },
     visible: {
       opacity: 1,
       y: 0,
@@ -158,9 +158,9 @@ export default function AboutPage() {
         {/* Ken Burns background */}
         <div className="absolute inset-0 z-0">
           <motion.div
-            initial={{ scale: 1 }}
-            animate={{ scale: 1.06 }}
-            transition={{ duration: 16, ease: 'easeOut', repeat: Infinity, repeatType: 'reverse' }}
+            initial={{ scale: 1.06 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 6, ease: [0.16, 1, 0.3, 1] }}
             className="relative w-full h-full"
           >
             <Image
@@ -536,7 +536,7 @@ export default function AboutPage() {
                 return (
                   <motion.div
                     key={evt.year}
-                    initial={{ opacity: 0, y: 30 }}
+                    initial={{ opacity: 0, y: 16 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5, delay: idx * 0.12 }}

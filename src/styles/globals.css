@@ -169,35 +169,37 @@ body {
   overflow-x: hidden;
 }
 
-/* Custom Scrollbar Styles for the entire site & scrollable panels */
-html {
-  scrollbar-width: thin;
-  scrollbar-color: var(--bg-royal) var(--bg-midnight);
-}
+/* Custom Scrollbar Styles for the entire site & scrollable panels - Desktop Only */
+@media (min-width: 1024px) {
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--bg-royal) var(--bg-midnight);
+  }
 
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
 
-::-webkit-scrollbar-track {
-  background: var(--bg-midnight);
-}
+  ::-webkit-scrollbar-track {
+    background: var(--bg-midnight);
+  }
 
-/* Custom scrollbar track offset to start below the header row */
-.custom-table-wrapper::-webkit-scrollbar-track:vertical {
-  margin-top: 53px;
-}
+  /* Custom scrollbar track offset to start below the header row */
+  .custom-table-wrapper::-webkit-scrollbar-track:vertical {
+    margin-top: 53px;
+  }
 
-::-webkit-scrollbar-thumb {
-  background: var(--bg-royal);
-  border-radius: 9999px;
-  border: 2px solid var(--bg-midnight);
-  transition: background-color 0.3s ease;
-}
+  ::-webkit-scrollbar-thumb {
+    background: var(--bg-royal);
+    border-radius: 9999px;
+    border: 2px solid var(--bg-midnight);
+    transition: background-color 0.3s ease;
+  }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--gold-primary);
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--gold-primary);
+  }
 }
 
 /* ----------------------------------------------------
