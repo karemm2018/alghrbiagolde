@@ -452,14 +452,22 @@ export default function PropertiesPage() {
     selectedAmenities
   ]);
 
-  // Table horizontal scroll adjustment effect
+  // Table and Carousel horizontal scroll adjustment effect (starting from the right in RTL)
   useEffect(() => {
     if (viewMode === 'table' && tableWrapperRef.current) {
       const el = tableWrapperRef.current;
-      el.scrollLeft = el.scrollWidth;
+      el.scrollLeft = 0;
       const timer = setTimeout(() => {
-        el.scrollLeft = el.scrollWidth;
-      }, 50);
+        el.scrollLeft = 0;
+      }, 55);
+      return () => clearTimeout(timer);
+    }
+    if (viewMode === 'carousel' && carouselRef.current) {
+      const el = carouselRef.current;
+      el.scrollLeft = 0;
+      const timer = setTimeout(() => {
+        el.scrollLeft = 0;
+      }, 55);
       return () => clearTimeout(timer);
     }
   }, [viewMode, filteredProperties]);
