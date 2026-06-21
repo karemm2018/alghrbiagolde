@@ -492,12 +492,12 @@ export default function PropertiesPage() {
             priority
             className="object-cover scale-105"
           />
-          {/* Dark premium overlay for readability */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#060D1A] via-[#060D1A]/70 to-[#060D1A]/35"></div>
+          {/* Lightened premium overlay for readability and visual clarity */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#060D1A]/90 via-[#060D1A]/55 to-[#060D1A]/15"></div>
         </div>
 
-        {/* Banner Contents (Centered vertically with pt-16/pt-20 offset to balance navbar height) */}
-        <div className="relative z-10 max-w-5xl w-[90%] mx-auto text-center flex flex-col items-center justify-center pt-16 sm:pt-20">
+        {/* Banner Contents (Centered vertically with balanced padding to push it down below floating navbar) */}
+        <div className="relative z-10 max-w-5xl w-[90%] mx-auto text-center flex flex-col items-center justify-center pt-28 sm:pt-36 pb-12 sm:pb-16">
           <motion.span 
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -510,7 +510,7 @@ export default function PropertiesPage() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="text-3xl sm:text-5xl lg:text-6xl font-black text-white leading-tight font-el-messiri mb-6 drop-shadow-xl text-center"
+            className="text-xl xs:text-2xl sm:text-5xl lg:text-6xl font-black text-white leading-tight font-el-messiri mb-6 drop-shadow-xl text-center"
           >
             استكشف <span className="bg-gradient-to-r from-gold-light via-gold-primary to-gold-warm bg-clip-text text-transparent">الوحدات العقارية الفاخرة</span>
           </motion.h1>
@@ -528,19 +528,19 @@ export default function PropertiesPage() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-wrap items-center justify-center gap-4"
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-md sm:max-w-none px-4 sm:px-0"
           >
             <button
               type="button"
               onClick={openInquiry}
-              className="py-3.5 px-10 text-xs sm:text-sm font-bold btn-premium-gold rounded-full flex items-center justify-center gap-1.5 cursor-pointer font-el-messiri transition-all hover:scale-105 active:scale-95 shadow-lg shadow-gold-primary/10"
+              className="w-full sm:w-auto py-3.5 px-10 text-xs sm:text-sm font-bold btn-premium-gold rounded-full flex items-center justify-center gap-1.5 cursor-pointer font-el-messiri transition-all hover:scale-102 active:scale-98 shadow-lg shadow-gold-primary/10"
             >
               <span>تواصل معنا للمعاينة</span>
             </button>
 
             <Link
               href="/#projects-section"
-              className="py-3.5 px-10 text-xs sm:text-sm font-bold bg-white/5 hover:bg-white/10 text-white border border-white/15 hover:border-gold-primary/50 rounded-full flex items-center justify-center gap-1.5 transition-all duration-300 font-el-messiri hover:scale-105 active:scale-95"
+              className="w-full sm:w-auto py-3.5 px-10 text-xs sm:text-sm font-bold bg-white/5 hover:bg-white/10 text-white border border-white/15 hover:border-gold-primary/50 rounded-full flex items-center justify-center gap-1.5 transition-all duration-300 font-el-messiri hover:scale-102 active:scale-98 text-center"
             >
               <span>تصفح المشاريع السكنية</span>
             </Link>
