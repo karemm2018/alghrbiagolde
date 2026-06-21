@@ -12,6 +12,7 @@ interface UnitsCarouselProps {
 
 export default function UnitsCarousel({ properties }: UnitsCarouselProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [showButtons, setShowButtons] = useState(false);
   const [canScrollLeft, setCanScrollLeft] = useState(true);
   const [canScrollRight, setCanScrollRight] = useState(false);
 
@@ -19,26 +20,18 @@ export default function UnitsCarousel({ properties }: UnitsCarouselProps) {
     if (!scrollRef.current) return;
     const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
     
-    // In RTL, scrollLeft is 0 when fully scrolled to the right (start in RTL).
-    // It goes negative as we scroll to the left.
-    // Let's use absolute scrollLeft or RTL standard matching.
-    const isLtr = document.dir === 'ltr';
+    // Show buttons only if there is overflow content to scroll
+    setShowButtons(scrollWidth > clientWidth);
+
+    const absScrollLeft = Math.abs(scrollLeft);
+    const maxScroll = scrollWidth - clientWidth;
     
-    if (isLtr) {
-      setCanScrollRight(scrollLeft > 5);
-      setCanScrollLeft(scrollLeft < scrollWidth - clientWidth - 5);
-    } else {
-      // RTL Mode scroll coordinates:
-      // scrollLeft is 0 at start, and goes negative as we scroll left.
-      // Maximum scroll is: clientWidth - scrollWidth (which is negative).
-      const absScrollLeft = Math.abs(scrollLeft);
-      const maxScroll = scrollWidth - clientWidth;
-      
-      // scrollRight button in RTL goes towards 0 (which is right/start).
-      // scrollLeft button in RTL goes towards maxScroll (which is left/end).
-      setCanScrollRight(absScrollLeft > 5);
-      setCanScrollLeft(absScrollLeft < maxScroll - 5);
-    }
+    // In both LTR and RTL, absScrollLeft tells us how far we have scrolled from the start.
+    // Can scroll right (prev/visual right): if we are scrolled away from start
+    setCanScrollRight(absScrollLeft > 5);
+    
+    // Can scroll left (next/visual left): if we haven't reached the end yet
+    setCanScrollLeft(absScrollLeft < maxScroll - 5);
   };
 
   useEffect(() => {
@@ -60,14 +53,13 @@ export default function UnitsCarousel({ properties }: UnitsCarouselProps) {
     const container = scrollRef.current;
     const scrollAmount = container.clientWidth * 0.85;
 
-    // RTL scroll directions:
-    // Moving left means subtracting/reducing value (scrollLeft becomes more negative).
-    // Moving right means adding/increasing value (scrollLeft moves towards 0).
-    const rtlMultiplier = document.dir === 'ltr' ? 1 : -1;
+    // Visual coordinate-based scrolling:
+    // Left always scrolls visually to the left (-scrollAmount),
+    // Right always scrolls visually to the right (+scrollAmount), regardless of LTR/RTL.
     const shift = direction === 'left' ? -scrollAmount : scrollAmount;
 
     container.scrollBy({
-      left: shift * rtlMultiplier,
+      left: shift,
       behavior: 'smooth',
     });
   };
@@ -75,25 +67,25 @@ export default function UnitsCarousel({ properties }: UnitsCarouselProps) {
   return (
     <div className="relative w-full group/carousel">
       {/* Scroll Navigation Buttons (Hidden on mobile touch screen, visible on hover/tablet+) */}
-      {properties.length > 1 && (
+      {showButtons && (
         <>
           <button
             type="button"
             onClick={() => scroll('right')}
             disabled={!canScrollRight}
-            className={`absolute top-1/2 -translate-y-1/2 start-[-16px] z-30 p-3 rounded-full bg-bg-deep/90 border border-gold-primary/30 text-gold-primary shadow-2xl hover:border-gold-primary transition-all duration-300 cursor-pointer hidden md:flex hover:scale-105 active:scale-95 disabled:opacity-30 disabled:pointer-events-none disabled:scale-100`}
+            className="absolute top-1/2 -translate-y-1/2 start-[-24px] z-30 w-12 h-12 rounded-full bg-gold-primary hover:bg-gold-light text-bg-deep border border-gold-dark/40 flex items-center justify-center shadow-[0_4px_20px_rgba(201,169,110,0.35)] hover:shadow-[0_4px_25px_rgba(201,169,110,0.5)] transition-all duration-300 cursor-pointer hidden md:flex hover:scale-105 active:scale-95 disabled:opacity-20 disabled:pointer-events-none disabled:scale-100"
             aria-label="السابق"
           >
-            <ChevronRight className="w-5 h-5" />
+            <ChevronRight className="w-6 h-6 stroke-[2.5]" />
           </button>
           <button
             type="button"
             onClick={() => scroll('left')}
             disabled={!canScrollLeft}
-            className={`absolute top-1/2 -translate-y-1/2 end-[-16px] z-30 p-3 rounded-full bg-bg-deep/90 border border-gold-primary/30 text-gold-primary shadow-2xl hover:border-gold-primary transition-all duration-300 cursor-pointer hidden md:flex hover:scale-105 active:scale-95 disabled:opacity-30 disabled:pointer-events-none disabled:scale-100`}
+            className="absolute top-1/2 -translate-y-1/2 end-[-24px] z-30 w-12 h-12 rounded-full bg-gold-primary hover:bg-gold-light text-bg-deep border border-gold-dark/40 flex items-center justify-center shadow-[0_4px_20px_rgba(201,169,110,0.35)] hover:shadow-[0_4px_25px_rgba(201,169,110,0.5)] transition-all duration-300 cursor-pointer hidden md:flex hover:scale-105 active:scale-95 disabled:opacity-20 disabled:pointer-events-none disabled:scale-100"
             aria-label="التالي"
           >
-            <ChevronLeft className="w-5 h-5" />
+            <ChevronLeft className="w-6 h-6 stroke-[2.5]" />
           </button>
         </>
       )}
