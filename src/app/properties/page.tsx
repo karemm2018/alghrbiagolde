@@ -485,32 +485,71 @@ export default function PropertiesPage() {
       {/* Container Wrapper */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
-        {/* Page Hero Header */}
-        <div className="text-center mb-12">
-          <motion.span 
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-[11px] font-extrabold text-gold-primary tracking-widest uppercase block mb-3 font-serif"
-          >
-            LIVING GOLDEN LUXURY
-          </motion.span>
-          <motion.h1 
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-tight font-el-messiri mb-4"
-          >
-            استكشف <span className="bg-gradient-to-r from-gold-light via-gold-primary to-gold-warm bg-clip-text text-transparent">الوحدات العقارية الفاخرة</span>
-          </motion.h1>
-          <motion.p 
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="text-xs sm:text-sm text-text-secondary max-w-2xl mx-auto leading-relaxed"
-          >
-            مجموعتنا الفاخرة والمنتقاة بعناية فائقة من الشقق، الفلل والملحقات الفاخرة (الروف) المصممة بأعلى معايير جودة البناء والتشطيب في أرقى أحياء جدة.
-          </motion.p>
+        {/* Page Hero Header Banner */}
+        <div className="relative w-full rounded-3xl overflow-hidden border border-border-gold/30 shadow-2xl mb-12 h-[360px] sm:h-[400px] flex items-center justify-center">
+          {/* Background Image with Slow Zoom effect */}
+          <div className="absolute inset-0 z-0 select-none">
+            <Image 
+              src="/hero-bg-luxury.webp" 
+              alt="Luxury properties background"
+              fill
+              priority
+              className="object-cover scale-105"
+            />
+            {/* Dark premium overlay for readability */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#060D1A] via-[#060D1A]/70 to-[#060D1A]/40"></div>
+          </div>
+
+          {/* Banner Contents */}
+          <div className="relative z-10 max-w-3xl mx-auto px-6 text-center flex flex-col items-center">
+            <motion.span 
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="text-[11px] font-extrabold text-gold-primary tracking-widest uppercase block mb-3.5 font-serif"
+            >
+              LIVING GOLDEN LUXURY
+            </motion.span>
+            <motion.h1 
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              className="text-2xl sm:text-4xl lg:text-5xl font-black text-white leading-tight font-el-messiri mb-4"
+            >
+              استكشف <span className="bg-gradient-to-r from-gold-light via-gold-primary to-gold-warm bg-clip-text text-transparent">الوحدات العقارية الفاخرة</span>
+            </motion.h1>
+            <motion.p 
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+              className="text-xs sm:text-sm text-text-secondary leading-relaxed mb-8 max-w-2xl"
+            >
+              مجموعتنا الفاخرة والمنتقاة بعناية فائقة من الشقق، الفلل والملحقات الفاخرة (الروف) المصممة بأعلى معايير جودة البناء والتشطيب في أرقى أحياء جدة.
+            </motion.p>
+
+            {/* Call To Actions */}
+            <motion.div 
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-wrap items-center justify-center gap-4"
+            >
+              <button
+                type="button"
+                onClick={openInquiry}
+                className="py-3 px-8 text-xs font-bold btn-premium-gold rounded-full flex items-center justify-center gap-1.5 cursor-pointer font-el-messiri transition-transform active:scale-95 shadow-lg shadow-gold-primary/10"
+              >
+                <span>تواصل معنا للمعاينة</span>
+              </button>
+
+              <Link
+                href="/#projects-section"
+                className="py-3 px-8 text-xs font-bold bg-white/5 hover:bg-white/10 text-white border border-white/15 hover:border-gold-primary/50 rounded-full flex items-center justify-center gap-1.5 transition-all duration-300 font-el-messiri active:scale-95"
+              >
+                <span>تصفح المشاريع السكنية</span>
+              </Link>
+            </motion.div>
+          </div>
         </div>
 
         {/* Filter panel card */}
