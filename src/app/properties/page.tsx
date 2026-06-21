@@ -30,7 +30,9 @@ import {
   Building,
   RotateCcw,
   Sliders,
-  Filter
+  Filter,
+  Calendar,
+  Compass
 } from 'lucide-react';
 
 // Sub-component for horizontal detailed card view
@@ -533,15 +535,17 @@ export default function PropertiesPage() {
             <button
               type="button"
               onClick={openInquiry}
-              className="w-full sm:w-auto py-3.5 px-10 text-xs sm:text-sm font-bold btn-premium-gold rounded-full flex items-center justify-center gap-1.5 cursor-pointer font-el-messiri transition-all hover:scale-102 active:scale-98 shadow-lg shadow-gold-primary/10"
+              className="w-full sm:w-auto py-3.5 px-10 text-xs sm:text-sm font-bold btn-premium-gold rounded-full flex items-center justify-center gap-2 cursor-pointer font-el-messiri transition-all hover:scale-102 active:scale-98 shadow-lg shadow-gold-primary/10"
             >
+              <Calendar className="w-4 h-4 shrink-0" />
               <span>تواصل معنا للمعاينة</span>
             </button>
 
             <Link
               href="/#projects-section"
-              className="w-full sm:w-auto py-3.5 px-10 text-xs sm:text-sm font-bold bg-white/5 hover:bg-white/10 text-white border border-white/15 hover:border-gold-primary/50 rounded-full flex items-center justify-center gap-1.5 transition-all duration-300 font-el-messiri hover:scale-102 active:scale-98 text-center"
+              className="w-full sm:w-auto py-3.5 px-10 text-xs sm:text-sm font-bold bg-white/5 hover:bg-white/10 text-white border border-white/15 hover:border-gold-primary/50 rounded-full flex items-center justify-center gap-2 transition-all duration-300 font-el-messiri hover:scale-102 active:scale-98 text-center"
             >
+              <Compass className="w-4 h-4 shrink-0 text-gold-primary" />
               <span>تصفح المشاريع السكنية</span>
             </Link>
           </motion.div>
