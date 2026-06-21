@@ -22,6 +22,7 @@ import {
   TableProperties,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   Phone,
   MessageCircle,
   X,
@@ -477,80 +478,82 @@ export default function PropertiesPage() {
   }, [filteredProperties]);
 
   return (
-    <main className="min-h-screen bg-bg-midnight pt-28 pb-20 relative overflow-hidden" dir="rtl">
+    <main className="min-h-screen bg-bg-midnight relative overflow-x-hidden" dir="rtl">
+      {/* ----------------------------------------------------
+         1. Full-screen Hero Section (80vh & Full Width)
+         ---------------------------------------------------- */}
+      <section className="relative h-[80vh] w-full flex items-center justify-center bg-bg-deep overflow-hidden">
+        {/* Background Image with Slow Zoom effect */}
+        <div className="absolute inset-0 z-0 select-none">
+          <Image 
+            src="/hero-bg-luxury.webp" 
+            alt="Luxury properties background"
+            fill
+            priority
+            className="object-cover scale-105"
+          />
+          {/* Dark premium overlay for readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#060D1A] via-[#060D1A]/70 to-[#060D1A]/35"></div>
+        </div>
+
+        {/* Banner Contents */}
+        <div className="relative z-10 max-w-5xl w-[90%] mx-auto text-center flex flex-col items-center justify-center">
+          <motion.span 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-[11px] font-extrabold text-gold-primary tracking-widest uppercase block mb-4 font-serif"
+          >
+            LIVING GOLDEN LUXURY
+          </motion.span>
+          <motion.h1 
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="text-3xl sm:text-5xl lg:text-6xl font-black text-white leading-tight font-el-messiri mb-6 drop-shadow-xl"
+          >
+            استكشف <span className="bg-gradient-to-r from-gold-light via-gold-primary to-gold-warm bg-clip-text text-transparent">الوحدات العقارية الفاخرة</span>
+          </motion.h1>
+          <motion.p 
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            className="text-xs sm:text-base text-text-secondary leading-relaxed mb-10 max-w-2xl drop-shadow-md"
+          >
+            مجموعتنا الفاخرة والمنتقاة بعناية فائقة من الشقق، الفلل والملحقات الفاخرة (الروف) المصممة بأعلى معايير جودة البناء والتشطيب في أرقى أحياء جدة.
+          </motion.p>
+
+          {/* Call To Actions */}
+          <motion.div 
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            className="flex flex-wrap items-center justify-center gap-4"
+          >
+            <button
+              type="button"
+              onClick={openInquiry}
+              className="py-3.5 px-10 text-xs sm:text-sm font-bold btn-premium-gold rounded-full flex items-center justify-center gap-1.5 cursor-pointer font-el-messiri transition-all hover:scale-105 active:scale-95 shadow-lg shadow-gold-primary/10"
+            >
+              <span>تواصل معنا للمعاينة</span>
+            </button>
+
+            <Link
+              href="/#projects-section"
+              className="py-3.5 px-10 text-xs sm:text-sm font-bold bg-white/5 hover:bg-white/10 text-white border border-white/15 hover:border-gold-primary/50 rounded-full flex items-center justify-center gap-1.5 transition-all duration-300 font-el-messiri hover:scale-105 active:scale-95"
+            >
+              <span>تصفح المشاريع السكنية</span>
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
       {/* Background ambient light effects */}
-      <div className="absolute top-0 right-0 w-[45vw] h-[45vw] bg-gradient-to-br from-gold-primary/8 to-transparent rounded-full blur-[140px] pointer-events-none -z-10" />
+      <div className="absolute top-[80vh] right-0 w-[45vw] h-[45vw] bg-gradient-to-br from-gold-primary/8 to-transparent rounded-full blur-[140px] pointer-events-none -z-10" />
       <div className="absolute bottom-[20%] left-0 w-[35vw] h-[35vw] bg-gradient-to-tr from-brand-primary/5 to-transparent rounded-full blur-[120px] pointer-events-none -z-10" />
 
-      {/* Container Wrapper */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
-        {/* Page Hero Header Banner */}
-        <div className="relative w-full rounded-3xl overflow-hidden border border-border-gold/30 shadow-2xl mb-12 h-[360px] sm:h-[400px] flex items-center justify-center">
-          {/* Background Image with Slow Zoom effect */}
-          <div className="absolute inset-0 z-0 select-none">
-            <Image 
-              src="/hero-bg-luxury.webp" 
-              alt="Luxury properties background"
-              fill
-              priority
-              className="object-cover scale-105"
-            />
-            {/* Dark premium overlay for readability */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#060D1A] via-[#060D1A]/70 to-[#060D1A]/40"></div>
-          </div>
-
-          {/* Banner Contents */}
-          <div className="relative z-10 max-w-3xl mx-auto px-6 text-center flex flex-col items-center">
-            <motion.span 
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="text-[11px] font-extrabold text-gold-primary tracking-widest uppercase block mb-3.5 font-serif"
-            >
-              LIVING GOLDEN LUXURY
-            </motion.span>
-            <motion.h1 
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="text-2xl sm:text-4xl lg:text-5xl font-black text-white leading-tight font-el-messiri mb-4"
-            >
-              استكشف <span className="bg-gradient-to-r from-gold-light via-gold-primary to-gold-warm bg-clip-text text-transparent">الوحدات العقارية الفاخرة</span>
-            </motion.h1>
-            <motion.p 
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-              className="text-xs sm:text-sm text-text-secondary leading-relaxed mb-8 max-w-2xl"
-            >
-              مجموعتنا الفاخرة والمنتقاة بعناية فائقة من الشقق، الفلل والملحقات الفاخرة (الروف) المصممة بأعلى معايير جودة البناء والتشطيب في أرقى أحياء جدة.
-            </motion.p>
-
-            {/* Call To Actions */}
-            <motion.div 
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-              className="flex flex-wrap items-center justify-center gap-4"
-            >
-              <button
-                type="button"
-                onClick={openInquiry}
-                className="py-3 px-8 text-xs font-bold btn-premium-gold rounded-full flex items-center justify-center gap-1.5 cursor-pointer font-el-messiri transition-transform active:scale-95 shadow-lg shadow-gold-primary/10"
-              >
-                <span>تواصل معنا للمعاينة</span>
-              </button>
-
-              <Link
-                href="/#projects-section"
-                className="py-3 px-8 text-xs font-bold bg-white/5 hover:bg-white/10 text-white border border-white/15 hover:border-gold-primary/50 rounded-full flex items-center justify-center gap-1.5 transition-all duration-300 font-el-messiri active:scale-95"
-              >
-                <span>تصفح المشاريع السكنية</span>
-              </Link>
-            </motion.div>
-          </div>
-        </div>
+      {/* 2. Listings Wrapper */}
+      <div id="properties-listings-section" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-24 relative z-10">
 
         {/* Filter panel card */}
         <section className="bg-bg-navy/35 backdrop-blur-xl border border-white/10 rounded-3xl p-6 sm:p-8 shadow-2xl mb-10 transition-all duration-300">
