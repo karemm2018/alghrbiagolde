@@ -70,7 +70,7 @@ const DetailedPropertyCard = ({ property, openInquiry }: { property: Property; o
           className="object-cover transition-transform duration-[6000ms] group-hover:scale-108 z-0"
         />
         <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-l from-slate-950/70 via-transparent to-transparent z-10"></div>
-        <div className="absolute top-4 right-4 z-20">
+        <div className="absolute top-4 start-4 z-20">
           <span className="px-3 py-1 text-[10px] font-extrabold text-white bg-status-available border border-status-available rounded-full shadow-[0_4px_12px_rgba(34,169,110,0.3)]">
             {property.status === 'available' ? 'متاح للبيع' : 'محجوز'}
           </span>
@@ -123,21 +123,21 @@ const DetailedPropertyCard = ({ property, openInquiry }: { property: Property; o
                 <span>{formatArea(property.specs.area)}</span>
               </div>
             </div>
-            <div className="flex flex-col items-center justify-center gap-1 border-r sm:border-r-0 sm:border-x border-white/5">
+            <div className="flex flex-col items-center justify-center gap-1 border-s sm:border-s-0 sm:border-x border-white/5">
               <span className="text-[9px] text-text-muted">الغرف</span>
               <div className="flex items-center gap-1 font-bold text-white">
                 <Bed className="w-3.5 h-3.5 text-gold-primary" />
                 <span>{property.specs.bedrooms}</span>
               </div>
             </div>
-            <div className="flex flex-col items-center justify-center gap-1 border-r border-white/5">
+            <div className="flex flex-col items-center justify-center gap-1 border-s border-white/5">
               <span className="text-[9px] text-text-muted">الحمامات</span>
               <div className="flex items-center gap-1 font-bold text-white">
                 <Bath className="w-3.5 h-3.5 text-gold-primary" />
                 <span>{property.specs.bathrooms}</span>
               </div>
             </div>
-            <div className="flex flex-col items-center justify-center gap-1 border-r border-white/5">
+            <div className="flex flex-col items-center justify-center gap-1 border-s border-white/5">
               <span className="text-[9px] text-text-muted">الفئة</span>
               <span className="font-extrabold text-gold-light">{typeLabel}</span>
             </div>
@@ -452,6 +452,17 @@ export default function PropertiesPage() {
     selectedAmenities
   ]);
 
+  // Dynamic filter visibility depending on options availability
+  const showCityFilter = useMemo(() => cityOptions.length > 2, [cityOptions]);
+  const showDistrictFilter = useMemo(() => districtOptions.length > 2, [districtOptions]);
+
+  const gridColsClass = useMemo(() => {
+    let cols = 2; // Search query takes col-span-2
+    if (showCityFilter) cols += 1;
+    if (showDistrictFilter) cols += 1;
+    return `grid grid-cols-1 md:grid-cols-${cols} gap-4`;
+  }, [showCityFilter, showDistrictFilter]);
+
   // Table and Carousel horizontal scroll adjustment effect (starting from the right in RTL)
   useEffect(() => {
     if (viewMode === 'table' && tableWrapperRef.current) {
@@ -561,8 +572,8 @@ export default function PropertiesPage() {
       </section>
 
       {/* Background ambient light effects */}
-      <div className="absolute top-[80vh] right-0 w-[45vw] h-[45vw] bg-gradient-to-br from-gold-primary/8 to-transparent rounded-full blur-[140px] pointer-events-none -z-10" />
-      <div className="absolute bottom-[20%] left-0 w-[35vw] h-[35vw] bg-gradient-to-tr from-brand-primary/5 to-transparent rounded-full blur-[120px] pointer-events-none -z-10" />
+      <div className="absolute top-[80vh] start-0 w-[45vw] h-[45vw] bg-gradient-to-br from-gold-primary/8 to-transparent rounded-full blur-[140px] pointer-events-none -z-10" />
+      <div className="absolute bottom-[20%] end-0 w-[35vw] h-[35vw] bg-gradient-to-tr from-brand-primary/5 to-transparent rounded-full blur-[120px] pointer-events-none -z-10" />
 
       {/* 2. Listings Wrapper */}
       <div id="properties-listings-section" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-24 relative z-10">
@@ -572,7 +583,7 @@ export default function PropertiesPage() {
           <div className="flex flex-col gap-6">
             
             {/* Primary filter row */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className={gridColsClass}>
               {/* Search input */}
               <div className="relative w-full text-right md:col-span-2">
                 <label htmlFor="prop-search" className="sr-only">البحث عن وحدة</label>
@@ -585,30 +596,34 @@ export default function PropertiesPage() {
                     placeholder="ابحث باسم الوحدة، الحي، أو المشروع..."
                     className="w-full bg-white/10 border border-border-gold/30 hover:border-gold-primary/50 focus:border-gold-primary rounded-xl px-4 py-3 pe-12 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-1 focus:ring-gold-primary transition-all duration-300"
                   />
-                  <Search className="w-5 h-5 text-text-muted absolute top-1/2 left-4 -translate-y-1/2" />
+                  <Search className="w-5 h-5 text-text-muted absolute top-1/2 start-4 -translate-y-1/2" />
                 </div>
               </div>
 
               {/* City selector */}
-              <CustomSelect 
-                id="city-select"
-                title="المدينة"
-                options={cityOptions}
-                value={selectedCity}
-                onChange={(val) => {
-                  setSelectedCity(val);
-                  setSelectedDistrict('all'); // reset district on city switch
-                }}
-              />
+              {showCityFilter && (
+                <CustomSelect 
+                  id="city-select"
+                  title="المدينة"
+                  options={cityOptions}
+                  value={selectedCity}
+                  onChange={(val) => {
+                    setSelectedCity(val);
+                    setSelectedDistrict('all'); // reset district on city switch
+                  }}
+                />
+              )}
 
               {/* District selector */}
-              <CustomSelect 
-                id="district-select"
-                title="الحي"
-                options={districtOptions}
-                value={selectedDistrict}
-                onChange={setSelectedDistrict}
-              />
+              {showDistrictFilter && (
+                <CustomSelect 
+                  id="district-select"
+                  title="الحي"
+                  options={districtOptions}
+                  value={selectedDistrict}
+                  onChange={setSelectedDistrict}
+                />
+              )}
             </div>
 
             {/* Collapsible advanced filters panel */}
@@ -902,7 +917,7 @@ export default function PropertiesPage() {
                     onClick={() => handleCarouselNav('prev')}
                     aria-label="السابق"
                     title="الرجوع للخلف"
-                    className="absolute top-1/2 -right-4 -translate-y-1/2 z-20 p-2.5 rounded-full bg-bg-midnight/90 border border-gold-primary/30 hover:border-gold-primary text-gold-primary shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 hidden sm:flex cursor-pointer"
+                    className="absolute top-1/2 -start-4 -translate-y-1/2 z-20 p-2.5 rounded-full bg-bg-midnight/90 border border-gold-primary/30 hover:border-gold-primary text-gold-primary shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 hidden sm:flex cursor-pointer"
                   >
                     <ChevronRight className="w-5 h-5" />
                   </button>
@@ -912,7 +927,7 @@ export default function PropertiesPage() {
                     onClick={() => handleCarouselNav('next')}
                     aria-label="التالي"
                     title="التمرير للأمام"
-                    className="absolute top-1/2 -left-4 -translate-y-1/2 z-20 p-2.5 rounded-full bg-bg-midnight/90 border border-gold-primary/30 hover:border-gold-primary text-gold-primary shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 hidden sm:flex cursor-pointer"
+                    className="absolute top-1/2 -end-4 -translate-y-1/2 z-20 p-2.5 rounded-full bg-bg-midnight/90 border border-gold-primary/30 hover:border-gold-primary text-gold-primary shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 hidden sm:flex cursor-pointer"
                   >
                     <ChevronLeft className="w-5 h-5" />
                   </button>
@@ -931,19 +946,19 @@ export default function PropertiesPage() {
                   <div 
                     ref={tableWrapperRef} 
                     className="custom-table-wrapper w-full max-h-[60vh] overflow-auto rounded-2xl border-2 border-gold-primary/50 bg-[#0F2342]/90 backdrop-blur-xl shadow-2xl scrollbar-thin scrollbar-thumb-gold-primary scrollbar-track-transparent" 
-                    dir="ltr"
+                    dir="rtl"
                   >
-                    <table className="w-full min-w-[950px] text-right text-xs sm:text-[13px] table-auto border-collapse" dir="rtl">
+                    <table className="w-full min-w-[950px] text-right text-xs sm:text-[13px] table-auto border-collapse">
                       <thead className="sticky top-0 z-20 shadow-md">
                         <tr className="border-b border-border-gold/30 text-gold-primary font-el-messiri bg-[#18325C]">
-                          <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0 text-right bg-[#18325C]">الصورة</th>
-                          <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0 text-right bg-[#18325C]">اسم الوحدة</th>
-                          <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0 text-right bg-[#18325C]">النوع</th>
-                          <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0 text-right bg-[#18325C]">الموقع</th>
-                          <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0 text-right bg-[#18325C]">المساحة</th>
-                          <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0 text-right bg-[#18325C]">الغرف / الحمامات</th>
-                          <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-r-0 last:border-l-0 text-right bg-[#18325C]">السعر الإجمالي</th>
-                          <th className="py-4 px-5 font-bold whitespace-nowrap text-center border-x border-border-gold/15 first:border-r-0 last:border-l-0 bg-[#18325C]">التفاصيل</th>
+                          <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-s-0 last:border-e-0 text-right bg-[#18325C]">الصورة</th>
+                          <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-s-0 last:border-e-0 text-right bg-[#18325C]">اسم الوحدة</th>
+                          <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-s-0 last:border-e-0 text-right bg-[#18325C]">النوع</th>
+                          <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-s-0 last:border-e-0 text-right bg-[#18325C]">الموقع</th>
+                          <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-s-0 last:border-e-0 text-right bg-[#18325C]">المساحة</th>
+                          <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-s-0 last:border-e-0 text-right bg-[#18325C]">الغرف / الحمامات</th>
+                          <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-s-0 last:border-e-0 text-right bg-[#18325C]">السعر الإجمالي</th>
+                          <th className="py-4 px-5 font-bold whitespace-nowrap text-center border-x border-border-gold/15 first:border-s-0 last:border-e-0 bg-[#18325C]">التفاصيل</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-border-gold/15 text-white bg-[#0F2342]/40">
@@ -958,7 +973,7 @@ export default function PropertiesPage() {
                           return (
                             <tr key={property.id} className="odd:bg-[#0F2342]/40 even:bg-[#142B4E]/60 hover:bg-gold-primary/[0.08] transition-colors duration-150 border-b border-border-gold/10 last:border-b-0">
                               {/* Image */}
-                              <td className="py-3 px-5 border-x border-border-gold/10 first:border-r-0 last:border-l-0 text-right">
+                              <td className="py-3 px-5 border-x border-border-gold/10 first:border-s-0 last:border-e-0 text-right">
                                 <div className="relative w-14 h-10 rounded-lg overflow-hidden border border-border-gold/20 shadow-sm shrink-0">
                                   <Image 
                                     src={property.media.thumbnail || '/properties/apartment.webp'} 
@@ -971,40 +986,40 @@ export default function PropertiesPage() {
                               </td>
 
                               {/* Title */}
-                              <td className="py-3 px-5 font-semibold border-x border-border-gold/10 first:border-r-0 last:border-l-0 text-right whitespace-nowrap">
+                              <td className="py-3 px-5 font-semibold border-x border-border-gold/10 first:border-s-0 last:border-e-0 text-right whitespace-nowrap">
                                 <span className="font-bold text-white block">{property.title}</span>
                                 <span className="text-[10px] text-text-muted block mt-0.5">{property.project.name}</span>
                               </td>
 
                               {/* Type */}
-                              <td className="py-3 px-5 border-x border-border-gold/10 first:border-r-0 last:border-l-0 text-right whitespace-nowrap">
+                              <td className="py-3 px-5 border-x border-border-gold/10 first:border-s-0 last:border-e-0 text-right whitespace-nowrap">
                                 <span className="inline-block py-0.5 px-2.5 text-[11px] font-bold text-gold-light bg-gold-primary/[0.08] border border-gold-primary/20 rounded-full">
                                   {typeLabel}
                                 </span>
                               </td>
 
                               {/* Location */}
-                              <td className="py-3 px-5 text-text-secondary border-x border-border-gold/10 first:border-r-0 last:border-l-0 text-right whitespace-nowrap">
+                              <td className="py-3 px-5 text-text-secondary border-x border-border-gold/10 first:border-s-0 last:border-e-0 text-right whitespace-nowrap">
                                 {property.location.city}، {property.location.district}
                               </td>
 
                               {/* Area */}
-                              <td className="py-3 px-5 font-bold border-x border-border-gold/10 first:border-r-0 last:border-l-0 text-right whitespace-nowrap font-mono">
+                              <td className="py-3 px-5 font-bold border-x border-border-gold/10 first:border-s-0 last:border-e-0 text-right whitespace-nowrap font-mono">
                                 {new Intl.NumberFormat('en-US').format(property.specs.area)} م²
                               </td>
 
                               {/* Specs */}
-                              <td className="py-3 px-5 text-text-secondary border-x border-border-gold/10 first:border-r-0 last:border-l-0 text-right whitespace-nowrap font-mono">
+                              <td className="py-3 px-5 text-text-secondary border-x border-border-gold/10 first:border-s-0 last:border-e-0 text-right whitespace-nowrap font-mono">
                                 {property.specs.bedrooms} غرف / {property.specs.bathrooms} حمامات
                               </td>
 
                               {/* Price */}
-                              <td className="py-3 px-5 font-bold text-gold-primary font-mono border-x border-border-gold/10 first:border-r-0 last:border-l-0 text-right whitespace-nowrap">
+                              <td className="py-3 px-5 font-bold text-gold-primary font-mono border-x border-border-gold/10 first:border-s-0 last:border-e-0 text-right whitespace-nowrap">
                                 {new Intl.NumberFormat('en-US').format(property.pricing.price)} ر.س
                               </td>
 
                               {/* Details button */}
-                              <td className="py-3 px-5 text-center border-x border-border-gold/10 first:border-r-0 last:border-l-0">
+                              <td className="py-3 px-5 text-center border-x border-border-gold/10 first:border-s-0 last:border-e-0">
                                 <Link
                                   href={`/property/${property.slug}`}
                                   className="py-1.5 px-5 text-xs font-bold btn-premium-gold rounded-md inline-block font-el-messiri whitespace-nowrap text-center"

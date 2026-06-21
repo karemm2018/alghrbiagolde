@@ -28,7 +28,8 @@ import {
   Sliders,
   Filter,
   Calendar,
-  Compass
+  Compass,
+  Download
 } from 'lucide-react';
 
 // Sub-component for horizontal detailed project card view
@@ -70,7 +71,7 @@ const DetailedProjectCard = ({ project, openInquiry }: { project: Project; openI
           className="object-cover transition-transform duration-[6000ms] group-hover:scale-108 z-0"
         />
         <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-l from-slate-950/70 via-transparent to-transparent z-10"></div>
-        <div className="absolute top-4 right-4 z-20">
+        <div className="absolute top-4 start-4 z-20">
           <span className={`px-3 py-1 text-[10px] font-extrabold text-white border rounded-full ${statusClass}`}>
             {statusLabel}
           </span>
@@ -108,15 +109,15 @@ const DetailedProjectCard = ({ project, openInquiry }: { project: Project; openI
               <span className="text-[9px] text-text-muted">المنطقة</span>
               <span className="font-bold text-white">{project.location.district}</span>
             </div>
-            <div className="flex flex-col items-center justify-center gap-1 border-r sm:border-r-0 sm:border-x border-white/5">
+            <div className="flex flex-col items-center justify-center gap-1 border-s sm:border-s-0 sm:border-x border-white/5">
               <span className="text-[9px] text-text-muted">إجمالي الوحدات</span>
               <span className="font-bold text-white">{project.specs.totalUnits} شقة</span>
             </div>
-            <div className="flex flex-col items-center justify-center gap-1 border-r border-white/5">
+            <div className="flex flex-col items-center justify-center gap-1 border-s border-white/5">
               <span className="text-[9px] text-text-muted">الوحدات المتاحة</span>
               <span className="font-bold text-gold-light">{project.specs.availableUnits} شقة</span>
             </div>
-            <div className="flex flex-col items-center justify-center gap-1 border-r border-white/5">
+            <div className="flex flex-col items-center justify-center gap-1 border-s border-white/5">
               <span className="text-[9px] text-text-muted">تاريخ التسليم</span>
               <span className="font-bold text-white">{project.specs.completionDate}</span>
             </div>
@@ -132,6 +133,15 @@ const DetailedProjectCard = ({ project, openInquiry }: { project: Project; openI
             <span>استعراض وحدات المشروع</span>
             <ChevronLeft className="w-3.5 h-3.5" />
           </Link>
+
+          <a
+            href="/brochure-placeholder.pdf"
+            download
+            className="w-full sm:w-auto py-2.5 px-6 text-xs font-bold bg-gold-primary/10 hover:bg-gold-primary/20 text-gold-primary border border-gold-primary/25 hover:border-gold-primary/50 rounded-xl flex items-center justify-center gap-1.5 transition-all text-center"
+          >
+            <Download className="w-3.5 h-3.5" />
+            <span>تحميل البروفايل PDF</span>
+          </a>
 
           <a
             href={whatsappLink}
@@ -194,7 +204,7 @@ const ProjectCard = ({ project, openInquiry }: { project: Project; openInquiry: 
           className="object-cover transition-transform duration-[6000ms] group-hover:scale-108 z-0"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent z-10"></div>
-        <div className="absolute top-4 right-4 z-20">
+        <div className="absolute top-4 start-4 z-20">
           <span className={`px-3 py-1 text-[10px] font-extrabold text-white border rounded-full ${statusClass}`}>
             {statusLabel}
           </span>
@@ -239,13 +249,23 @@ const ProjectCard = ({ project, openInquiry }: { project: Project; openInquiry: 
               </span>
             </div>
             
-            <button
-              type="button"
-              onClick={openInquiry}
-              className="py-2 px-4 text-xs font-bold btn-premium-gold rounded-xl cursor-pointer font-el-messiri transition-all hover:scale-102 active:scale-98 shadow-md"
-            >
-              تفاصيل المشروع
-            </button>
+            <div className="flex items-center gap-2">
+              <a
+                href="/brochure-placeholder.pdf"
+                download
+                title="تحميل البروفايل PDF"
+                className="p-2 rounded-xl bg-white/5 hover:bg-gold-primary/10 border border-white/10 hover:border-gold-primary/40 text-text-secondary hover:text-gold-primary transition-all cursor-pointer"
+              >
+                <Download className="w-4 h-4" />
+              </a>
+              <button
+                type="button"
+                onClick={openInquiry}
+                className="py-2 px-4 text-xs font-bold btn-premium-gold rounded-xl cursor-pointer font-el-messiri transition-all hover:scale-102 active:scale-98 shadow-md"
+              >
+                تفاصيل
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -271,12 +291,16 @@ export default function ProjectsPage() {
   const carouselRef = useRef<HTMLDivElement>(null);
   const tableWrapperRef = useRef<HTMLDivElement>(null);
 
-  // Constants
-  const cityOptions = [
-    { value: 'all', label: 'كل المدن' },
-    { value: 'جدة', label: 'جدة' },
-    { value: 'الرياض', label: 'الرياض' }
-  ];
+  // Extract unique cities dynamically
+  const cityOptions = useMemo(() => {
+    const citiesSet = new Set<string>();
+    PROJECTS.forEach(proj => citiesSet.add(proj.location.city));
+    const citiesArray = Array.from(citiesSet);
+    return [
+      { value: 'all', label: 'كل المدن' },
+      ...citiesArray.map(c => ({ value: c, label: c }))
+    ];
+  }, []);
 
   const statusOptions = [
     { value: 'all', label: 'كل الحالات' },
@@ -302,6 +326,17 @@ export default function ProjectsPage() {
 
     return list;
   }, [selectedCity]);
+
+  // Dynamic filter visibility depending on options availability
+  const showCityFilter = useMemo(() => cityOptions.length > 2, [cityOptions]);
+  const showDistrictFilter = useMemo(() => districtOptions.length > 2, [districtOptions]);
+
+  const gridColsClass = useMemo(() => {
+    let cols = 2; // Search query takes col-span-2
+    if (showCityFilter) cols += 1;
+    if (showDistrictFilter) cols += 1;
+    return `grid grid-cols-1 md:grid-cols-${cols} gap-4`;
+  }, [showCityFilter, showDistrictFilter]);
 
   // Price select options
   const minPriceOptions = [
@@ -497,8 +532,8 @@ export default function ProjectsPage() {
       </section>
 
       {/* Background ambient light effects */}
-      <div className="absolute top-[80vh] right-0 w-[45vw] h-[45vw] bg-gradient-to-br from-gold-primary/8 to-transparent rounded-full blur-[140px] pointer-events-none -z-10" />
-      <div className="absolute bottom-[20%] left-0 w-[35vw] h-[35vw] bg-gradient-to-tr from-brand-primary/5 to-transparent rounded-full blur-[120px] pointer-events-none -z-10" />
+      <div className="absolute top-[80vh] start-0 w-[45vw] h-[45vw] bg-gradient-to-br from-gold-primary/8 to-transparent rounded-full blur-[140px] pointer-events-none -z-10" />
+      <div className="absolute bottom-[20%] end-0 w-[35vw] h-[35vw] bg-gradient-to-tr from-brand-primary/5 to-transparent rounded-full blur-[120px] pointer-events-none -z-10" />
 
       {/* 2. Listings Wrapper */}
       <div id="projects-listings-section" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-24 relative z-10">
@@ -508,7 +543,7 @@ export default function ProjectsPage() {
           <div className="flex flex-col gap-6">
             
             {/* Primary filter row */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className={gridColsClass}>
               {/* Search input */}
               <div className="relative w-full text-right md:col-span-2">
                 <label htmlFor="proj-search" className="sr-only">البحث عن مشروع</label>
@@ -521,30 +556,34 @@ export default function ProjectsPage() {
                     placeholder="ابحث باسم المشروع، الحي، أو المدينة..."
                     className="w-full bg-white/10 border border-border-gold/30 hover:border-gold-primary/50 focus:border-gold-primary rounded-xl px-4 py-3 pe-12 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-1 focus:ring-gold-primary transition-all duration-300"
                   />
-                  <Search className="w-5 h-5 text-text-muted absolute top-1/2 left-4 -translate-y-1/2" />
+                  <Search className="w-5 h-5 text-text-muted absolute top-1/2 start-4 -translate-y-1/2" />
                 </div>
               </div>
 
               {/* City selector */}
-              <CustomSelect 
-                id="city-select"
-                title="المدينة"
-                options={cityOptions}
-                value={selectedCity}
-                onChange={(val) => {
-                  setSelectedCity(val);
-                  setSelectedDistrict('all'); // reset district on city switch
-                }}
-              />
+              {showCityFilter && (
+                <CustomSelect 
+                  id="city-select"
+                  title="المدينة"
+                  options={cityOptions}
+                  value={selectedCity}
+                  onChange={(val) => {
+                    setSelectedCity(val);
+                    setSelectedDistrict('all'); // reset district on city switch
+                  }}
+                />
+              )}
 
               {/* District selector */}
-              <CustomSelect 
-                id="district-select"
-                title="الحي"
-                options={districtOptions}
-                value={selectedDistrict}
-                onChange={setSelectedDistrict}
-              />
+              {showDistrictFilter && (
+                <CustomSelect 
+                  id="district-select"
+                  title="الحي"
+                  options={districtOptions}
+                  value={selectedDistrict}
+                  onChange={setSelectedDistrict}
+                />
+              )}
             </div>
 
             {/* Collapsible advanced filters panel */}
@@ -693,7 +732,7 @@ export default function ProjectsPage() {
             </button>
           </div>
 
-          <h2 className="text-lg font-bold text-white font-el-messiri border-r-2 border-gold-primary pr-3">مشاريعنا العقارية</h2>
+          <h2 className="text-lg font-bold text-white font-el-messiri border-r-2 border-gold-primary pr-3 border-e-2 pe-3 border-r-0">مشاريعنا العقارية</h2>
         </div>
 
         {/* ----------------------------------------------------
@@ -774,7 +813,7 @@ export default function ProjectsPage() {
                   onClick={() => handleCarouselNav('prev')}
                   aria-label="السابق"
                   title="الرجوع للخلف"
-                  className="absolute top-1/2 -right-4 -translate-y-1/2 z-20 p-2.5 rounded-full bg-bg-midnight/90 border border-gold-primary/30 hover:border-gold-primary text-gold-primary shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 hidden sm:flex cursor-pointer"
+                  className="absolute top-1/2 -start-4 -translate-y-1/2 z-20 p-2.5 rounded-full bg-bg-midnight/90 border border-gold-primary/30 hover:border-gold-primary text-gold-primary shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 hidden sm:flex cursor-pointer"
                 >
                   <ChevronRight className="w-5 h-5" />
                 </button>
@@ -784,7 +823,7 @@ export default function ProjectsPage() {
                   onClick={() => handleCarouselNav('next')}
                   aria-label="التالي"
                   title="التمرير للأمام"
-                  className="absolute top-1/2 -left-4 -translate-y-1/2 z-20 p-2.5 rounded-full bg-bg-midnight/90 border border-gold-primary/30 hover:border-gold-primary text-gold-primary shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 hidden sm:flex cursor-pointer"
+                  className="absolute top-1/2 -end-4 -translate-y-1/2 z-20 p-2.5 rounded-full bg-bg-midnight/90 border border-gold-primary/30 hover:border-gold-primary text-gold-primary shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 hidden sm:flex cursor-pointer"
                 >
                   <ChevronLeft className="w-5 h-5" />
                 </button>
@@ -810,13 +849,13 @@ export default function ProjectsPage() {
                   <table className="w-full border-collapse text-right text-xs sm:text-sm">
                     <thead>
                       <tr className="border-b border-white/10 bg-white/[0.02] text-text-muted font-bold">
-                        <th className="p-4">اسم المشروع</th>
-                        <th className="p-4">المدينة</th>
-                        <th className="p-4">الحي</th>
-                        <th className="p-4">تاريخ التسليم</th>
-                        <th className="p-4">الوحدات المتاحة</th>
-                        <th className="p-4">نطاق الأسعار</th>
-                        <th className="p-4 text-left">الإجراءات</th>
+                        <th className="p-4 border-x border-white/5 first:border-s-0 last:border-e-0">اسم المشروع</th>
+                        <th className="p-4 border-x border-white/5 first:border-s-0 last:border-e-0">المدينة</th>
+                        <th className="p-4 border-x border-white/5 first:border-s-0 last:border-e-0">الحي</th>
+                        <th className="p-4 border-x border-white/5 first:border-s-0 last:border-e-0">تاريخ التسليم</th>
+                        <th className="p-4 border-x border-white/5 first:border-s-0 last:border-e-0">الوحدات المتاحة</th>
+                        <th className="p-4 border-x border-white/5 first:border-s-0 last:border-e-0">نطاق الأسعار</th>
+                        <th className="p-4 text-left border-x border-white/5 first:border-s-0 last:border-e-0">الإجراءات</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-white/5 text-text-secondary font-medium">
@@ -832,7 +871,7 @@ export default function ProjectsPage() {
                             className="hover:bg-white/[0.02] transition-colors duration-200"
                           >
                             {/* Project Name & Thumbnail */}
-                            <td className="p-4 flex items-center gap-3">
+                            <td className="p-4 flex items-center gap-3 border-x border-white/5 first:border-s-0 last:border-e-0">
                               <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-bg-deep shrink-0 border border-white/10">
                                 <Image 
                                   src={project.media.hero || '/properties/apartment.webp'} 
@@ -849,23 +888,31 @@ export default function ProjectsPage() {
                             </td>
 
                             {/* Location */}
-                            <td className="p-4 text-xs sm:text-sm">{project.location.city}</td>
-                            <td className="p-4 text-xs sm:text-sm">{project.location.district}</td>
+                            <td className="p-4 text-xs sm:text-sm border-x border-white/5 first:border-s-0 last:border-e-0">{project.location.city}</td>
+                            <td className="p-4 text-xs sm:text-sm border-x border-white/5 first:border-s-0 last:border-e-0">{project.location.district}</td>
 
                             {/* Specs */}
-                            <td className="p-4 text-xs sm:text-sm">{project.specs.completionDate}</td>
-                            <td className="p-4 font-mono text-xs sm:text-sm text-gold-light">
+                            <td className="p-4 text-xs sm:text-sm border-x border-white/5 first:border-s-0 last:border-e-0">{project.specs.completionDate}</td>
+                            <td className="p-4 font-mono text-xs sm:text-sm text-gold-light border-x border-white/5 first:border-s-0 last:border-e-0">
                               {project.specs.availableUnits} / {project.specs.totalUnits}
                             </td>
 
                             {/* Price */}
-                            <td className="p-4 font-bold text-gold-primary text-xs sm:text-sm font-el-messiri">
+                            <td className="p-4 font-bold text-gold-primary text-xs sm:text-sm font-el-messiri border-x border-white/5 first:border-s-0 last:border-e-0">
                               {formatPriceRange(project.priceRange.min, project.priceRange.max)}
                             </td>
 
                             {/* Actions */}
-                            <td className="p-4 text-left">
+                            <td className="p-4 text-left border-x border-white/5 first:border-s-0 last:border-e-0">
                               <div className="inline-flex items-center gap-2">
+                                <a
+                                  href="/brochure-placeholder.pdf"
+                                  download
+                                  title="تحميل البروفايل PDF"
+                                  className="p-1.5 rounded-lg bg-white/5 hover:bg-gold-primary/10 border border-white/10 text-text-secondary hover:text-gold-primary transition-all cursor-pointer"
+                                >
+                                  <Download className="w-3.5 h-3.5" />
+                                </a>
                                 <Link
                                   href={`/properties?project=${project.slug}`}
                                   className="py-1.5 px-3 rounded-lg bg-white/5 hover:bg-white/10 text-white border border-white/10 text-[10px] font-bold transition-all text-center"
