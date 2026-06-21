@@ -496,8 +496,8 @@ export default function PropertiesPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-[#060D1A]/90 via-[#060D1A]/55 to-[#060D1A]/15"></div>
         </div>
 
-        {/* Banner Contents (Centered vertically with balanced padding to push it down below floating navbar) */}
-        <div className="relative z-10 max-w-5xl w-[90%] mx-auto text-center flex flex-col items-center justify-center pt-28 sm:pt-36 pb-12 sm:pb-16">
+        {/* Banner Contents (Centered vertically with balanced padding and shifted 10vh down below floating navbar) */}
+        <div className="relative z-10 max-w-5xl w-[90%] mx-auto text-center flex flex-col items-center justify-center pt-28 sm:pt-36 pb-12 sm:pb-16 translate-y-[10vh]">
           <motion.span 
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
