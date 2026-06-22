@@ -9,35 +9,33 @@ export default function FloatingContact() {
   const phoneUrl = "tel:+966550085811";
 
   return (
-    <div className="fixed bottom-6 left-6 z-45 flex flex-col gap-3 items-center select-none" dir="ltr">
-      
-      {/* 1. Floating Phone Call Button */}
+    <>
+      {/* 1. Floating Phone Call Button - Bottom Left */}
       <a
         href={phoneUrl}
-        className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-r from-gold-deep via-gold-primary to-gold-deep hover:from-gold-primary hover:to-gold-light text-bg-midnight border border-gold-light/20 flex items-center justify-center shadow-[0_4px_16px_rgba(201,169,110,0.3)] hover:shadow-[0_4px_24px_rgba(201,169,110,0.5)] hover:scale-105 active:scale-95 transition-all duration-300 group"
+        className="fixed bottom-6 left-6 z-45 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-r from-gold-deep via-gold-primary to-gold-deep hover:from-gold-primary hover:to-gold-light text-bg-midnight border border-gold-light/20 flex items-center justify-center shadow-[0_4px_16px_rgba(201,169,110,0.3)] hover:shadow-[0_4px_24px_rgba(201,169,110,0.5)] hover:scale-105 active:scale-95 transition-all duration-300 group select-none"
         title="اتصال هاتفي مباشر"
         aria-label="اتصال هاتفي مباشر"
       >
         <Phone className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.2] animate-pulse" />
       </a>
 
-      {/* 2. Floating WhatsApp Button */}
+      {/* 2. Floating WhatsApp Button - Bottom Right */}
       <a
         href={whatsappUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#25D366] hover:bg-[#20ba5a] text-white border border-emerald-400/20 flex items-center justify-center shadow-[0_4px_16px_rgba(37,211,102,0.3)] hover:shadow-[0_4px_24px_rgba(37,211,102,0.5)] hover:scale-105 active:scale-95 transition-all duration-300"
+        className="fixed bottom-6 right-6 z-45 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#25D366] hover:bg-[#20ba5a] text-white border border-emerald-400/20 flex items-center justify-center shadow-[0_4px_16px_rgba(37,211,102,0.3)] hover:shadow-[0_4px_24px_rgba(37,211,102,0.5)] hover:scale-105 active:scale-95 transition-all duration-300 select-none"
         title="محادثة واتساب فورية"
         aria-label="محادثة واتساب فورية"
       >
         <svg 
           viewBox="0 0 24 24" 
-          className="w-5.5 h-5.5 sm:w-7 sm:h-7 fill-current"
+          className="w-6 h-6 sm:w-7 sm:h-7 fill-current"
         >
-          <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.733-1.458L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.965C16.528 2.01 14.07 1.006 11.993 1.006c-5.452 0-9.88 4.417-9.884 9.761-.002 1.802.502 3.55 1.462 5.076L2.482 21.07l5.244-1.373-.079-.543zM15.76 13.06c-.322-.16-1.897-.932-2.193-1.04-.297-.11-.513-.16-.73.16-.214.32-.832 1.04-1.018 1.25-.187.21-.374.24-.696.08-.322-.16-1.36-.5-2.59-1.6-1.033-.92-1.73-2.05-1.93-2.4-.2-.34-.02-.53.15-.7.15-.15.32-.35.48-.53.16-.18.21-.3.32-.5.11-.2.05-.38-.03-.54-.08-.16-.73-1.76-1-2.4-.26-.63-.52-.55-.73-.56-.18-.01-.4-.01-.61-.01-.21 0-.56.08-.85.4-.3.32-1.15 1.13-1.15 2.76 0 1.63 1.19 3.2 1.35 3.42.16.22 2.34 3.58 5.68 5.02.79.34 1.4.55 1.88.7.8.25 1.52.22 2.09.13.64-.1 1.897-.77 2.163-1.48.26-.7.26-1.3.18-1.42-.08-.12-.29-.18-.61-.34z"/>
+          <path d="M12.031 2C6.446 2 1.922 6.476 1.922 12c0 2.215.656 4.28 1.776 6.012L2 22.48l4.67-1.213C8.36 22.25 10.143 22.8 12.03 22.8c5.586 0 10.11-4.475 10.11-10c0-5.524-4.524-10-10.11-10zm6.758 14.283c-.277.778-1.611 1.483-2.22 1.53-.58.045-1.127.228-3.702-.79-3.29-1.302-5.328-4.572-5.492-4.786-.164-.214-1.332-1.745-1.332-3.328 0-1.583.847-2.36 1.144-2.673.296-.314.646-.39.862-.39s.43.003.616.012c.193.008.452-.07.708.547.256.618.874 2.106.95 2.256.075.15.126.326.025.52-.1.196-.15.318-.297.487-.148.168-.312.378-.445.508-.148.145-.304.303-.13.597.172.293.768 1.252 1.65 2.023.163.14.3.26.474.37.525.334.83.428 1.112.27.3-.17.653-.515.82-.724.168-.21.32-.178.536-.1.216.078 1.37.636 1.605.753.235.116.392.174.45.27.058.096.058.556-.22 1.334z"/>
         </svg>
       </a>
-
-    </div>
+    </>
   );
 }
