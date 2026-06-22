@@ -26,8 +26,8 @@ export default function Navbar() {
     <header className="fixed top-4 left-1/2 -translate-x-1/2 w-[92%] max-w-6xl z-45 bg-gradient-to-b from-[#0D213F]/90 to-[#08172D]/95 backdrop-blur-2xl border border-gold-primary/25 rounded-[2.2rem] sm:rounded-full transition-all duration-500 shadow-[0_20px_50px_rgba(0,0,0,0.65),inset_0_1px_1px_rgba(255,255,255,0.15)] hover:border-gold-primary/45 hover:shadow-[0_20px_60px_rgba(201,169,110,0.1),inset_0_1px_1px_rgba(255,255,255,0.2)]">
       <div className="px-4 sm:px-10 h-16 sm:h-20 flex items-center justify-between">
         {/* Logo (Right side in RTL) */}
-        <div className="flex items-center gap-2 sm:gap-3">
-          <div className="relative w-9 h-9 sm:w-12 sm:h-12 flex items-center justify-center">
+        <Link href="/" className="flex items-center gap-2 sm:gap-3 cursor-pointer group/logo">
+          <div className="relative w-9 h-9 sm:w-12 sm:h-12 flex items-center justify-center transition-transform duration-300 group-hover/logo:scale-105">
             <Image
               src="/logo.webp"
               alt="الغربية الذهبية"
@@ -38,14 +38,14 @@ export default function Navbar() {
             />
           </div>
           <div className="text-right flex flex-col justify-center">
-            <span className="block text-xs sm:text-sm font-extrabold text-white leading-tight font-el-messiri">
+            <span className="block text-xs sm:text-sm font-extrabold text-white leading-tight font-el-messiri transition-colors duration-300 group-hover/logo:text-gold-light">
               الغربية <span className="bg-gradient-to-r from-gold-light via-gold-primary to-gold-warm bg-clip-text text-transparent font-black">الذهبية</span>
             </span>
-            <span className="block text-[6px] sm:text-[8px] text-gold-primary/90 tracking-[0.2em] font-serif uppercase font-medium -mt-0.5">
+            <span className="block text-[6px] sm:text-[8px] text-gold-primary/90 tracking-[0.2em] font-serif uppercase font-medium -mt-0.5 animate-pulse-slow">
               AL GHRBIA GOLDEN
             </span>
           </div>
-        </div>
+        </Link>
 
         {/* Navigation links (Center) */}
         <nav className="hidden md:flex items-center gap-1.5 text-sm font-semibold relative bg-[#060D1A]/40 border border-white/5 rounded-full p-1.5 shadow-[inset_0_1px_1px_rgba(0,0,0,0.3)]">
