@@ -42,6 +42,7 @@ export const metadata: Metadata = {
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import InquiryModal from '../components/layout/InquiryModal';
+import FloatingContact from '../components/layout/FloatingContact';
 
 export default function RootLayout({
   children,
@@ -55,6 +56,7 @@ export default function RootLayout({
         {children}
         <Footer />
         <InquiryModal />
+        <FloatingContact />
       </body>
     </html>
   );
