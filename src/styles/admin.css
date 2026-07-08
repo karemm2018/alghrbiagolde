@@ -162,7 +162,7 @@
   right: 0;
   width: var(--sidebar-width);
   height: 100vh;
-  background: #D3DFEE; /* Elegant light slate blue-grey */
+  background: var(--neu-raised);
   z-index: 50;
   display: flex;
   flex-direction: column;
@@ -183,7 +183,7 @@
   transition: margin-right var(--neu-transition-slow);
 }
 
-.admin-sidebar.collapsed ~ .admin-main {
+.admin-sidebar.collapsed~.admin-main {
   margin-right: var(--sidebar-collapsed-width);
 }
 
@@ -191,54 +191,13 @@
   position: sticky;
   top: 0;
   height: var(--topbar-height);
-  background: #D3DFEE; /* Same light slate blue-grey */
+  background: var(--neu-raised);
   z-index: 40;
   display: flex;
   align-items: center;
   padding: 0 28px;
   box-shadow: none; /* Merged, no separator shadow */
   border-bottom: none; /* Merged, no separator line */
-  gap: 12px;
-}
-
-/* Overrides for topbar components in light slate theme */
-.admin-topbar .neu-btn-icon {
-  background: transparent !important;
-  box-shadow: none !important;
-  color: #4D5E7B !important; /* Dark slate blue icons */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: var(--neu-radius-sm);
-  transition: all var(--neu-transition);
-}
-
-.admin-topbar .neu-btn-icon:hover {
-  color: var(--neu-gold) !important;
-  background: rgba(255, 255, 255, 0.25) !important; /* Soft white highlight on hover */
-}
-
-.admin-topbar .neu-btn-icon svg {
-  width: 20px;
-  height: 20px;
-}
-
-.admin-topbar .neu-inset-sm {
-  background: rgba(255, 255, 255, 0.4) !important; /* Elegant glass input */
-  border: 1px solid rgba(255, 255, 255, 0.6) !important;
-  box-shadow: inset 1px 1px 3px rgba(165, 180, 203, 0.3), inset -1px -1px 3px rgba(255, 255, 255, 0.8) !important;
-  border-radius: var(--neu-radius-md);
-  padding: 6px 12px;
-}
-
-.admin-topbar .neu-inset-sm input {
-  color: #1F2E4A !important;
-}
-
-.admin-topbar .neu-inset-sm input::placeholder {
-  color: #8192B0 !important;
 }
 
 .admin-content {
@@ -254,30 +213,26 @@
   align-items: center;
   gap: 14px;
   padding: 24px 22px;
-  border-bottom: none; /* No separator border */
-}
-
-.sidebar-logo span {
-  color: #0E1A2E !important; /* Deep dark navy for logo text */
+  border-bottom: 1px solid rgba(201, 169, 110, 0.1);
 }
 
 .sidebar-nav {
   flex: 1;
-  padding: 10px 12px;
+  padding: 18px 12px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
 }
 
 .sidebar-nav-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 14px;
-  border-radius: var(--neu-radius-sm);
-  color: #4D5E7B; /* Dark slate blue text */
-  font-size: 13.5px;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: var(--neu-radius-md);
+  color: var(--neu-text-secondary);
+  font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   transition: all var(--neu-transition);
@@ -285,25 +240,17 @@
   position: relative;
 }
 
-.sidebar-nav-item svg {
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  /* Removed margin: 0 auto to align perfectly in a column */
-}
-
 .sidebar-nav-item:hover {
-  color: #0E1A2E;
-  background: rgba(255, 255, 255, 0.25);
+  color: var(--neu-text-primary);
+  background: rgba(201, 169, 110, 0.05);
 }
 
 .sidebar-nav-item.active {
   color: var(--neu-gold);
-  background: var(--neu-base); /* Page background color for flat integrated active state */
-  box-shadow: none;
+  background: var(--neu-depressed);
+  box-shadow:
+    inset 3px 3px 8px var(--neu-shadow-dark),
+    inset -3px -3px 8px var(--neu-shadow-light);
 }
 
 .sidebar-nav-item.active::before {
@@ -510,6 +457,9 @@
   height: 44px;
   padding: 0;
   border-radius: var(--neu-radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .neu-btn:disabled {
