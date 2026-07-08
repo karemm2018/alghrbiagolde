@@ -158,20 +158,18 @@
 
 .admin-sidebar {
   position: fixed;
-  top: 0;
+  top: var(--topbar-height); /* Start below topbar */
   right: 0;
   width: var(--sidebar-width);
-  height: 100vh;
+  height: calc(100vh - var(--topbar-height)); /* Fill remaining screen height */
   background: var(--neu-raised);
-  z-index: 50;
+  z-index: 40; /* Lower than topbar */
   display: flex;
   flex-direction: column;
-  box-shadow:
-    -6px 0 20px var(--neu-shadow-dark);
   transition: width var(--neu-transition-slow);
   overflow: hidden;
-  box-shadow: none; /* Merged, no separator shadow */
-  border-left: none; /* Merged, no separator line */
+  box-shadow: none; /* Seamless, no shadow */
+  border-left: none; /* Seamless, no border */
 }
 
 .admin-sidebar.collapsed {
@@ -180,31 +178,35 @@
 
 .admin-main {
   flex: 1;
-  margin-right: var(--sidebar-width);
   min-height: 100vh;
   transition: margin-right var(--neu-transition-slow);
+  margin-right: 0; /* Navbar spans full screen width, no offset margin here */
 }
 
-.admin-sidebar.collapsed~.admin-main {
+.admin-sidebar.collapsed ~ .admin-main .admin-content {
   margin-right: var(--sidebar-collapsed-width);
 }
 
 .admin-topbar {
   position: sticky;
   top: 0;
+  right: 0;
+  width: 100%; /* Stretch navbar to full viewport width */
   height: var(--topbar-height);
   background: var(--neu-raised);
-  z-index: 40;
+  z-index: 50; /* Higher than sidebar */
   display: flex;
   align-items: center;
   padding: 0 28px;
-  box-shadow:
-    0 4px 12px var(--neu-shadow-dark);
+  box-shadow: none; /* Seamless, no shadow */
+  border-bottom: none; /* Seamless, no border */
 }
 
 .admin-content {
   padding: 28px;
   max-width: 1440px;
+  margin-right: var(--sidebar-width); /* Shift content left of sidebar */
+  transition: margin-right var(--neu-transition-slow);
 }
 
 /* ------------------------------------------------------------
@@ -459,6 +461,9 @@
   height: 44px;
   padding: 0;
   border-radius: var(--neu-radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .neu-btn:disabled {
@@ -849,8 +854,12 @@
    ------------------------------------------------------------ */
 @media (max-width: 1024px) {
   .admin-sidebar {
+    top: 0; /* Full height overlay on mobile */
+    height: 100vh;
+    z-index: 100;
     transform: translateX(100%);
     transition: transform var(--neu-transition-slow);
+    box-shadow: -6px 0 20px var(--neu-shadow-dark); /* Show shadow on mobile drawer overlay */
   }
 
   .admin-sidebar.mobile-open {
@@ -863,6 +872,7 @@
 
   .admin-content {
     padding: 16px;
+    margin-right: 0; /* Full width content container on mobile */
   }
 }
 
@@ -951,4 +961,24 @@
 .login-bg-pattern {
   background-image: radial-gradient(circle at 25% 25%, var(--neu-gold) 1px, transparent 1px);
   background-size: 40px 40px;
+}
+
+/* Defensive helper overrides to prevent CSS display conflicts with Tailwind */
+.hidden {
+  display: none !important;
+}
+
+@media (max-width: 1024px) {
+  .lg\:hidden {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hidden {
+    display: none !important;
+  }
+  .lg\:flex {
+    display: flex !important;
+  }
 }

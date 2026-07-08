@@ -5,12 +5,11 @@ import React from 'react';
 import { Menu, Bell, ExternalLink, Search } from 'lucide-react';
 
 interface AdminTopbarProps {
-  onToggleSidebar: () => void;
   onToggleMobile: () => void;
   pageTitle?: string;
 }
 
-export default function AdminTopbar({ onToggleSidebar, onToggleMobile, pageTitle }: AdminTopbarProps) {
+export default function AdminTopbar({ onToggleMobile, pageTitle }: AdminTopbarProps) {
   return (
     <header className="admin-topbar">
       {/* Mobile menu button */}
@@ -22,14 +21,7 @@ export default function AdminTopbar({ onToggleSidebar, onToggleMobile, pageTitle
         <Menu className="w-5 h-5 text-[var(--neu-text-secondary)]" />
       </button>
 
-      {/* Desktop sidebar toggle */}
-      <button
-        onClick={onToggleSidebar}
-        className="hidden lg:flex items-center justify-center neu-btn-icon neu-raised-sm"
-        aria-label="تبديل القائمة"
-      >
-        <Menu className="w-5 h-5 text-[var(--neu-text-secondary)]" />
-      </button>
+
 
       {/* Page title */}
       {pageTitle && (
