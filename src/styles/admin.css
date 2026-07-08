@@ -162,13 +162,14 @@
   right: 0;
   width: var(--sidebar-width);
   height: 100vh;
-  background: #0A111F; /* Premium dark theme background */
+  background: #D3DFEE; /* Elegant light slate blue-grey */
   z-index: 50;
   display: flex;
   flex-direction: column;
-  border-left: 1px solid rgba(255, 255, 255, 0.04); /* Thin clean divider */
   transition: width var(--neu-transition-slow);
   overflow: hidden;
+  box-shadow: none; /* Merged, no separator shadow */
+  border-left: none; /* Merged, no separator line */
 }
 
 .admin-sidebar.collapsed {
@@ -190,20 +191,21 @@
   position: sticky;
   top: 0;
   height: var(--topbar-height);
-  background: #0A111F; /* Matching dark theme background */
+  background: #D3DFEE; /* Same light slate blue-grey */
   z-index: 40;
   display: flex;
   align-items: center;
   padding: 0 28px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04); /* Thin clean divider */
+  box-shadow: none; /* Merged, no separator shadow */
+  border-bottom: none; /* Merged, no separator line */
   gap: 12px;
 }
 
-/* Overrides for topbar components in dark theme */
+/* Overrides for topbar components in light slate theme */
 .admin-topbar .neu-btn-icon {
   background: transparent !important;
   box-shadow: none !important;
-  color: #8C9BAE !important;
+  color: #4D5E7B !important; /* Dark slate blue icons */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -215,27 +217,28 @@
 
 .admin-topbar .neu-btn-icon:hover {
   color: var(--neu-gold) !important;
-  background: rgba(255, 255, 255, 0.04) !important;
+  background: rgba(255, 255, 255, 0.25) !important; /* Soft white highlight on hover */
 }
 
 .admin-topbar .neu-btn-icon svg {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
 }
 
 .admin-topbar .neu-inset-sm {
-  background: rgba(255, 255, 255, 0.03) !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  box-shadow: none !important;
+  background: rgba(255, 255, 255, 0.4) !important; /* Elegant glass input */
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  box-shadow: inset 1px 1px 3px rgba(165, 180, 203, 0.3), inset -1px -1px 3px rgba(255, 255, 255, 0.8) !important;
+  border-radius: var(--neu-radius-md);
   padding: 6px 12px;
 }
 
 .admin-topbar .neu-inset-sm input {
-  color: #FFFFFF !important;
+  color: #1F2E4A !important;
 }
 
 .admin-topbar .neu-inset-sm input::placeholder {
-  color: #5F7290 !important;
+  color: #8192B0 !important;
 }
 
 .admin-content {
@@ -251,11 +254,11 @@
   align-items: center;
   gap: 14px;
   padding: 24px 22px;
-  border-bottom: none; /* Removed separating border */
+  border-bottom: none; /* No separator border */
 }
 
 .sidebar-logo span {
-  color: #FFFFFF !important;
+  color: #0E1A2E !important; /* Deep dark navy for logo text */
 }
 
 .sidebar-nav {
@@ -264,7 +267,7 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 2px; /* Smooth continuous menu flow */
+  gap: 2px;
 }
 
 .sidebar-nav-item {
@@ -273,7 +276,7 @@
   gap: 12px;
   padding: 10px 14px;
   border-radius: var(--neu-radius-sm);
-  color: #8C9BAE; /* Sleek light slate */
+  color: #4D5E7B; /* Dark slate blue text */
   font-size: 13.5px;
   font-weight: 500;
   cursor: pointer;
@@ -289,18 +292,18 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  margin: 0 auto; /* Center the icon */
+  /* Removed margin: 0 auto to align perfectly in a column */
 }
 
 .sidebar-nav-item:hover {
-  color: #FFFFFF;
-  background: rgba(255, 255, 255, 0.04);
+  color: #0E1A2E;
+  background: rgba(255, 255, 255, 0.25);
 }
 
 .sidebar-nav-item.active {
   color: var(--neu-gold);
-  background: rgba(201, 169, 110, 0.08);
-  box-shadow: none; /* No heavy shadows */
+  background: var(--neu-base); /* Page background color for flat integrated active state */
+  box-shadow: none;
 }
 
 .sidebar-nav-item.active::before {
@@ -557,11 +560,25 @@
   border-radius: 0 var(--neu-radius-lg) var(--neu-radius-lg) 0;
 }
 
-.neu-stat-card.gold::after { background: var(--neu-gold); }
-.neu-stat-card.success::after { background: var(--neu-success); }
-.neu-stat-card.warning::after { background: var(--neu-warning); }
-.neu-stat-card.info::after { background: var(--neu-info); }
-.neu-stat-card.danger::after { background: var(--neu-danger); }
+.neu-stat-card.gold::after {
+  background: var(--neu-gold);
+}
+
+.neu-stat-card.success::after {
+  background: var(--neu-success);
+}
+
+.neu-stat-card.warning::after {
+  background: var(--neu-warning);
+}
+
+.neu-stat-card.info::after {
+  background: var(--neu-info);
+}
+
+.neu-stat-card.danger::after {
+  background: var(--neu-danger);
+}
 
 /* ------------------------------------------------------------
    8. Table Styles
@@ -924,6 +941,7 @@
    17. Reduced Motion
    ------------------------------------------------------------ */
 @media (prefers-reduced-motion: reduce) {
+
   .neu-pressable,
   .neu-btn,
   .neu-toggle,

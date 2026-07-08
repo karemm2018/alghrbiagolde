@@ -28,7 +28,6 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   BarChart,
   Bar,
 } from 'recharts';
@@ -266,7 +265,7 @@ export default function DashboardPage() {
       {/* Recent Submissions Table */}
       <div className="neu-card">
         <div className="flex items-center justify-between mb-5">
-          <h3 className="text-lg font-bold text-[var(--neu-text-heading)]">آخر الاستفسارات الواردة</h3>
+          <h3 className="text-lg font-bold text-[var(--neu-text-heading)]">آخر الاستفسارات</h3>
           <Link
             href="/golden-cp/submissions"
             className="text-sm text-[var(--neu-gold)] hover:text-[var(--neu-gold-light)] transition-colors font-medium"
