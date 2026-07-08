@@ -15,9 +15,23 @@ import {
   ArrowUpLeft,
   Clock,
   CheckCircle2,
-  AlertCircle,
   Phone,
+  BarChart2,
+  Activity,
+  Calendar,
 } from 'lucide-react';
+import {
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  BarChart,
+  Bar,
+} from 'recharts';
 
 // Temporary mock stats until Supabase is connected
 const MOCK_STATS = {
@@ -33,6 +47,23 @@ const MOCK_RECENT_SUBMISSIONS = [
   { id: '1', name: 'أبو محمد الشهري', phone: '0554498018', subject: 'استفسار عن ملحق أمل ستارز', type: 'property_inquiry' as const, status: 'new' as const, created_at: '2026-07-08T14:30:00' },
   { id: '2', name: 'سارة القحطاني', phone: '0551234567', subject: 'استفسار عام', type: 'contact' as const, status: 'new' as const, created_at: '2026-07-08T12:15:00' },
   { id: '3', name: 'خالد العمري', phone: '0559876543', subject: 'استفسار عن مشروع ريناد غاليري', type: 'inquiry' as const, status: 'reviewed' as const, created_at: '2026-07-07T18:00:00' },
+];
+
+const MOCK_ANALYTICS_DATA = [
+  { name: 'السبت', views: 320, submissions: 4 },
+  { name: 'الأحد', views: 450, submissions: 8 },
+  { name: 'الإثنين', views: 410, submissions: 5 },
+  { name: 'الثلاثاء', views: 520, submissions: 12 },
+  { name: 'الأربعاء', views: 610, submissions: 15 },
+  { name: 'الخميس', views: 580, submissions: 9 },
+  { name: 'الجمعة', views: 480, submissions: 6 },
+];
+
+const MOCK_PROPERTY_PERFORMANCE = [
+  { name: 'شقق', 'الوحدات المعروضة': 12, 'تم بيعها': 8 },
+  { name: 'فيلات', 'الوحدات المعروضة': 6, 'تم بيعها': 3 },
+  { name: 'ملاحق', 'الوحدات المعروضة': 4, 'تم بيعها': 2 },
+  { name: 'بنتهاوس', 'الوحدات المعروضة': 3, 'تم بيعها': 1 },
 ];
 
 const STATUS_MAP = {
@@ -62,11 +93,17 @@ export default function DashboardPage() {
       <AdminBreadcrumb items={[{ label: 'لوحة التحكم' }]} />
 
       {/* Welcome Section */}
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold text-[var(--neu-text-heading)] mb-1">مرحباً بك 👋</h2>
-        <p className="text-[var(--neu-text-secondary)] text-sm">
-          إليك نظرة عامة على نشاط الموقع اليوم
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+        <div>
+          <h2 className="text-2xl font-bold text-[var(--neu-text-heading)] mb-1">مرحباً بك 👋</h2>
+          <p className="text-[var(--neu-text-secondary)] text-sm">
+            إليك نظرة عامة على نشاط الموقع والتحليلات المتقدمة اليوم
+          </p>
+        </div>
+        <div className="neu-card p-3 flex items-center gap-2 text-xs font-semibold text-[var(--neu-text-secondary)] neu-raised-sm self-start">
+          <Calendar className="w-4 h-4 text-[var(--neu-gold)]" />
+          <span>اليوم، {new Date().toLocaleDateString('ar-SA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span>
+        </div>
       </div>
 
       {/* Stats Cards Grid */}
@@ -93,6 +130,81 @@ export default function DashboardPage() {
             </div>
           );
         })}
+      </div>
+
+      {/* Analytics Charts Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        {/* Visitor Traffic Area Chart */}
+        <div className="neu-card">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h3 className="font-bold text-[var(--neu-text-heading)]">حركة الزوار ونسب الاستفسارات</h3>
+              <p className="text-xs text-[var(--neu-text-muted)] mt-0.5">معدلات المشاهدة والتحويل خلال الـ 7 أيام الماضية</p>
+            </div>
+            <Activity className="w-5 h-5 text-[var(--neu-gold)]" />
+          </div>
+          <div className="h-64 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={MOCK_ANALYTICS_DATA} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="colorViews" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#C9A96E" stopOpacity={0.2}/>
+                    <stop offset="95%" stopColor="#C9A96E" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(165,180,203,0.2)" />
+                <XAxis dataKey="name" tick={{ fill: 'var(--neu-text-muted)', fontSize: 11 }} tickLine={false} axisLine={false} />
+                <YAxis tick={{ fill: 'var(--neu-text-muted)', fontSize: 11 }} tickLine={false} axisLine={false} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: '#132238',
+                    border: '1px solid rgba(201, 169, 110, 0.2)',
+                    borderRadius: '12px',
+                    color: '#E8EDF5',
+                    fontSize: '12px',
+                    fontFamily: 'inherit',
+                    textAlign: 'right'
+                  }}
+                  itemStyle={{ color: '#E8EDF5' }}
+                />
+                <Area type="monotone" dataKey="views" name="المشاهدات" stroke="#C9A96E" strokeWidth={2} fillOpacity={1} fill="url(#colorViews)" />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Property Performance Bar Chart */}
+        <div className="neu-card">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h3 className="font-bold text-[var(--neu-text-heading)]">أداء فئات الوحدات العقارية</h3>
+              <p className="text-xs text-[var(--neu-text-muted)] mt-0.5">عدد الوحدات المعروضة مقارنة بالوحدات المباعة فعلياً</p>
+            </div>
+            <BarChart2 className="w-5 h-5 text-[var(--neu-gold)]" />
+          </div>
+          <div className="h-64 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={MOCK_PROPERTY_PERFORMANCE} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(165,180,203,0.2)" />
+                <XAxis dataKey="name" tick={{ fill: 'var(--neu-text-muted)', fontSize: 11 }} tickLine={false} axisLine={false} />
+                <YAxis tick={{ fill: 'var(--neu-text-muted)', fontSize: 11 }} tickLine={false} axisLine={false} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: '#132238',
+                    border: '1px solid rgba(201, 169, 110, 0.2)',
+                    borderRadius: '12px',
+                    color: '#E8EDF5',
+                    fontSize: '12px',
+                    fontFamily: 'inherit',
+                    textAlign: 'right'
+                  }}
+                />
+                <Bar dataKey="الوحدات المعروضة" fill="#4D5E7B" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="تم بيعها" fill="#C9A96E" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
       </div>
 
       {/* Quick Actions */}
@@ -154,7 +266,7 @@ export default function DashboardPage() {
       {/* Recent Submissions Table */}
       <div className="neu-card">
         <div className="flex items-center justify-between mb-5">
-          <h3 className="text-lg font-bold text-[var(--neu-text-heading)]">آخر الاستفسارات</h3>
+          <h3 className="text-lg font-bold text-[var(--neu-text-heading)]">آخر الاستفسارات الواردة</h3>
           <Link
             href="/golden-cp/submissions"
             className="text-sm text-[var(--neu-gold)] hover:text-[var(--neu-gold-light)] transition-colors font-medium"

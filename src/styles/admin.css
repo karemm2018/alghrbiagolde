@@ -8,44 +8,44 @@
    ------------------------------------------------------------ */
 :root {
   /* Neumorphic Background Surfaces */
-  --neu-base: #0E1A2E;
-  --neu-raised: #132238;
-  --neu-depressed: #0A1420;
-  --neu-surface: #162640;
+  --neu-base: #EBF0F6;
+  --neu-raised: #EBF0F6;
+  --neu-depressed: #DCE4EC;
+  --neu-surface: #E3EAF2;
 
   /* Neumorphic Shadows */
-  --neu-shadow-dark: rgba(4, 8, 16, 0.7);
-  --neu-shadow-light: rgba(25, 45, 75, 0.15);
-  --neu-shadow-dark-strong: rgba(4, 8, 16, 0.85);
-  --neu-shadow-light-strong: rgba(30, 55, 90, 0.2);
+  --neu-shadow-dark: rgba(165, 180, 203, 0.6);
+  --neu-shadow-light: rgba(255, 255, 255, 0.95);
+  --neu-shadow-dark-strong: rgba(165, 180, 203, 0.75);
+  --neu-shadow-light-strong: rgba(255, 255, 255, 1.0);
 
   /* Admin Gold Accents (from brand) */
   --neu-gold: #C9A96E;
   --neu-gold-light: #E8C98A;
   --neu-gold-warm: #B8945A;
   --neu-gold-deep: #9A7A40;
-  --neu-gold-glow: rgba(201, 169, 110, 0.15);
-  --neu-gold-glow-strong: rgba(201, 169, 110, 0.3);
+  --neu-gold-glow: rgba(201, 169, 110, 0.12);
+  --neu-gold-glow-strong: rgba(201, 169, 110, 0.25);
 
   /* Admin Typography */
-  --neu-text-primary: #E8EDF5;
-  --neu-text-secondary: #7A8FA8;
-  --neu-text-muted: #4A6080;
-  --neu-text-heading: #F0F4FA;
+  --neu-text-primary: #1F2E4A;
+  --neu-text-secondary: #4D5E7B;
+  --neu-text-muted: #8192B0;
+  --neu-text-heading: #0E1A2E;
 
   /* Status Colors (Soft variants) */
-  --neu-success: #2ECC71;
-  --neu-success-bg: rgba(46, 204, 113, 0.08);
-  --neu-success-border: rgba(46, 204, 113, 0.25);
-  --neu-warning: #F39C12;
-  --neu-warning-bg: rgba(243, 156, 18, 0.08);
-  --neu-warning-border: rgba(243, 156, 18, 0.25);
-  --neu-danger: #E74C3C;
-  --neu-danger-bg: rgba(231, 76, 60, 0.08);
-  --neu-danger-border: rgba(231, 76, 60, 0.25);
-  --neu-info: #3498DB;
-  --neu-info-bg: rgba(52, 152, 219, 0.08);
-  --neu-info-border: rgba(52, 152, 219, 0.25);
+  --neu-success: #27AE60;
+  --neu-success-bg: rgba(39, 174, 96, 0.12);
+  --neu-success-border: rgba(39, 174, 96, 0.3);
+  --neu-warning: #E67E22;
+  --neu-warning-bg: rgba(230, 126, 34, 0.12);
+  --neu-warning-border: rgba(230, 126, 34, 0.3);
+  --neu-danger: #C0392B;
+  --neu-danger-bg: rgba(192, 57, 43, 0.12);
+  --neu-danger-border: rgba(192, 57, 43, 0.3);
+  --neu-info: #2980B9;
+  --neu-info-bg: rgba(41, 128, 185, 0.12);
+  --neu-info-border: rgba(41, 128, 185, 0.3);
 
   /* Admin Layout */
   --sidebar-width: 280px;
