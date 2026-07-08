@@ -801,7 +801,7 @@ export default function HomePage() {
       {/* ----------------------------------------------------
          3. Advanced Search Bar Component
          ---------------------------------------------------- */}
-      <section id="search-filter-section" className="relative z-40 w-[92%] max-w-6xl mx-auto px-4 -mt-[calc(6rem+10vh)] sm:-mt-36">
+      <section id="search-filter-section" className="relative z-40 w-[92%] max-w-6xl mx-auto px-4 -mt-[calc(8.5rem+10vh)] sm:-mt-48">
         <form
           onSubmit={handleSearch}
           className="relative w-full"
