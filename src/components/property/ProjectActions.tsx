@@ -27,7 +27,7 @@ export function ProjectSidebarInquiry({ whatsappLink }: ProjectInquiryProps) {
         href={whatsappLink}
         target="_blank"
         rel="noopener noreferrer"
-        className="w-full py-3 text-xs sm:text-sm font-bold bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#25D366] border border-[#25D366]/20 hover:border-[#25D366]/40 rounded-full flex items-center justify-center gap-2 transition-all duration-300 text-center font-el-messiri"
+        className="w-full py-3 text-xs sm:text-sm font-bold bg-gold-primary/10 hover:bg-gold-primary/20 text-gold-light border border-gold-primary/20 hover:border-gold-primary/40 rounded-full flex items-center justify-center gap-2 transition-all duration-300 text-center font-el-messiri"
       >
         <MessageCircle className="w-4 h-4 shrink-0" />
         <span>مراسلة عبر واتساب</span>

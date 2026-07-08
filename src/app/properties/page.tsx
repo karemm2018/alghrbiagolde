@@ -173,7 +173,7 @@ const DetailedPropertyCard = ({ property, openInquiry }: { property: Property; o
             href={`https://wa.me/9665xxxxxxxx?text=${encodeURIComponent(`السلام عليكم، أريد الاستفسار عن الوحدة العقارية: ${property.title}`)}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="py-2.5 px-4 text-xs font-bold bg-[#25D366]/10 text-[#25D366] border border-[#25D366]/25 rounded-xl hover:bg-[#25D366] hover:text-white transition-all duration-300 flex items-center justify-center gap-1.5 font-el-messiri"
+            className="py-2.5 px-4 text-xs font-bold bg-gold-primary/10 text-gold-light border border-gold-primary/25 rounded-xl hover:bg-gold-primary hover:text-bg-midnight transition-all duration-300 flex items-center justify-center gap-1.5 font-el-messiri"
           >
             <MessageCircle className="w-4 h-4" />
             <span>واتساب</span>

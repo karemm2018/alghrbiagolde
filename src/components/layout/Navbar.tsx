@@ -29,7 +29,7 @@ export default function Navbar() {
         <Link href="/" className="flex items-center gap-2 sm:gap-3 cursor-pointer group/logo">
           <div className="relative w-9 h-9 sm:w-12 sm:h-12 flex items-center justify-center transition-transform duration-300 group-hover/logo:scale-105">
             <Image
-              src="/logo.webp"
+              src="/logo-new.webp"
               alt="الغربية الذهبية"
               width={48}
               height={48}
@@ -38,11 +38,11 @@ export default function Navbar() {
             />
           </div>
           <div className="text-right flex flex-col justify-center">
-            <span className="block text-xs sm:text-sm font-extrabold text-white leading-tight font-el-messiri transition-colors duration-300 group-hover/logo:text-gold-light">
-              الغربية <span className="bg-gradient-to-r from-gold-light via-gold-primary to-gold-warm bg-clip-text text-transparent font-black">الذهبية</span>
+            <span className="block text-xs sm:text-sm font-extrabold text-white leading-tight font-el-messiri transition-colors duration-300 group-hover/logo:text-white">
+              الغربية الذهبية
             </span>
-            <span className="block text-[6px] sm:text-[8px] text-gold-primary/90 tracking-[0.2em] font-serif uppercase font-medium -mt-0.5 animate-pulse-slow">
-              AL GHRBIA GOLDEN
+            <span className="block text-[5px] sm:text-[6.5px] text-white/80 tracking-[0.44em] font-serif uppercase font-medium mt-1.5 animate-pulse-slow">
+              GOLDEN WESTERN
             </span>
           </div>
         </Link>

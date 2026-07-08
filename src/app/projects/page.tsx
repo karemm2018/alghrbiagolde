@@ -149,7 +149,7 @@ const DetailedProjectCard = ({ project, openInquiry }: { project: Project; openI
             href={whatsappLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full sm:w-auto py-2.5 px-6 text-xs font-bold bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#25D366] border border-[#25D366]/20 hover:border-[#25D366]/40 rounded-xl flex items-center justify-center gap-1.5 transition-all text-center"
+            className="w-full sm:w-auto py-2.5 px-6 text-xs font-bold bg-gold-primary/10 hover:bg-gold-primary/20 text-gold-light border border-gold-primary/20 hover:border-gold-primary/40 rounded-xl flex items-center justify-center gap-1.5 transition-all text-center"
           >
             <MessageCircle className="w-3.5 h-3.5" />
             <span>استفسار واتساب</span>

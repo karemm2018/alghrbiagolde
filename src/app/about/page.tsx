@@ -592,7 +592,7 @@ export default function AboutPage() {
                         <span className={`text-[9px] font-bold font-mono tracking-wider ${
                           isActive ? 'text-gold-light' : 'text-slate-400'
                         }`}>
-                          AL GHRBIA LEGACY
+                          GOLDEN WESTERN LEGACY
                         </span>
                         <Calendar className={`w-3.5 h-3.5 ${
                           isActive ? 'text-gold-light' : 'text-slate-500'

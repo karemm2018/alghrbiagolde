@@ -25,7 +25,7 @@ export default function FloatingContact() {
         href={whatsappUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-6 left-6 z-45 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#25D366] hover:bg-[#20ba5a] text-white border border-emerald-400/20 flex items-center justify-center shadow-[0_4px_16px_rgba(37,211,102,0.3)] hover:shadow-[0_4px_24px_rgba(37,211,102,0.5)] hover:scale-105 active:scale-95 transition-all duration-300 select-none"
+        className="fixed bottom-6 left-6 z-45 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-r from-gold-deep via-gold-primary to-gold-deep hover:from-gold-primary hover:to-gold-light text-bg-midnight border border-gold-light/20 flex items-center justify-center shadow-[0_4px_16px_rgba(201,169,110,0.3)] hover:shadow-[0_4px_24px_rgba(201,169,110,0.5)] hover:scale-105 active:scale-95 transition-all duration-300 select-none"
         title="محادثة واتساب فورية"
         aria-label="محادثة واتساب فورية"
       >

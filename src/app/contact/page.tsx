@@ -18,7 +18,9 @@ import {
   Youtube,
   MessageCircle,
   ArrowUpLeft,
-  Navigation
+  Navigation,
+  User,
+  HelpCircle
 } from 'lucide-react';
 import { useInquiryStore } from '../../store/useInquiryStore';
 
@@ -26,6 +28,7 @@ export default function ContactPage() {
   const openInquiry = useInquiryStore((state) => state.open);
 
   // Form States
+  const [residentType, setResidentType] = useState<'citizen' | 'resident'>('citizen');
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
@@ -56,6 +59,7 @@ export default function ContactPage() {
       setIsSending(false);
       setFormSuccess(true);
       // Reset form fields
+      setResidentType('citizen');
       setName('');
       setPhone('');
       setEmail('');
@@ -137,7 +141,7 @@ export default function ContactPage() {
             variants={fadeUpVariants}
             className="lg:col-span-7"
           >
-            <div className="p-6 sm:p-10 bg-[#FAF8F5] border border-gold-primary/35 rounded-[2.5rem] shadow-[0_30px_70px_rgba(201,169,110,0.12)] h-full flex flex-col justify-between relative overflow-hidden group">
+            <div className="p-5 sm:p-8 bg-[#FAF8F5] border border-gold-primary/35 rounded-[2.5rem] shadow-[0_30px_70px_rgba(201,169,110,0.12)] h-full flex flex-col justify-between relative overflow-hidden group">
               {/* Metallic Gold Top Accent Bar */}
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold-primary to-transparent" />
               <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-gold-primary/5 to-transparent blur-2xl pointer-events-none rounded-full" />
@@ -162,73 +166,113 @@ export default function ContactPage() {
                     </motion.h3>
                     <motion.p 
                       variants={fadeUpVariants}
-                      className="text-[11px] sm:text-xs text-slate-500 mb-8 leading-relaxed text-right"
+                      className="text-[11px] sm:text-xs text-slate-500 mb-5 leading-relaxed text-right"
                     >
                       يرجى تعبئة الحقول وسيقوم مستشارنا العقاري المعتمد بالتواصل معكم في غضون 24 ساعة لتقديم الاستشارة اللازمة.
                     </motion.p>
 
-                    <form onSubmit={handleContactSubmit} className="space-y-5">
+                    <form onSubmit={handleContactSubmit} className="space-y-3.5">
+                      {/* Resident / Citizen Selection */}
+                      <motion.div variants={fadeUpVariants} className="text-right">
+                        <span className="block text-xs font-semibold text-slate-700 mb-1.5">
+                          الصفة
+                        </span>
+                        <div className="grid grid-cols-2 gap-2 p-1 bg-slate-200/40 border border-slate-200/60 rounded-xl">
+                          <button
+                            type="button"
+                            onClick={() => setResidentType('citizen')}
+                            className={`py-2 rounded-lg text-xs sm:text-sm font-bold transition-all duration-300 font-el-messiri cursor-pointer text-center ${
+                              residentType === 'citizen'
+                                ? 'bg-white text-gold-deep border border-slate-200/30 shadow-sm font-extrabold'
+                                : 'text-slate-500 hover:text-slate-800 bg-transparent'
+                            }`}
+                          >
+                            مواطن
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setResidentType('resident')}
+                            className={`py-2 rounded-lg text-xs sm:text-sm font-bold transition-all duration-300 font-el-messiri cursor-pointer text-center ${
+                              residentType === 'resident'
+                                ? 'bg-white text-gold-deep border border-slate-200/30 shadow-sm font-extrabold'
+                                : 'text-slate-500 hover:text-slate-800 bg-transparent'
+                            }`}
+                          >
+                            مقيم
+                          </button>
+                        </div>
+                      </motion.div>
+
                       {/* Name input */}
                       <motion.div variants={fadeUpVariants} className="text-right">
-                        <label htmlFor="contact-name" className="block text-xs font-semibold text-slate-700 mb-2">
+                        <label htmlFor="contact-name" className="block text-xs font-semibold text-slate-700 mb-1.5">
                           الاسم بالكامل
                         </label>
-                        <input
-                          id="contact-name"
-                          type="text"
-                          required
-                          value={name}
-                          onChange={(e) => setName(e.target.value)}
-                          className="w-full bg-white border border-slate-200/80 focus:border-gold-primary focus:bg-white rounded-xl px-4 py-3.5 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-gold-primary/40 transition-all duration-300"
-                          placeholder="الاسم الثلاثي للمستثمر"
-                        />
+                        <div className="relative text-slate-400/80 focus-within:text-gold-primary transition-colors duration-300">
+                          <User className="absolute start-3.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" />
+                          <input
+                            id="contact-name"
+                            type="text"
+                            required
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            className="w-full bg-white border border-slate-200/80 focus:border-gold-primary focus:bg-white rounded-xl ps-10 pe-4 py-2.5 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-gold-primary/40 transition-all duration-300"
+                            placeholder="الاسم الثلاثي للمستثمر"
+                          />
+                        </div>
                       </motion.div>
 
                       {/* Grid: Phone & Email */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <motion.div variants={fadeUpVariants} className="text-right">
-                          <label htmlFor="contact-phone" className="block text-xs font-semibold text-slate-700 mb-2">
+                          <label htmlFor="contact-phone" className="block text-xs font-semibold text-slate-700 mb-1.5">
                             رقم الجوال
                           </label>
-                          <input
-                            id="contact-phone"
-                            type="tel"
-                            required
-                            pattern="^(05|009665|\+9665)\d{8}$"
-                            value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
-                            className="w-full bg-white border border-slate-200/80 focus:border-gold-primary focus:bg-white rounded-xl px-4 py-3.5 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-gold-primary/40 transition-all duration-300 text-left font-mono"
-                            placeholder="05xxxxxxxx"
-                          />
+                          <div className="relative text-slate-400/80 focus-within:text-gold-primary transition-colors duration-300">
+                            <Phone className="absolute start-3.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" />
+                            <input
+                              id="contact-phone"
+                              type="tel"
+                              required
+                              pattern="^(05|009665|\+9665)\d{8}$"
+                              value={phone}
+                              onChange={(e) => setPhone(e.target.value)}
+                              className="w-full bg-white border border-slate-200/80 focus:border-gold-primary focus:bg-white rounded-xl ps-10 pe-4 py-2.5 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-gold-primary/40 transition-all duration-300 text-left font-mono"
+                              placeholder="05xxxxxxxx"
+                            />
+                          </div>
                         </motion.div>
 
                         <motion.div variants={fadeUpVariants} className="text-right">
-                          <label htmlFor="contact-email" className="block text-xs font-semibold text-slate-700 mb-2">
-                            البريد الإلكتروني
+                          <label htmlFor="contact-email" className="block text-xs font-semibold text-slate-700 mb-1.5">
+                            البريد الإلكتروني (اختياري)
                           </label>
-                          <input
-                            id="contact-email"
-                            type="email"
-                            required
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="w-full bg-white border border-slate-200/80 focus:border-gold-primary focus:bg-white rounded-xl px-4 py-3.5 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-gold-primary/40 transition-all duration-300 text-left font-mono"
-                            placeholder="username@domain.com"
-                          />
+                          <div className="relative text-slate-400/80 focus-within:text-gold-primary transition-colors duration-300">
+                            <Mail className="absolute start-3.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" />
+                            <input
+                              id="contact-email"
+                              type="email"
+                              value={email}
+                              onChange={(e) => setEmail(e.target.value)}
+                              className="w-full bg-white border border-slate-200/80 focus:border-gold-primary focus:bg-white rounded-xl ps-10 pe-4 py-2.5 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-gold-primary/40 transition-all duration-300 text-left font-mono"
+                              placeholder="username@domain.com"
+                            />
+                          </div>
                         </motion.div>
                       </div>
 
                       {/* Dropdown / Subject */}
                       <motion.div variants={fadeUpVariants} className="text-right">
-                        <label htmlFor="contact-subject" className="block text-xs font-semibold text-slate-700 mb-2">
+                        <label htmlFor="contact-subject" className="block text-xs font-semibold text-slate-700 mb-1.5">
                           موضوع الاستفسار
                         </label>
-                        <div className="relative">
+                        <div className="relative text-slate-400/80 focus-within:text-gold-primary transition-colors duration-300">
+                          <HelpCircle className="absolute start-3.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" />
                           <select
                             id="contact-subject"
                             value={subject}
                             onChange={(e) => setSubject(e.target.value)}
-                            className="w-full bg-white border border-slate-200/80 focus:border-gold-primary focus:bg-white rounded-xl px-4 py-3.5 text-xs sm:text-sm text-slate-800 focus:outline-none focus:ring-1 focus:ring-gold-primary/40 transition-all duration-300 appearance-none cursor-pointer font-el-messiri"
+                            className="w-full bg-white border border-slate-200/80 focus:border-gold-primary focus:bg-white rounded-xl ps-10 pe-10 py-2.5 text-xs sm:text-sm text-slate-800 focus:outline-none focus:ring-1 focus:ring-gold-primary/40 transition-all duration-300 appearance-none cursor-pointer font-el-messiri"
                           >
                             <option value="general" className="bg-white text-slate-800">استفسار عام</option>
                             <option value="buy" className="bg-white text-slate-800">شراء وحدة سكنية فاخرة</option>
@@ -245,18 +289,21 @@ export default function ContactPage() {
 
                       {/* Message body */}
                       <motion.div variants={fadeUpVariants} className="text-right">
-                        <label htmlFor="contact-message" className="block text-xs font-semibold text-slate-700 mb-2">
+                        <label htmlFor="contact-message" className="block text-xs font-semibold text-slate-700 mb-1.5">
                           تفاصيل الرسالة الاستثمارية
                         </label>
-                        <textarea
-                          id="contact-message"
-                          required
-                          rows={4}
-                          value={message}
-                          onChange={(e) => setMessage(e.target.value)}
-                          className="w-full bg-white border border-slate-200/80 focus:border-gold-primary focus:bg-white rounded-xl px-4 py-3 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-gold-primary/40 transition-all duration-300 resize-none"
-                          placeholder="اكتب استفسارك بالتفصيل للمشروع أو المواصفات..."
-                        />
+                        <div className="relative text-slate-400/80 focus-within:text-gold-primary transition-colors duration-300">
+                          <MessageCircle className="absolute start-3.5 top-3.5 w-4 h-4 pointer-events-none" />
+                          <textarea
+                            id="contact-message"
+                            required
+                            rows={3}
+                            value={message}
+                            onChange={(e) => setMessage(e.target.value)}
+                            className="w-full bg-white border border-slate-200/80 focus:border-gold-primary focus:bg-white rounded-xl ps-10 pe-4 py-2.5 text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-gold-primary/40 transition-all duration-300 resize-none"
+                            placeholder="اكتب استفسارك بالتفصيل للمشروع أو المواصفات..."
+                          />
+                        </div>
                       </motion.div>
 
                       {/* Submit Button */}
@@ -264,7 +311,7 @@ export default function ContactPage() {
                         <button
                           type="submit"
                           disabled={isSending}
-                          className="w-full py-4 px-6 rounded-full text-xs sm:text-sm font-extrabold btn-premium-gold flex items-center justify-center gap-2 cursor-pointer transition-all duration-300 font-el-messiri disabled:opacity-50 shadow-md"
+                          className="w-full py-3 px-6 rounded-full text-xs sm:text-sm font-extrabold btn-premium-gold flex items-center justify-center gap-2 cursor-pointer transition-all duration-300 font-el-messiri disabled:opacity-50 shadow-md"
                         >
                           {isSending ? (
                             <>
@@ -592,7 +639,7 @@ export default function ContactPage() {
                 <Youtube className="w-5 h-5" />
               </div>
               <h4 className="font-extrabold text-[#060D1A] text-base font-el-messiri transition-colors duration-300 group-hover:text-gold-deep">يوتيوب</h4>
-              <span className="text-[10px] sm:text-xs text-gold-deep font-mono font-semibold" dir="ltr">Al Ghrbia Golden</span>
+              <span className="text-[10px] sm:text-xs text-gold-deep font-mono font-semibold" dir="ltr">Golden Western</span>
               <p className="text-xs text-slate-600 leading-relaxed mt-3 mb-6 font-sans transition-colors duration-300 group-hover:text-slate-800">
                 شاهد العروض السينمائية وجولات الفيديو عالية الدقة لوحداتنا السكنية ومشاريعنا الكبرى.
               </p>
