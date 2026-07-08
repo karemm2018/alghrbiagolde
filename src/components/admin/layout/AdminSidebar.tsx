@@ -3,7 +3,6 @@
 
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import {
   LayoutDashboard,
@@ -14,7 +13,8 @@ import {
   BarChart3,
   ImageIcon,
   LogOut,
-  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
   X,
 } from 'lucide-react';
 
@@ -22,6 +22,7 @@ interface AdminSidebarProps {
   collapsed: boolean;
   mobileOpen: boolean;
   onToggleMobile: () => void;
+  onToggleCollapse: () => void;
   newSubmissionsCount?: number;
 }
 
@@ -53,7 +54,7 @@ const NAV_ITEMS: NavSection[] = [
     ],
   },
   {
-    section: 'التواصل',
+    section: 'التعامل',
     items: [
       { label: 'الاستفسارات', href: '/golden-cp/submissions', icon: MessageSquareText, badge: true },
     ],
@@ -67,8 +68,13 @@ const NAV_ITEMS: NavSection[] = [
   },
 ];
 
-
-export default function AdminSidebar({ collapsed, mobileOpen, onToggleMobile, newSubmissionsCount = 0 }: AdminSidebarProps) {
+export default function AdminSidebar({
+  collapsed,
+  mobileOpen,
+  onToggleMobile,
+  onToggleCollapse,
+  newSubmissionsCount = 0,
+}: AdminSidebarProps) {
   const pathname = usePathname();
 
   const isActive = (href: string) => {
@@ -92,27 +98,27 @@ export default function AdminSidebar({ collapsed, mobileOpen, onToggleMobile, ne
         role="navigation"
         aria-label="القائمة الجانبية"
       >
-        {/* Logo */}
-        <div className="sidebar-logo lg:hidden">
-          <Image
-            src="/logo-new.webp"
-            alt="الغربية الذهبية"
-            width={40}
-            height={40}
-            className="rounded-xl shrink-0"
-            priority
-          />
-          {!collapsed && (
-            <div className="flex flex-col min-w-0">
-              <span className="text-sm font-bold text-[var(--neu-text-heading)] truncate">الغربية الذهبية</span>
-              <span className="text-[10px] text-[var(--neu-text-muted)] tracking-wider">GOLDEN WESTERN</span>
-            </div>
-          )}
+        {/* Sidebar Header with collapse/close controls */}
+        <div className="flex items-center justify-between p-4 h-[70px] shrink-0">
+          {/* Desktop collapse button */}
+          <button
+            onClick={onToggleCollapse}
+            className={`hidden lg:flex items-center justify-center neu-btn-icon neu-raised-sm ${
+              collapsed ? 'mx-auto' : 'ms-auto'
+            }`}
+            aria-label={collapsed ? 'توسيع القائمة' : 'طي القائمة'}
+          >
+            {collapsed ? (
+              <ChevronsLeft className="w-5 h-5 text-[var(--neu-text-secondary)]" />
+            ) : (
+              <ChevronsRight className="w-5 h-5 text-[var(--neu-text-secondary)]" />
+            )}
+          </button>
 
           {/* Mobile close button */}
           <button
             onClick={onToggleMobile}
-            className="lg:hidden ms-auto p-1.5 rounded-lg text-[var(--neu-text-muted)] hover:text-[var(--neu-gold)] transition-colors"
+            className="lg:hidden ms-auto p-1.5 rounded-lg text-[var(--neu-text-muted)] hover:text-[var(--neu-gold)] transition-colors flex items-center justify-center"
             aria-label="إغلاق القائمة"
           >
             <X className="w-5 h-5" />
@@ -152,14 +158,14 @@ export default function AdminSidebar({ collapsed, mobileOpen, onToggleMobile, ne
         </nav>
 
         {/* Bottom: Logout */}
-        <div className="p-3 border-t border-white/5">
+        <div className="p-3">
           <form action="/golden-cp/login" method="GET">
             <button
               type="submit"
-              className="sidebar-nav-item w-full text-[var(--neu-danger)] hover:!text-[var(--neu-danger)]"
-              title="تسجيل الخروج"
+              className="neu-btn neu-btn-danger w-full flex items-center justify-center gap-2"
+              title={collapsed ? 'تسجيل الخروج' : undefined}
             >
-              <LogOut className="w-[20px] h-[20px] shrink-0" />
+              <LogOut className="w-5 h-5" />
               {!collapsed && <span>تسجيل الخروج</span>}
             </button>
           </form>

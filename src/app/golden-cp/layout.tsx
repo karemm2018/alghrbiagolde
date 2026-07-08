@@ -20,11 +20,11 @@ export default function AdminLayout({
         collapsed={sidebarCollapsed}
         mobileOpen={mobileOpen}
         onToggleMobile={() => setMobileOpen(!mobileOpen)}
+        onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
         newSubmissionsCount={0}
       />
       <div className="admin-main">
         <AdminTopbar
-          onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)}
           onToggleMobile={() => setMobileOpen(!mobileOpen)}
         />
         <main className="admin-content">
