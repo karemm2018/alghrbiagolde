@@ -961,7 +961,8 @@
 }
 
 /* Progress bar */
-.neu-progress {
+.neu-progress,
+.neu-progress-wrapper {
   height: 6px;
   border-radius: 3px;
   background: var(--neu-depressed);
@@ -973,8 +974,22 @@
 .neu-progress-bar {
   height: 100%;
   border-radius: 3px;
-  background: linear-gradient(90deg, var(--neu-gold-warm), var(--neu-gold-light));
+  background: var(--bar-color, linear-gradient(90deg, var(--neu-gold-warm), var(--neu-gold-light)));
   transition: width 0.3s ease;
+}
+
+/* Analytics: dynamic-color legend dot */
+.analytics-legend-dot {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 9999px;
+  flex-shrink: 0;
+  background-color: var(--dot-color, var(--neu-gold));
+}
+
+/* Analytics: dynamic-color icon */
+.analytics-device-icon {
+  color: var(--icon-color, var(--neu-gold));
 }
 
 /* Login Background Pattern */

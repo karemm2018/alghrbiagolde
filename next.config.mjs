@@ -1,6 +1,21 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* empty config to use Next.js defaults */
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'zrbwtxufgtwtrkjvlwwi.supabase.co',
+        port: '',
+        pathname: '/storage/v1/object/public/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+        port: '',
+        pathname: '/**',
+      },
+    ],
+  },
 };
 
 export default nextConfig;

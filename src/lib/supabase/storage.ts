@@ -8,6 +8,7 @@ const BUCKETS = {
   projects: 'projects',
   siteAssets: 'site-assets',
   submissions: 'submissions',
+  media: 'media',
 } as const;
 
 type BucketName = typeof BUCKETS[keyof typeof BUCKETS];
