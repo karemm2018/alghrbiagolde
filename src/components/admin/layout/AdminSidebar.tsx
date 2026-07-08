@@ -93,7 +93,7 @@ export default function AdminSidebar({ collapsed, mobileOpen, onToggleMobile, ne
         aria-label="القائمة الجانبية"
       >
         {/* Logo */}
-        <div className="sidebar-logo">
+        <div className="sidebar-logo lg:hidden">
           <Image
             src="/logo-new.webp"
             alt="الغربية الذهبية"

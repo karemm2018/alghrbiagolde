@@ -2,16 +2,43 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { Menu, Bell, ExternalLink, Search } from 'lucide-react';
 
 interface AdminTopbarProps {
+  onToggleSidebar: () => void;
   onToggleMobile: () => void;
   pageTitle?: string;
 }
 
-export default function AdminTopbar({ onToggleMobile, pageTitle }: AdminTopbarProps) {
+export default function AdminTopbar({ onToggleSidebar, onToggleMobile, pageTitle }: AdminTopbarProps) {
   return (
     <header className="admin-topbar">
+      {/* Logo & Company Name */}
+      <div className="flex items-center gap-3 me-6 shrink-0">
+        <Image
+          src="/logo-new.webp"
+          alt="الغربية الذهبية"
+          width={36}
+          height={36}
+          className="rounded-lg shrink-0"
+          priority
+        />
+        <div className="flex flex-col min-w-0">
+          <span className="text-sm font-bold text-[var(--neu-text-heading)] truncate">الغربية الذهبية</span>
+          <span className="text-[9px] text-[var(--neu-text-muted)] tracking-wider">GOLDEN WESTERN</span>
+        </div>
+      </div>
+
+      {/* Desktop sidebar toggle */}
+      <button
+        onClick={onToggleSidebar}
+        className="hidden lg:flex items-center justify-center neu-btn-icon neu-raised-sm me-3"
+        aria-label="تبديل القائمة"
+      >
+        <Menu className="w-5 h-5 text-[var(--neu-text-secondary)]" />
+      </button>
+
       {/* Mobile menu button */}
       <button
         onClick={onToggleMobile}
@@ -20,8 +47,6 @@ export default function AdminTopbar({ onToggleMobile, pageTitle }: AdminTopbarPr
       >
         <Menu className="w-5 h-5 text-[var(--neu-text-secondary)]" />
       </button>
-
-
 
       {/* Page title */}
       {pageTitle && (

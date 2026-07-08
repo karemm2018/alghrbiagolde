@@ -168,8 +168,8 @@
   flex-direction: column;
   transition: width var(--neu-transition-slow);
   overflow: hidden;
-  box-shadow: none; /* Seamless, no shadow */
-  border-left: none; /* Seamless, no border */
+  box-shadow: -6px 0 20px var(--neu-shadow-dark); /* Defined sidebar shadow */
+  border-left: none;
 }
 
 .admin-sidebar.collapsed {
@@ -198,8 +198,8 @@
   display: flex;
   align-items: center;
   padding: 0 28px;
-  box-shadow: none; /* Seamless, no shadow */
-  border-bottom: none; /* Seamless, no border */
+  box-shadow: 0 4px 12px var(--neu-shadow-dark); /* Defined topbar shadow */
+  border-bottom: none;
 }
 
 .admin-content {
@@ -961,24 +961,4 @@
 .login-bg-pattern {
   background-image: radial-gradient(circle at 25% 25%, var(--neu-gold) 1px, transparent 1px);
   background-size: 40px 40px;
-}
-
-/* Defensive helper overrides to prevent CSS display conflicts with Tailwind */
-.hidden {
-  display: none !important;
-}
-
-@media (max-width: 1024px) {
-  .lg\:hidden {
-    display: none !important;
-  }
-}
-
-@media (min-width: 1024px) {
-  .hidden {
-    display: none !important;
-  }
-  .lg\:flex {
-    display: flex !important;
-  }
 }
