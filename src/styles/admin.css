@@ -162,12 +162,11 @@
   right: 0;
   width: var(--sidebar-width);
   height: 100vh;
-  background: var(--neu-raised);
+  background: #0A111F; /* Premium dark theme background */
   z-index: 50;
   display: flex;
   flex-direction: column;
-  box-shadow:
-    -6px 0 20px var(--neu-shadow-dark);
+  border-left: 1px solid rgba(255, 255, 255, 0.04); /* Thin clean divider */
   transition: width var(--neu-transition-slow);
   overflow: hidden;
 }
@@ -191,13 +190,52 @@
   position: sticky;
   top: 0;
   height: var(--topbar-height);
-  background: var(--neu-raised);
+  background: #0A111F; /* Matching dark theme background */
   z-index: 40;
   display: flex;
   align-items: center;
   padding: 0 28px;
-  box-shadow:
-    0 4px 12px var(--neu-shadow-dark);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04); /* Thin clean divider */
+  gap: 12px;
+}
+
+/* Overrides for topbar components in dark theme */
+.admin-topbar .neu-btn-icon {
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #8C9BAE !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--neu-radius-sm);
+  transition: all var(--neu-transition);
+}
+
+.admin-topbar .neu-btn-icon:hover {
+  color: var(--neu-gold) !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+}
+
+.admin-topbar .neu-btn-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.admin-topbar .neu-inset-sm {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: none !important;
+  padding: 6px 12px;
+}
+
+.admin-topbar .neu-inset-sm input {
+  color: #FFFFFF !important;
+}
+
+.admin-topbar .neu-inset-sm input::placeholder {
+  color: #5F7290 !important;
 }
 
 .admin-content {
@@ -213,26 +251,30 @@
   align-items: center;
   gap: 14px;
   padding: 24px 22px;
-  border-bottom: 1px solid rgba(201, 169, 110, 0.1);
+  border-bottom: none; /* Removed separating border */
+}
+
+.sidebar-logo span {
+  color: #FFFFFF !important;
 }
 
 .sidebar-nav {
   flex: 1;
-  padding: 18px 12px;
+  padding: 10px 12px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px; /* Smooth continuous menu flow */
 }
 
 .sidebar-nav-item {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 12px 16px;
-  border-radius: var(--neu-radius-md);
-  color: var(--neu-text-secondary);
-  font-size: 14px;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: var(--neu-radius-sm);
+  color: #8C9BAE; /* Sleek light slate */
+  font-size: 13.5px;
   font-weight: 500;
   cursor: pointer;
   transition: all var(--neu-transition);
@@ -240,17 +282,25 @@
   position: relative;
 }
 
+.sidebar-nav-item svg {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin: 0 auto; /* Center the icon */
+}
+
 .sidebar-nav-item:hover {
-  color: var(--neu-text-primary);
-  background: rgba(201, 169, 110, 0.05);
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .sidebar-nav-item.active {
   color: var(--neu-gold);
-  background: var(--neu-depressed);
-  box-shadow:
-    inset 3px 3px 8px var(--neu-shadow-dark),
-    inset -3px -3px 8px var(--neu-shadow-light);
+  background: rgba(201, 169, 110, 0.08);
+  box-shadow: none; /* No heavy shadows */
 }
 
 .sidebar-nav-item.active::before {

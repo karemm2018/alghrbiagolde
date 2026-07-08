@@ -152,7 +152,7 @@ export default function AdminSidebar({ collapsed, mobileOpen, onToggleMobile, ne
         </nav>
 
         {/* Bottom: Logout */}
-        <div className="p-3 border-t border-white/5">
+        <div className="p-3">
           <form action="/golden-cp/login" method="GET">
             <button
               type="submit"
