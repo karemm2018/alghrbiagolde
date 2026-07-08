@@ -1,0 +1,937 @@
+/* ============================================================
+   Admin Dashboard — Neumorphism (Soft UI) Design System
+   Brand: الغربية الذهبية (Golden Western Real Estate)
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   1. Admin Design Tokens
+   ------------------------------------------------------------ */
+:root {
+  /* Neumorphic Background Surfaces */
+  --neu-base: #0E1A2E;
+  --neu-raised: #132238;
+  --neu-depressed: #0A1420;
+  --neu-surface: #162640;
+
+  /* Neumorphic Shadows */
+  --neu-shadow-dark: rgba(4, 8, 16, 0.7);
+  --neu-shadow-light: rgba(25, 45, 75, 0.15);
+  --neu-shadow-dark-strong: rgba(4, 8, 16, 0.85);
+  --neu-shadow-light-strong: rgba(30, 55, 90, 0.2);
+
+  /* Admin Gold Accents (from brand) */
+  --neu-gold: #C9A96E;
+  --neu-gold-light: #E8C98A;
+  --neu-gold-warm: #B8945A;
+  --neu-gold-deep: #9A7A40;
+  --neu-gold-glow: rgba(201, 169, 110, 0.15);
+  --neu-gold-glow-strong: rgba(201, 169, 110, 0.3);
+
+  /* Admin Typography */
+  --neu-text-primary: #E8EDF5;
+  --neu-text-secondary: #7A8FA8;
+  --neu-text-muted: #4A6080;
+  --neu-text-heading: #F0F4FA;
+
+  /* Status Colors (Soft variants) */
+  --neu-success: #2ECC71;
+  --neu-success-bg: rgba(46, 204, 113, 0.08);
+  --neu-success-border: rgba(46, 204, 113, 0.25);
+  --neu-warning: #F39C12;
+  --neu-warning-bg: rgba(243, 156, 18, 0.08);
+  --neu-warning-border: rgba(243, 156, 18, 0.25);
+  --neu-danger: #E74C3C;
+  --neu-danger-bg: rgba(231, 76, 60, 0.08);
+  --neu-danger-border: rgba(231, 76, 60, 0.25);
+  --neu-info: #3498DB;
+  --neu-info-bg: rgba(52, 152, 219, 0.08);
+  --neu-info-border: rgba(52, 152, 219, 0.25);
+
+  /* Admin Layout */
+  --sidebar-width: 280px;
+  --sidebar-collapsed-width: 80px;
+  --topbar-height: 72px;
+
+  /* Border Radius */
+  --neu-radius-sm: 10px;
+  --neu-radius-md: 16px;
+  --neu-radius-lg: 22px;
+  --neu-radius-xl: 30px;
+  --neu-radius-full: 9999px;
+
+  /* Transitions */
+  --neu-transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --neu-transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ------------------------------------------------------------
+   2. Neumorphic Utility Classes
+   ------------------------------------------------------------ */
+
+/* Raised surface (buttons, cards) */
+.neu-raised {
+  background: var(--neu-raised);
+  box-shadow:
+    6px 6px 14px var(--neu-shadow-dark),
+    -6px -6px 14px var(--neu-shadow-light);
+}
+
+.neu-raised-sm {
+  background: var(--neu-raised);
+  box-shadow:
+    3px 3px 8px var(--neu-shadow-dark),
+    -3px -3px 8px var(--neu-shadow-light);
+}
+
+.neu-raised-lg {
+  background: var(--neu-raised);
+  box-shadow:
+    10px 10px 22px var(--neu-shadow-dark-strong),
+    -10px -10px 22px var(--neu-shadow-light-strong);
+}
+
+/* Pressed / Inset (inputs, toggles off) */
+.neu-inset {
+  background: var(--neu-depressed);
+  box-shadow:
+    inset 4px 4px 10px var(--neu-shadow-dark),
+    inset -4px -4px 10px var(--neu-shadow-light);
+}
+
+.neu-inset-sm {
+  background: var(--neu-depressed);
+  box-shadow:
+    inset 2px 2px 6px var(--neu-shadow-dark),
+    inset -2px -2px 6px var(--neu-shadow-light);
+}
+
+/* Flat surface (subtle, no elevation) */
+.neu-flat {
+  background: var(--neu-base);
+  box-shadow: none;
+}
+
+/* Gold accent border glow */
+.neu-gold-glow {
+  box-shadow:
+    6px 6px 14px var(--neu-shadow-dark),
+    -6px -6px 14px var(--neu-shadow-light),
+    0 0 0 1px var(--neu-gold-glow);
+}
+
+.neu-gold-glow:hover {
+  box-shadow:
+    6px 6px 14px var(--neu-shadow-dark),
+    -6px -6px 14px var(--neu-shadow-light),
+    0 0 0 1px var(--neu-gold-glow-strong),
+    0 0 20px var(--neu-gold-glow);
+}
+
+/* Interactive press effect */
+.neu-pressable {
+  transition: all var(--neu-transition);
+  cursor: pointer;
+}
+
+.neu-pressable:hover {
+  box-shadow:
+    8px 8px 18px var(--neu-shadow-dark-strong),
+    -8px -8px 18px var(--neu-shadow-light-strong);
+}
+
+.neu-pressable:active {
+  box-shadow:
+    inset 3px 3px 8px var(--neu-shadow-dark),
+    inset -3px -3px 8px var(--neu-shadow-light);
+}
+
+/* ------------------------------------------------------------
+   3. Admin Layout Base Styles
+   ------------------------------------------------------------ */
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background: var(--neu-base);
+  color: var(--neu-text-primary);
+  direction: rtl;
+}
+
+.admin-sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: var(--sidebar-width);
+  height: 100vh;
+  background: var(--neu-raised);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  box-shadow:
+    -6px 0 20px var(--neu-shadow-dark);
+  transition: width var(--neu-transition-slow);
+  overflow: hidden;
+}
+
+.admin-sidebar.collapsed {
+  width: var(--sidebar-collapsed-width);
+}
+
+.admin-main {
+  flex: 1;
+  margin-right: var(--sidebar-width);
+  min-height: 100vh;
+  transition: margin-right var(--neu-transition-slow);
+}
+
+.admin-sidebar.collapsed ~ .admin-main {
+  margin-right: var(--sidebar-collapsed-width);
+}
+
+.admin-topbar {
+  position: sticky;
+  top: 0;
+  height: var(--topbar-height);
+  background: var(--neu-raised);
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  padding: 0 28px;
+  box-shadow:
+    0 4px 12px var(--neu-shadow-dark);
+}
+
+.admin-content {
+  padding: 28px;
+  max-width: 1440px;
+}
+
+/* ------------------------------------------------------------
+   4. Sidebar Navigation Styles
+   ------------------------------------------------------------ */
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 24px 22px;
+  border-bottom: 1px solid rgba(201, 169, 110, 0.1);
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 18px 12px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sidebar-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: var(--neu-radius-md);
+  color: var(--neu-text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--neu-transition);
+  text-decoration: none;
+  position: relative;
+}
+
+.sidebar-nav-item:hover {
+  color: var(--neu-text-primary);
+  background: rgba(201, 169, 110, 0.05);
+}
+
+.sidebar-nav-item.active {
+  color: var(--neu-gold);
+  background: var(--neu-depressed);
+  box-shadow:
+    inset 3px 3px 8px var(--neu-shadow-dark),
+    inset -3px -3px 8px var(--neu-shadow-light);
+}
+
+.sidebar-nav-item.active::before {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 60%;
+  background: var(--neu-gold);
+  border-radius: var(--neu-radius-full);
+}
+
+.sidebar-nav-item .badge {
+  margin-right: auto;
+  margin-left: 0;
+  min-width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--neu-radius-full);
+  background: var(--neu-danger);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 0 6px;
+}
+
+.sidebar-section-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--neu-text-muted);
+  padding: 16px 16px 6px;
+  font-weight: 600;
+}
+
+/* ------------------------------------------------------------
+   5. Neumorphic Form Elements
+   ------------------------------------------------------------ */
+.neu-input-wrapper {
+  position: relative;
+}
+
+.neu-input {
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: var(--neu-radius-md);
+  background: var(--neu-depressed);
+  border: 1px solid transparent;
+  color: var(--neu-text-primary);
+  font-size: 14px;
+  font-family: inherit;
+  box-shadow:
+    inset 3px 3px 8px var(--neu-shadow-dark),
+    inset -3px -3px 8px var(--neu-shadow-light);
+  outline: none;
+  transition: all var(--neu-transition);
+}
+
+.neu-input::placeholder {
+  color: var(--neu-text-muted);
+}
+
+.neu-input:focus {
+  border-color: rgba(201, 169, 110, 0.4);
+  box-shadow:
+    inset 3px 3px 8px var(--neu-shadow-dark),
+    inset -3px -3px 8px var(--neu-shadow-light),
+    0 0 0 3px rgba(201, 169, 110, 0.08);
+}
+
+.neu-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.neu-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--neu-text-secondary);
+  margin-bottom: 8px;
+}
+
+/* Textarea */
+.neu-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Select */
+.neu-select {
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%237A8FA8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: left 14px center;
+  padding-left: 40px;
+}
+
+/* ------------------------------------------------------------
+   6. Neumorphic Button System
+   ------------------------------------------------------------ */
+.neu-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: var(--neu-radius-md);
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  transition: all var(--neu-transition);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.neu-btn-primary {
+  background: linear-gradient(135deg, var(--neu-gold-warm), var(--neu-gold), var(--neu-gold-light));
+  color: #0E1A2E;
+  box-shadow:
+    4px 4px 12px var(--neu-shadow-dark),
+    -4px -4px 12px var(--neu-shadow-light),
+    0 2px 8px rgba(201, 169, 110, 0.25);
+}
+
+.neu-btn-primary:hover {
+  box-shadow:
+    6px 6px 16px var(--neu-shadow-dark),
+    -6px -6px 16px var(--neu-shadow-light),
+    0 4px 16px rgba(201, 169, 110, 0.4);
+  transform: translateY(-1px);
+}
+
+.neu-btn-primary:active {
+  box-shadow:
+    inset 2px 2px 6px rgba(0, 0, 0, 0.3),
+    inset -2px -2px 6px rgba(255, 255, 255, 0.05);
+  transform: translateY(0);
+}
+
+.neu-btn-secondary {
+  background: var(--neu-raised);
+  color: var(--neu-text-primary);
+  box-shadow:
+    4px 4px 12px var(--neu-shadow-dark),
+    -4px -4px 12px var(--neu-shadow-light);
+}
+
+.neu-btn-secondary:hover {
+  color: var(--neu-gold);
+  box-shadow:
+    6px 6px 16px var(--neu-shadow-dark),
+    -6px -6px 16px var(--neu-shadow-light);
+}
+
+.neu-btn-ghost {
+  background: transparent;
+  color: var(--neu-text-secondary);
+}
+
+.neu-btn-ghost:hover {
+  color: var(--neu-gold);
+  background: rgba(201, 169, 110, 0.06);
+}
+
+.neu-btn-danger {
+  background: var(--neu-raised);
+  color: var(--neu-danger);
+  box-shadow:
+    4px 4px 12px var(--neu-shadow-dark),
+    -4px -4px 12px var(--neu-shadow-light);
+}
+
+.neu-btn-danger:hover {
+  background: var(--neu-danger-bg);
+  border-color: var(--neu-danger-border);
+  box-shadow:
+    4px 4px 12px var(--neu-shadow-dark),
+    -4px -4px 12px var(--neu-shadow-light),
+    0 0 12px var(--neu-danger-bg);
+}
+
+.neu-btn-sm {
+  padding: 8px 16px;
+  font-size: 12px;
+  border-radius: var(--neu-radius-sm);
+}
+
+.neu-btn-lg {
+  padding: 16px 32px;
+  font-size: 16px;
+  border-radius: var(--neu-radius-lg);
+}
+
+.neu-btn-icon {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: var(--neu-radius-md);
+}
+
+.neu-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ------------------------------------------------------------
+   7. Neumorphic Cards & Containers
+   ------------------------------------------------------------ */
+.neu-card {
+  background: var(--neu-raised);
+  border-radius: var(--neu-radius-lg);
+  padding: 24px;
+  box-shadow:
+    6px 6px 14px var(--neu-shadow-dark),
+    -6px -6px 14px var(--neu-shadow-light);
+  transition: all var(--neu-transition);
+}
+
+.neu-card-interactive:hover {
+  box-shadow:
+    8px 8px 20px var(--neu-shadow-dark-strong),
+    -8px -8px 20px var(--neu-shadow-light-strong);
+}
+
+.neu-card-gold {
+  box-shadow:
+    6px 6px 14px var(--neu-shadow-dark),
+    -6px -6px 14px var(--neu-shadow-light),
+    0 0 0 1px rgba(201, 169, 110, 0.12);
+}
+
+/* Stats card */
+.neu-stat-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.neu-stat-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 4px;
+  height: 100%;
+  border-radius: 0 var(--neu-radius-lg) var(--neu-radius-lg) 0;
+}
+
+.neu-stat-card.gold::after { background: var(--neu-gold); }
+.neu-stat-card.success::after { background: var(--neu-success); }
+.neu-stat-card.warning::after { background: var(--neu-warning); }
+.neu-stat-card.info::after { background: var(--neu-info); }
+.neu-stat-card.danger::after { background: var(--neu-danger); }
+
+/* ------------------------------------------------------------
+   8. Table Styles
+   ------------------------------------------------------------ */
+.neu-table-wrapper {
+  background: var(--neu-raised);
+  border-radius: var(--neu-radius-lg);
+  overflow: hidden;
+  box-shadow:
+    6px 6px 14px var(--neu-shadow-dark),
+    -6px -6px 14px var(--neu-shadow-light);
+}
+
+.neu-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.neu-table th {
+  text-align: right;
+  padding: 16px 20px;
+  background: var(--neu-depressed);
+  color: var(--neu-text-secondary);
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid rgba(201, 169, 110, 0.08);
+}
+
+.neu-table td {
+  padding: 14px 20px;
+  color: var(--neu-text-primary);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.neu-table tbody tr {
+  transition: background var(--neu-transition);
+}
+
+.neu-table tbody tr:hover {
+  background: rgba(201, 169, 110, 0.03);
+}
+
+.neu-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ------------------------------------------------------------
+   9. Status Badges
+   ------------------------------------------------------------ */
+.neu-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: var(--neu-radius-full);
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid;
+}
+
+.neu-badge-success {
+  background: var(--neu-success-bg);
+  color: var(--neu-success);
+  border-color: var(--neu-success-border);
+}
+
+.neu-badge-warning {
+  background: var(--neu-warning-bg);
+  color: var(--neu-warning);
+  border-color: var(--neu-warning-border);
+}
+
+.neu-badge-danger {
+  background: var(--neu-danger-bg);
+  color: var(--neu-danger);
+  border-color: var(--neu-danger-border);
+}
+
+.neu-badge-info {
+  background: var(--neu-info-bg);
+  color: var(--neu-info);
+  border-color: var(--neu-info-border);
+}
+
+.neu-badge-gold {
+  background: rgba(201, 169, 110, 0.08);
+  color: var(--neu-gold);
+  border-color: rgba(201, 169, 110, 0.25);
+}
+
+.neu-badge-dot::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* ------------------------------------------------------------
+   10. Modal / Dialog
+   ------------------------------------------------------------ */
+.neu-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 8, 16, 0.85);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.neu-modal {
+  background: var(--neu-raised);
+  border-radius: var(--neu-radius-xl);
+  padding: 32px;
+  max-width: 520px;
+  width: 100%;
+  box-shadow:
+    12px 12px 28px var(--neu-shadow-dark-strong),
+    -12px -12px 28px var(--neu-shadow-light-strong),
+    0 0 0 1px rgba(201, 169, 110, 0.08);
+}
+
+/* ------------------------------------------------------------
+   11. Stepper (Multi-Step Form)
+   ------------------------------------------------------------ */
+.neu-stepper {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 32px;
+}
+
+.neu-step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.neu-step-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  transition: all var(--neu-transition);
+  flex-shrink: 0;
+}
+
+.neu-step.pending .neu-step-circle {
+  background: var(--neu-depressed);
+  color: var(--neu-text-muted);
+  box-shadow:
+    inset 2px 2px 5px var(--neu-shadow-dark),
+    inset -2px -2px 5px var(--neu-shadow-light);
+}
+
+.neu-step.active .neu-step-circle {
+  background: linear-gradient(135deg, var(--neu-gold-warm), var(--neu-gold-light));
+  color: #0E1A2E;
+  box-shadow: 0 0 14px rgba(201, 169, 110, 0.3);
+}
+
+.neu-step.completed .neu-step-circle {
+  background: var(--neu-success);
+  color: #fff;
+}
+
+.neu-step-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--neu-text-muted);
+  transition: color var(--neu-transition);
+  white-space: nowrap;
+}
+
+.neu-step.active .neu-step-label {
+  color: var(--neu-gold);
+}
+
+.neu-step.completed .neu-step-label {
+  color: var(--neu-success);
+}
+
+.neu-step-connector {
+  flex: 1;
+  height: 2px;
+  background: var(--neu-depressed);
+  margin: 0 8px;
+  border-radius: 1px;
+}
+
+.neu-step-connector.completed {
+  background: var(--neu-success);
+}
+
+/* ------------------------------------------------------------
+   12. Toggle Switch
+   ------------------------------------------------------------ */
+.neu-toggle {
+  position: relative;
+  width: 52px;
+  height: 28px;
+  border-radius: var(--neu-radius-full);
+  background: var(--neu-depressed);
+  box-shadow:
+    inset 3px 3px 6px var(--neu-shadow-dark),
+    inset -3px -3px 6px var(--neu-shadow-light);
+  cursor: pointer;
+  transition: all var(--neu-transition);
+}
+
+.neu-toggle.active {
+  background: rgba(201, 169, 110, 0.15);
+}
+
+.neu-toggle-knob {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--neu-text-muted);
+  box-shadow:
+    2px 2px 5px var(--neu-shadow-dark),
+    -2px -2px 5px var(--neu-shadow-light);
+  transition: all var(--neu-transition);
+}
+
+.neu-toggle.active .neu-toggle-knob {
+  right: auto;
+  left: 3px;
+  background: var(--neu-gold);
+  box-shadow:
+    2px 2px 5px var(--neu-shadow-dark),
+    0 0 8px rgba(201, 169, 110, 0.4);
+}
+
+/* ------------------------------------------------------------
+   13. Login Page
+   ------------------------------------------------------------ */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--neu-base);
+  padding: 20px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 440px;
+  padding: 48px 40px;
+  border-radius: var(--neu-radius-xl);
+  background: var(--neu-raised);
+  box-shadow:
+    12px 12px 28px var(--neu-shadow-dark-strong),
+    -12px -12px 28px var(--neu-shadow-light-strong);
+}
+
+/* ------------------------------------------------------------
+   14. Charts Container
+   ------------------------------------------------------------ */
+.neu-chart-container {
+  padding: 20px;
+  border-radius: var(--neu-radius-lg);
+  background: var(--neu-raised);
+  box-shadow:
+    6px 6px 14px var(--neu-shadow-dark),
+    -6px -6px 14px var(--neu-shadow-light);
+}
+
+/* Recharts overrides for dark theme */
+.neu-chart-container .recharts-text {
+  fill: var(--neu-text-secondary) !important;
+  font-size: 12px;
+}
+
+.neu-chart-container .recharts-cartesian-grid-horizontal line,
+.neu-chart-container .recharts-cartesian-grid-vertical line {
+  stroke: rgba(255, 255, 255, 0.04);
+}
+
+/* ------------------------------------------------------------
+   15. Scrollbar Styling
+   ------------------------------------------------------------ */
+.admin-layout ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.admin-layout ::-webkit-scrollbar-track {
+  background: var(--neu-depressed);
+}
+
+.admin-layout ::-webkit-scrollbar-thumb {
+  background: var(--neu-text-muted);
+  border-radius: 3px;
+}
+
+.admin-layout ::-webkit-scrollbar-thumb:hover {
+  background: var(--neu-gold-warm);
+}
+
+/* ------------------------------------------------------------
+   16. Responsive Overrides
+   ------------------------------------------------------------ */
+@media (max-width: 1024px) {
+  .admin-sidebar {
+    transform: translateX(100%);
+    transition: transform var(--neu-transition-slow);
+  }
+
+  .admin-sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  .admin-main {
+    margin-right: 0;
+  }
+
+  .admin-content {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  .neu-card {
+    padding: 16px;
+    border-radius: var(--neu-radius-md);
+  }
+
+  .login-card {
+    padding: 32px 24px;
+  }
+
+  .neu-stepper {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .neu-step-label {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------------------
+   17. Reduced Motion
+   ------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  .neu-pressable,
+  .neu-btn,
+  .neu-toggle,
+  .neu-toggle-knob,
+  .sidebar-nav-item,
+  .neu-input {
+    transition: none !important;
+  }
+}
+
+/* ------------------------------------------------------------
+   18. Image Uploader / Dropzone
+   ------------------------------------------------------------ */
+.neu-dropzone {
+  border: 2px dashed rgba(201, 169, 110, 0.2);
+  border-radius: var(--neu-radius-lg);
+  padding: 40px 24px;
+  text-align: center;
+  background: var(--neu-depressed);
+  box-shadow:
+    inset 3px 3px 8px var(--neu-shadow-dark),
+    inset -3px -3px 8px var(--neu-shadow-light);
+  transition: all var(--neu-transition);
+  cursor: pointer;
+}
+
+.neu-dropzone:hover,
+.neu-dropzone.drag-active {
+  border-color: var(--neu-gold);
+  background: rgba(201, 169, 110, 0.03);
+}
+
+.neu-dropzone.drag-active {
+  box-shadow:
+    inset 3px 3px 8px var(--neu-shadow-dark),
+    inset -3px -3px 8px var(--neu-shadow-light),
+    0 0 20px rgba(201, 169, 110, 0.1);
+}
+
+/* Progress bar */
+.neu-progress {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--neu-depressed);
+  box-shadow:
+    inset 1px 1px 3px var(--neu-shadow-dark);
+  overflow: hidden;
+}
+
+.neu-progress-bar {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--neu-gold-warm), var(--neu-gold-light));
+  transition: width 0.3s ease;
+}
+
+/* Login Background Pattern */
+.login-bg-pattern {
+  background-image: radial-gradient(circle at 25% 25%, var(--neu-gold) 1px, transparent 1px);
+  background-size: 40px 40px;
+}

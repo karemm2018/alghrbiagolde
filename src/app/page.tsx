@@ -848,8 +848,8 @@ export default function HomePage() {
                 type="button"
                 onClick={() => setShowMobileFilters(!showMobileFilters)}
                 className={`w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center border transition-all duration-300 cursor-pointer shrink-0 ${showMobileFilters
-                  ? 'bg-gold-primary text-bg-midnight border-gold-primary shadow-lg shadow-gold-primary/20 scale-95'
-                  : 'bg-white/[0.04] text-text-secondary border-border-gold/20 hover:border-gold-primary/40 hover:text-white'
+                    ? 'bg-gold-primary text-bg-midnight border-gold-primary shadow-lg shadow-gold-primary/20 scale-95'
+                    : 'bg-white/[0.04] text-text-secondary border-border-gold/20 hover:border-gold-primary/40 hover:text-white'
                   }`}
                 title="تصفية متقدمة"
                 aria-label="تصفية متقدمة"
@@ -1214,8 +1214,8 @@ export default function HomePage() {
                   type="button"
                   onClick={() => setPropertiesViewMode('grid')}
                   className={`px-3 py-1.5 rounded-md transition-all duration-300 cursor-pointer text-xs font-semibold font-el-messiri ${propertiesViewMode === 'grid'
-                    ? 'bg-gold-primary text-bg-midnight font-bold shadow-md shadow-gold-primary/10'
-                    : 'text-text-muted hover:text-white'
+                      ? 'bg-gold-primary text-bg-midnight font-bold shadow-md shadow-gold-primary/10'
+                      : 'text-text-muted hover:text-white'
                     }`}
                 >
                   كروت العرض
@@ -1224,8 +1224,8 @@ export default function HomePage() {
                   type="button"
                   onClick={() => setPropertiesViewMode('table')}
                   className={`px-3 py-1.5 rounded-md transition-all duration-300 cursor-pointer text-xs font-semibold font-el-messiri ${propertiesViewMode === 'table'
-                    ? 'bg-gold-primary text-bg-midnight font-bold shadow-md shadow-gold-primary/10'
-                    : 'text-text-muted hover:text-white'
+                      ? 'bg-gold-primary text-bg-midnight font-bold shadow-md shadow-gold-primary/10'
+                      : 'text-text-muted hover:text-white'
                     }`}
                 >
                   جدول التفاصيل
@@ -1237,8 +1237,8 @@ export default function HomePage() {
                 type="button"
                 onClick={() => setShowLocalFilters(!showLocalFilters)}
                 className={`flex items-center justify-center p-1.5 rounded-lg border transition-all duration-300 cursor-pointer shrink-0 ${showLocalFilters
-                  ? 'bg-gold-primary text-bg-midnight border-gold-primary shadow-lg shadow-gold-primary/20 scale-95'
-                  : 'bg-bg-royal/30 text-gold-primary border border-border-gold/15 hover:border-gold-primary hover:bg-gold-primary/10'
+                    ? 'bg-gold-primary text-bg-midnight border-gold-primary shadow-lg shadow-gold-primary/20 scale-95'
+                    : 'bg-bg-royal/30 text-gold-primary border border-border-gold/15 hover:border-gold-primary hover:bg-gold-primary/10'
                   }`}
                 title="تصفية العقارات"
               >
@@ -1605,8 +1605,8 @@ export default function HomePage() {
                   type="button"
                   onClick={() => setProjectsViewMode('grid')}
                   className={`px-4 py-1.5 rounded-md transition-all duration-300 cursor-pointer text-xs font-semibold font-el-messiri ${projectsViewMode === 'grid'
-                    ? 'bg-gold-primary text-bg-midnight font-bold shadow-md shadow-gold-primary/10'
-                    : 'text-text-muted hover:text-white'
+                      ? 'bg-gold-primary text-bg-midnight font-bold shadow-md shadow-gold-primary/10'
+                      : 'text-text-muted hover:text-white'
                     }`}
                 >
                   كروت العرض
@@ -1615,8 +1615,8 @@ export default function HomePage() {
                   type="button"
                   onClick={() => setProjectsViewMode('table')}
                   className={`px-4 py-1.5 rounded-md transition-all duration-300 cursor-pointer text-xs font-semibold font-el-messiri ${projectsViewMode === 'table'
-                    ? 'bg-gold-primary text-bg-midnight font-bold shadow-md shadow-gold-primary/10'
-                    : 'text-text-muted hover:text-white'
+                      ? 'bg-gold-primary text-bg-midnight font-bold shadow-md shadow-gold-primary/10'
+                      : 'text-text-muted hover:text-white'
                     }`}
                 >
                   جدول التفاصيل
