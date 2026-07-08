@@ -21,7 +21,7 @@ import {
   Briefcase,
   ChevronLeft
 } from 'lucide-react';
-import { useInquiryStore } from '../../store/useInquiryStore';
+import { useInquiryStore } from '@/store/useInquiryStore';
 
 // Sub-component for luxury split-word text animations
 const AnimateWords = ({ text, className, delay = 0 }: { text: string; className?: string; delay?: number }) => {

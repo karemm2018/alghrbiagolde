@@ -39,7 +39,7 @@ import {
   Ruler
 } from 'lucide-react';
 import CustomSelect from '@/components/ui/CustomSelect';
-import { useInquiryStore } from '../store/useInquiryStore';
+import { useInquiryStore } from '@/store/useInquiryStore';
 
 const PanoramaViewer = dynamic(() => import('@/components/ui/PanoramaViewer'), {
   ssr: false,

@@ -22,7 +22,7 @@ import {
   User,
   HelpCircle
 } from 'lucide-react';
-import { useInquiryStore } from '../../store/useInquiryStore';
+import { useInquiryStore } from '@/store/useInquiryStore';
 
 export default function ContactPage() {
   const openInquiry = useInquiryStore((state) => state.open);
