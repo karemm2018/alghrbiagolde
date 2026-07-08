@@ -16,7 +16,7 @@ export default function AdminTopbar({ onToggleSidebar, onToggleMobile, pageTitle
       {/* Mobile menu button */}
       <button
         onClick={onToggleMobile}
-        className="lg:hidden neu-btn-icon neu-raised-sm ms-0 me-3"
+        className="lg:hidden flex items-center justify-center neu-btn-icon neu-raised-sm ms-0 me-3"
         aria-label="فتح القائمة"
       >
         <Menu className="w-5 h-5 text-[var(--neu-text-secondary)]" />
@@ -25,7 +25,7 @@ export default function AdminTopbar({ onToggleSidebar, onToggleMobile, pageTitle
       {/* Desktop sidebar toggle */}
       <button
         onClick={onToggleSidebar}
-        className="hidden lg:flex neu-btn-icon neu-raised-sm"
+        className="hidden lg:flex items-center justify-center neu-btn-icon neu-raised-sm"
         aria-label="تبديل القائمة"
       >
         <Menu className="w-5 h-5 text-[var(--neu-text-secondary)]" />
@@ -53,7 +53,7 @@ export default function AdminTopbar({ onToggleSidebar, onToggleMobile, pageTitle
 
       {/* Notifications */}
       <button
-        className="neu-btn-icon neu-raised-sm relative me-2"
+        className="flex items-center justify-center neu-btn-icon neu-raised-sm relative me-2"
         aria-label="الإشعارات"
         title="الإشعارات"
       >
@@ -65,7 +65,7 @@ export default function AdminTopbar({ onToggleSidebar, onToggleMobile, pageTitle
         href="/"
         target="_blank"
         rel="noopener noreferrer"
-        className="neu-btn-icon neu-raised-sm"
+        className="flex items-center justify-center neu-btn-icon neu-raised-sm"
         aria-label="عرض الموقع"
         title="عرض الموقع"
       >

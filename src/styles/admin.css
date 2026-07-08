@@ -166,6 +166,8 @@
   z-index: 50;
   display: flex;
   flex-direction: column;
+  box-shadow:
+    -6px 0 20px var(--neu-shadow-dark);
   transition: width var(--neu-transition-slow);
   overflow: hidden;
   box-shadow: none; /* Merged, no separator shadow */
@@ -196,8 +198,8 @@
   display: flex;
   align-items: center;
   padding: 0 28px;
-  box-shadow: none; /* Merged, no separator shadow */
-  border-bottom: none; /* Merged, no separator line */
+  box-shadow:
+    0 4px 12px var(--neu-shadow-dark);
 }
 
 .admin-content {
@@ -457,9 +459,6 @@
   height: 44px;
   padding: 0;
   border-radius: var(--neu-radius-md);
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .neu-btn:disabled {
