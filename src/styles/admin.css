@@ -962,3 +962,10 @@
   background-image: radial-gradient(circle at 25% 25%, var(--neu-gold) 1px, transparent 1px);
   background-size: 40px 40px;
 }
+
+/* Ensure Tailwind's lg:hidden is respected on desktop screen widths */
+@media (min-width: 1024px) {
+  .lg\:hidden {
+    display: none !important;
+  }
+}
