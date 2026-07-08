@@ -168,7 +168,7 @@
   flex-direction: column;
   transition: width var(--neu-transition-slow);
   overflow: hidden;
-  box-shadow: -6px 0 20px var(--neu-shadow-dark); /* Defined sidebar shadow */
+  box-shadow: none; /* Seamless, no shadow */
   border-left: none;
 }
 
@@ -178,34 +178,37 @@
 
 .admin-main {
   flex: 1;
-  min-height: 100vh;
+  margin-top: var(--topbar-height); /* Offset to start below topbar */
+  margin-right: var(--sidebar-width); /* Stay to the left of the sidebar */
+  min-height: calc(100vh - var(--topbar-height));
   transition: margin-right var(--neu-transition-slow);
-  margin-right: 0; /* Navbar spans full screen width, no offset margin here */
 }
 
-.admin-sidebar.collapsed ~ .admin-main .admin-content {
+.admin-sidebar.collapsed ~ .admin-main {
   margin-right: var(--sidebar-collapsed-width);
 }
 
 .admin-topbar {
-  position: sticky;
+  position: fixed; /* Fixed full-width navbar at top */
   top: 0;
   right: 0;
-  width: 100%; /* Stretch navbar to full viewport width */
+  left: 0;
+  width: 100%;
   height: var(--topbar-height);
   background: var(--neu-raised);
-  z-index: 50; /* Higher than sidebar */
+  z-index: 50; /* Sits on top of sidebar and main content */
   display: flex;
   align-items: center;
   padding: 0 28px;
-  box-shadow: none; /* Removed topbar shadow */
-  border-bottom: none;
+  box-shadow: none; /* Seamless, no shadow */
+  border-bottom: 1px solid rgba(165, 180, 203, 0.25); /* Light border */
 }
 
 .admin-content {
   padding: 28px;
   max-width: 1440px;
-  margin-right: var(--sidebar-width); /* Shift content left of sidebar */
+  margin-left: auto;
+  margin-right: auto; /* Perfectly centered inside the remaining viewport space */
   transition: margin-right var(--neu-transition-slow);
 }
 
@@ -854,25 +857,42 @@
    ------------------------------------------------------------ */
 @media (max-width: 1024px) {
   .admin-sidebar {
-    top: 0; /* Full height overlay on mobile */
-    height: 100vh;
-    z-index: 100;
-    transform: translateX(100%);
-    transition: transform var(--neu-transition-slow);
-    box-shadow: -6px 0 20px var(--neu-shadow-dark); /* Show shadow on mobile drawer overlay */
+    top: var(--topbar-height) !important; /* Start below topbar on mobile */
+    right: -280px !important; /* Hide off-screen right */
+    width: 280px !important; /* Force full width mobile drawer */
+    height: calc(100vh - var(--topbar-height)) !important; /* Height offset by topbar */
+    z-index: 100 !important;
+    transform: none !important; /* Disable LTR/RTL translation conflicts */
+    transition: right var(--neu-transition-slow) !important;
+    box-shadow: none;
+  }
+
+  .desktop-collapse-btn {
+    display: none !important; /* Hide desktop collapse/expand button on mobile screen widths */
   }
 
   .admin-sidebar.mobile-open {
-    transform: translateX(0);
+    right: 0 !important; /* Slide drawer in */
+    box-shadow: -6px 0 20px var(--neu-shadow-dark) !important;
   }
 
-  .admin-main {
-    margin-right: 0;
+  .admin-main,
+  .admin-sidebar.collapsed ~ .admin-main {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+    width: 100% !important;
   }
 
   .admin-content {
-    padding: 16px;
-    margin-right: 0; /* Full width content container on mobile */
+    padding: 16px !important;
+    margin-right: auto !important;
+    margin-left: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .admin-topbar {
+    padding: 0 16px !important; /* Squeeze padding on mobile screens */
   }
 }
 

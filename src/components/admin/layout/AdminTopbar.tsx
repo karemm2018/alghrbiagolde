@@ -13,22 +13,6 @@ interface AdminTopbarProps {
 export default function AdminTopbar({ onToggleMobile, pageTitle }: AdminTopbarProps) {
   return (
     <header className="admin-topbar">
-      {/* Logo & Company Name */}
-      <div className="flex items-center gap-3 me-6 shrink-0">
-        <Image
-          src="/logo-new.webp"
-          alt="الغربية الذهبية"
-          width={36}
-          height={36}
-          className="rounded-lg shrink-0"
-          priority
-        />
-        <div className="flex flex-col min-w-0">
-          <span className="text-sm font-bold text-[var(--neu-text-heading)] truncate">الغربية الذهبية</span>
-          <span className="text-[9px] text-[var(--neu-text-muted)] tracking-wider">GOLDEN WESTERN</span>
-        </div>
-      </div>
-
       {/* Mobile menu button */}
       <button
         onClick={onToggleMobile}
@@ -37,6 +21,22 @@ export default function AdminTopbar({ onToggleMobile, pageTitle }: AdminTopbarPr
       >
         <Menu className="w-5 h-5 text-[var(--neu-text-secondary)]" />
       </button>
+
+      {/* Logo & Company Name */}
+      <div className="flex items-center gap-3 me-6 shrink-0">
+        <Image
+          src="/logo-new.webp"
+          alt="الغربية الذهبية"
+          width={36}
+          height={36}
+          className="rounded-lg shrink-0 w-auto h-auto"
+          priority
+        />
+        <div className="flex flex-col min-w-0">
+          <span className="text-sm font-bold text-[var(--neu-text-heading)] truncate">الغربية الذهبية</span>
+          <span className="text-[9px] text-[var(--neu-text-muted)] tracking-wider">GOLDEN WESTERN</span>
+        </div>
+      </div>
 
       {/* Page title */}
       {pageTitle && (

@@ -103,7 +103,7 @@ export default function AdminSidebar({
           {/* Desktop collapse button */}
           <button
             onClick={onToggleCollapse}
-            className={`hidden lg:flex items-center justify-center neu-btn-icon neu-raised-sm ${
+            className={`hidden lg:flex items-center justify-center neu-btn-icon neu-raised-sm desktop-collapse-btn ${
               collapsed ? 'mx-auto' : 'ms-auto'
             }`}
             aria-label={collapsed ? 'توسيع القائمة' : 'طي القائمة'}

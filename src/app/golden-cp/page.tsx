@@ -106,24 +106,24 @@ export default function DashboardPage() {
       </div>
 
       {/* Stats Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 mb-8">
+      <div className="grid grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-5 mb-8">
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (
             <div
               key={stat.label}
-              className={`neu-card neu-stat-card ${stat.color}`}
+              className={`neu-card neu-stat-card ${stat.color} p-3 sm:p-5`}
             >
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="text-sm text-[var(--neu-text-muted)] mb-1">{stat.label}</p>
-                  <p className="text-3xl font-bold text-[var(--neu-text-heading)]">
+              <div className="flex items-start justify-between gap-1">
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs sm:text-sm text-[var(--neu-text-muted)] mb-1 truncate" title={stat.label}>{stat.label}</p>
+                  <p className="text-2xl sm:text-3xl font-bold text-[var(--neu-text-heading)]">
                     {stat.value.toLocaleString('en-US')}
                   </p>
-                  <p className="text-xs text-[var(--neu-text-muted)] mt-2">{stat.change}</p>
+                  <p className="text-[10px] sm:text-xs text-[var(--neu-text-muted)] mt-2 truncate" title={stat.change}>{stat.change}</p>
                 </div>
-                <div className="neu-raised-sm rounded-xl p-3">
-                  <Icon className="w-6 h-6 text-[var(--neu-gold)]" />
+                <div className="neu-raised-sm rounded-xl p-2 sm:p-3 shrink-0">
+                  <Icon className="w-5 h-5 sm:w-6 h-6 text-[var(--neu-gold)]" />
                 </div>
               </div>
             </div>
