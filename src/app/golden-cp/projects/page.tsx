@@ -57,7 +57,7 @@ export default function ProjectsPage() {
             placeholder="ابحث بالاسم أو المدينة..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="neu-input ps-10"
+            className="neu-input neu-input-search"
           />
         </div>
       </div>

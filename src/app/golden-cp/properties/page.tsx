@@ -80,7 +80,7 @@ export default function PropertiesPage() {
               placeholder="ابحث بالعنوان، المدينة، أو الحي..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="neu-input ps-10"
+              className="neu-input neu-input-search"
             />
           </div>
 

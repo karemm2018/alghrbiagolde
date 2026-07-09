@@ -73,7 +73,7 @@ export default function SubmissionsPage() {
               placeholder="ابحث بالاسم أو رقم الجوال..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="neu-input ps-10"
+              className="neu-input neu-input-search"
             />
           </div>
           <AdminSelect

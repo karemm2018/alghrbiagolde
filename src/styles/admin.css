@@ -320,6 +320,10 @@
   transition: all var(--neu-transition);
 }
 
+.neu-input-search {
+  padding-inline-start: 44px !important;
+}
+
 .neu-input::placeholder {
   color: var(--neu-text-muted);
 }

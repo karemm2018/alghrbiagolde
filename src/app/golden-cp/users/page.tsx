@@ -320,7 +320,7 @@ export default function UsersManagementPage() {
                     placeholder="ابحث باسم الموظف أو البريد الإلكتروني..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="neu-input ps-10"
+                    className="neu-input neu-input-search"
                   />
                 </div>
               </div>
