@@ -39,7 +39,7 @@ export async function getAccountsList(): Promise<DbUserAccount[]> {
       };
 
       let name = meta.name || 'مستخدم غير معروف';
-      if (user.email?.toLowerCase() === 'admin@alghrbiagolden.com') {
+      if (user.email?.toLowerCase() === 'admin@goldenwestern.com') {
         name = 'سوبر أدمن';
       }
 

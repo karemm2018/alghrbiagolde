@@ -402,7 +402,7 @@ export default function UsersManagementPage() {
                       </button>
                       <button
                         onClick={() => setConfirmDeleteAccount(acc)}
-                        disabled={acc.name === 'سوبر أدمن'} // Protect main super admin account
+                        disabled={acc.name === 'سوبر أدمن' || acc.email.toLowerCase() === 'admin@alghrbiagolde.com'} // Protect main super admin account
                         className="neu-btn neu-btn-secondary p-2 text-red-400 hover:text-red-500 disabled:opacity-30"
                         title="حذف الحساب"
                       >
