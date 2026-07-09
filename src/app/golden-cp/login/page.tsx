@@ -90,7 +90,7 @@ function LoginFormContent() {
               placeholder="admin@example.com"
               required
               autoComplete="email"
-              className="neu-input pe-11"
+              className="neu-input neu-input-icon-right"
               dir="ltr"
             />
           </div>
@@ -109,7 +109,7 @@ function LoginFormContent() {
               placeholder="••••••••"
               required
               autoComplete="current-password"
-              className="neu-input pe-11 ps-11"
+              className="neu-input neu-input-icon-right neu-input-icon-left"
               dir="ltr"
             />
             <button
