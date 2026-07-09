@@ -3,7 +3,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   LayoutDashboard,
   Building2,
@@ -18,6 +18,7 @@ import {
   X,
   Users,
 } from 'lucide-react';
+import { getSupabaseBrowserClient } from '../../../lib/supabase/client';
 
 interface AdminSidebarProps {
   collapsed: boolean;
@@ -78,10 +79,23 @@ export default function AdminSidebar({
   newSubmissionsCount = 0,
 }: AdminSidebarProps) {
   const pathname = usePathname();
+  const router = useRouter();
 
   const isActive = (href: string) => {
     if (href === '/golden-cp') return pathname === '/golden-cp';
     return pathname.startsWith(href);
+  };
+
+  const handleLogout = async () => {
+    try {
+      const supabase = getSupabaseBrowserClient();
+      await supabase.auth.signOut();
+      router.push('/golden-cp/login');
+      router.refresh();
+    } catch (err) {
+      console.error('Logout error:', err);
+      window.location.href = '/golden-cp/login';
+    }
   };
 
   return (
@@ -161,16 +175,15 @@ export default function AdminSidebar({
 
         {/* Bottom: Logout */}
         <div className="p-3">
-          <form action="/golden-cp/login" method="GET">
-            <button
-              type="submit"
-              className="neu-btn neu-btn-danger w-full flex items-center justify-center gap-2"
-              title={collapsed ? 'تسجيل الخروج' : undefined}
-            >
-              <LogOut className="w-5 h-5" />
-              {!collapsed && <span>تسجيل الخروج</span>}
-            </button>
-          </form>
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="neu-btn neu-btn-danger w-full flex items-center justify-center gap-2"
+            title={collapsed ? 'تسجيل الخروج' : undefined}
+          >
+            <LogOut className="w-5 h-5" />
+            {!collapsed && <span>تسجيل الخروج</span>}
+          </button>
         </div>
       </aside>
     </>
