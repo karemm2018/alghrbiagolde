@@ -38,9 +38,14 @@ export async function getAccountsList(): Promise<DbUserAccount[]> {
         settings: false,
       };
 
+      let name = meta.name || 'مستخدم غير معروف';
+      if (user.email?.toLowerCase() === 'admin@alghrbiagolden.com') {
+        name = 'سوبر أدمن';
+      }
+
       return {
         id: user.id,
-        name: meta.name || 'مستخدم غير معروف',
+        name,
         email: user.email || '',
         status: ((user as any).banned_until || (user as any).ban_duration) ? 'suspended' : 'active',
         createdDate: user.created_at ? user.created_at.split('T')[0] : '',
