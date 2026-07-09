@@ -815,12 +815,12 @@
   align-items: center;
   justify-content: center;
   background: 
-    radial-gradient(circle at 10% 20%, rgba(201, 169, 110, 0.08) 0%, transparent 40%),
-    radial-gradient(circle at 90% 80%, rgba(31, 46, 74, 0.05) 0%, transparent 50%),
-    linear-gradient(rgba(235, 240, 246, 0.82) 0%, rgba(235, 240, 246, 0.82) 100%),
+    radial-gradient(circle at 10% 20%, rgba(201, 169, 110, 0.15) 0%, transparent 45%),
+    radial-gradient(circle at 90% 80%, rgba(201, 169, 110, 0.1) 0%, transparent 50%),
+    linear-gradient(rgba(10, 22, 40, 0.65) 0%, rgba(10, 22, 40, 0.65) 100%),
     url('/admin-login-bg.png');
   background-size: cover;
-  background-position: center;
+  background-position: 35% center;
   background-repeat: no-repeat;
   padding: 20px;
 }
@@ -828,12 +828,11 @@
 .login-card {
   width: 100%;
   max-width: 550px;
+  min-width: 420px;
   padding: 54px 44px;
   border-radius: var(--neu-radius-xl);
   background: var(--neu-raised);
-  box-shadow:
-    12px 12px 28px var(--neu-shadow-dark-strong),
-    -12px -12px 28px var(--neu-shadow-light-strong);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
 }
 
 /* ------------------------------------------------------------

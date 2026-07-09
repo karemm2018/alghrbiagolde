@@ -19,7 +19,7 @@ export default function AdminLayout({
   const isLoginPage = pathname === '/golden-cp/login';
 
   if (isLoginPage) {
-    return <div className="login-page">{children}</div>;
+    return children;
   }
 
   return (
