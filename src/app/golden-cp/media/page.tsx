@@ -217,7 +217,11 @@ export default function MediaPage() {
 
   // Initialize media gallery once on client side mount
   useEffect(() => {
-    setMediaList(buildMediaGallery());
+    const mockGallery = buildMediaGallery();
+    const uploadedMedia = JSON.parse(localStorage.getItem('golden-cp-uploaded-media') || '[]');
+    const combinedGallery = [...uploadedMedia, ...mockGallery];
+    const deletedIds = JSON.parse(localStorage.getItem('golden-cp-deleted-media') || '[]');
+    setMediaList(combinedGallery.filter((item) => !deletedIds.includes(item.id)));
   }, []);
 
   // Automatically close upload modal after all files are successfully uploaded
@@ -327,6 +331,8 @@ export default function MediaPage() {
                   : undefined,
               };
               setMediaList((prev) => [newVideoItem, ...prev]);
+              const uploaded = JSON.parse(localStorage.getItem('golden-cp-uploaded-media') || '[]');
+              localStorage.setItem('golden-cp-uploaded-media', JSON.stringify([newVideoItem, ...uploaded]));
               resolve();
             } else {
               reject(new Error(xhr.responseText || 'فشل الرفع إلى Cloudinary'));
@@ -371,6 +377,8 @@ export default function MediaPage() {
           size: `${(webpFile.size / 1024).toFixed(1)} KB`,
         };
         setMediaList((prev) => [newImageItem, ...prev]);
+        const uploaded = JSON.parse(localStorage.getItem('golden-cp-uploaded-media') || '[]');
+        localStorage.setItem('golden-cp-uploaded-media', JSON.stringify([newImageItem, ...uploaded]));
       }
 
       // Mark as complete
@@ -469,6 +477,18 @@ export default function MediaPage() {
           await deleteFile('media', storagePath);
         }
       }
+
+      // Save deleted item id to localStorage to persist deletion
+      const deletedIds = JSON.parse(localStorage.getItem('golden-cp-deleted-media') || '[]');
+      if (!deletedIds.includes(confirmDeleteFile.id)) {
+        deletedIds.push(confirmDeleteFile.id);
+        localStorage.setItem('golden-cp-deleted-media', JSON.stringify(deletedIds));
+      }
+
+      // If it was a manually uploaded file, also remove it from uploaded-media storage to free space
+      const uploaded = JSON.parse(localStorage.getItem('golden-cp-uploaded-media') || '[]');
+      const updatedUploaded = uploaded.filter((m: any) => m.id !== confirmDeleteFile.id);
+      localStorage.setItem('golden-cp-uploaded-media', JSON.stringify(updatedUploaded));
 
       // Remove from state list
       setMediaList((prev) => prev.filter((m) => m.id !== confirmDeleteFile.id));
