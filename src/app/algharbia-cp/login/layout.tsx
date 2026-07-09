@@ -1,4 +1,4 @@
-// src/app/golden-cp/login/layout.tsx
+// src/app/algharbia-cp/login/layout.tsx
 // Login page uses its own minimal layout without sidebar/topbar
 
 import React from 'react';

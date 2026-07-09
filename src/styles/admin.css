@@ -28,10 +28,10 @@
   --neu-gold-glow-strong: rgba(201, 169, 110, 0.25);
 
   /* Admin Typography */
-  --neu-text-primary: #1F2E4A;
-  --neu-text-secondary: #4D5E7B;
-  --neu-text-muted: #8192B0;
-  --neu-text-heading: #0E1A2E;
+  --neu-text-primary: #1A2640;
+  --neu-text-secondary: #3A4D6B;
+  --neu-text-muted: #5D6F8A;
+  --neu-text-heading: #0A1422;
 
   /* Status Colors (Soft variants) */
   --neu-success: #27AE60;

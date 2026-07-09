@@ -1,4 +1,4 @@
-// src/app/golden-cp/media/page.tsx
+// src/app/algharbia-cp/media/page.tsx
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
@@ -219,9 +219,9 @@ export default function MediaPage() {
   // Initialize media gallery once on client side mount
   useEffect(() => {
     const mockGallery = buildMediaGallery();
-    const uploadedMedia = JSON.parse(localStorage.getItem('golden-cp-uploaded-media') || '[]');
+    const uploadedMedia = JSON.parse(localStorage.getItem('algharbia-cp-uploaded-media') || '[]');
     const combinedGallery = [...uploadedMedia, ...mockGallery];
-    const deletedIds = JSON.parse(localStorage.getItem('golden-cp-deleted-media') || '[]');
+    const deletedIds = JSON.parse(localStorage.getItem('algharbia-cp-deleted-media') || '[]');
     setMediaList(combinedGallery.filter((item) => !deletedIds.includes(item.id)));
   }, []);
 
@@ -332,8 +332,8 @@ export default function MediaPage() {
                   : undefined,
               };
               setMediaList((prev) => [newVideoItem, ...prev]);
-              const uploaded = JSON.parse(localStorage.getItem('golden-cp-uploaded-media') || '[]');
-              localStorage.setItem('golden-cp-uploaded-media', JSON.stringify([newVideoItem, ...uploaded]));
+              const uploaded = JSON.parse(localStorage.getItem('algharbia-cp-uploaded-media') || '[]');
+              localStorage.setItem('algharbia-cp-uploaded-media', JSON.stringify([newVideoItem, ...uploaded]));
               resolve();
             } else {
               reject(new Error(xhr.responseText || 'فشل الرفع إلى Cloudinary'));
@@ -378,8 +378,8 @@ export default function MediaPage() {
           size: `${(webpFile.size / 1024).toFixed(1)} KB`,
         };
         setMediaList((prev) => [newImageItem, ...prev]);
-        const uploaded = JSON.parse(localStorage.getItem('golden-cp-uploaded-media') || '[]');
-        localStorage.setItem('golden-cp-uploaded-media', JSON.stringify([newImageItem, ...uploaded]));
+        const uploaded = JSON.parse(localStorage.getItem('algharbia-cp-uploaded-media') || '[]');
+        localStorage.setItem('algharbia-cp-uploaded-media', JSON.stringify([newImageItem, ...uploaded]));
       }
 
       // Mark as complete
@@ -480,16 +480,16 @@ export default function MediaPage() {
       }
 
       // Save deleted item id to localStorage to persist deletion
-      const deletedIds = JSON.parse(localStorage.getItem('golden-cp-deleted-media') || '[]');
+      const deletedIds = JSON.parse(localStorage.getItem('algharbia-cp-deleted-media') || '[]');
       if (!deletedIds.includes(confirmDeleteFile.id)) {
         deletedIds.push(confirmDeleteFile.id);
-        localStorage.setItem('golden-cp-deleted-media', JSON.stringify(deletedIds));
+        localStorage.setItem('algharbia-cp-deleted-media', JSON.stringify(deletedIds));
       }
 
       // If it was a manually uploaded file, also remove it from uploaded-media storage to free space
-      const uploaded = JSON.parse(localStorage.getItem('golden-cp-uploaded-media') || '[]');
+      const uploaded = JSON.parse(localStorage.getItem('algharbia-cp-uploaded-media') || '[]');
       const updatedUploaded = uploaded.filter((m: any) => m.id !== confirmDeleteFile.id);
-      localStorage.setItem('golden-cp-uploaded-media', JSON.stringify(updatedUploaded));
+      localStorage.setItem('algharbia-cp-uploaded-media', JSON.stringify(updatedUploaded));
 
       // Remove from state list
       setMediaList((prev) => prev.filter((m) => m.id !== confirmDeleteFile.id));
@@ -599,7 +599,8 @@ export default function MediaPage() {
         {filtered.map((item) => (
           <div key={item.id} className="neu-card p-0 overflow-hidden group">
             {/* Preview Thumbnail */}
-            <div className="relative h-32 sm:h-40 bg-[var(--neu-depressed)]">
+            <div className="p-2.5 pb-0">
+            <div className="relative h-32 sm:h-40 bg-[var(--neu-depressed)] rounded-2xl overflow-hidden">
               {item.thumbnail.startsWith('/') || item.thumbnail.startsWith('http') ? (
                 <Image
                   src={item.thumbnail}
@@ -687,6 +688,7 @@ export default function MediaPage() {
                 </span>
               </div>
             </div>
+            </div>
 
             {/* File Info */}
             <div className="p-2.5 sm:p-3">
@@ -706,6 +708,36 @@ export default function MediaPage() {
               <p className="text-[10px] text-[var(--neu-text-muted)] mt-0.5" dir="ltr">
                 {item.size}
               </p>
+              
+              {/* Mobile Action Buttons */}
+              <div className="flex items-center justify-around mt-2.5 pt-2 border-t border-[var(--neu-depressed)] md:hidden">
+                <button
+                  onClick={() => setPreviewItem(item)}
+                  className="p-1 text-[var(--neu-text-secondary)] active:text-[var(--neu-gold)]"
+                  title="معاينة"
+                >
+                  <Eye className="w-4.5 h-4.5" />
+                </button>
+                <button
+                  onClick={() => handleCopyLink(item)}
+                  className="p-1 text-[var(--neu-text-secondary)] active:text-[var(--neu-gold)]"
+                  title="نسخ الرابط"
+                >
+                  {copiedId === item.id ? (
+                    <CheckCircle2 className="w-4.5 h-4.5 text-[var(--neu-success)]" />
+                  ) : (
+                    <Copy className="w-4.5 h-4.5" />
+                  )}
+                </button>
+                <button
+                  onClick={() => handleDeleteItem(item)}
+                  className="p-1 text-[var(--neu-danger)] active:scale-95"
+                  title="حذف"
+                  aria-label={`حذف ${item.name}`}
+                >
+                  <Trash2 className="w-4.5 h-4.5" />
+                </button>
+              </div>
             </div>
           </div>
         ))}

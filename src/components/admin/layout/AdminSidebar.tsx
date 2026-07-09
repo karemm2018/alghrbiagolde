@@ -44,29 +44,29 @@ const NAV_ITEMS: NavSection[] = [
   {
     section: 'الرئيسية',
     items: [
-      { label: 'لوحة التحكم', href: '/golden-cp', icon: LayoutDashboard },
+      { label: 'لوحة التحكم', href: '/algharbia-cp', icon: LayoutDashboard },
     ],
   },
   {
     section: 'إدارة المحتوى',
     items: [
-      { label: 'العقارات', href: '/golden-cp/properties', icon: Building2 },
-      { label: 'المشاريع', href: '/golden-cp/projects', icon: FolderKanban },
-      { label: 'الوسائط', href: '/golden-cp/media', icon: ImageIcon },
+      { label: 'العقارات', href: '/algharbia-cp/properties', icon: Building2 },
+      { label: 'المشاريع', href: '/algharbia-cp/projects', icon: FolderKanban },
+      { label: 'الوسائط', href: '/algharbia-cp/media', icon: ImageIcon },
     ],
   },
   {
     section: 'التعامل',
     items: [
-      { label: 'الاستفسارات', href: '/golden-cp/submissions', icon: MessageSquareText, badge: true },
+      { label: 'الاستفسارات', href: '/algharbia-cp/submissions', icon: MessageSquareText, badge: true },
     ],
   },
   {
     section: 'النظام',
     items: [
-      { label: 'التحليلات', href: '/golden-cp/analytics', icon: BarChart3 },
-      { label: 'إدارة الحسابات', href: '/golden-cp/users', icon: Users },
-      { label: 'إعدادات الموقع', href: '/golden-cp/settings', icon: Settings },
+      { label: 'التحليلات', href: '/algharbia-cp/analytics', icon: BarChart3 },
+      { label: 'إدارة الحسابات', href: '/algharbia-cp/users', icon: Users },
+      { label: 'إعدادات الموقع', href: '/algharbia-cp/settings', icon: Settings },
     ],
   },
 ];
@@ -82,7 +82,7 @@ export default function AdminSidebar({
   const router = useRouter();
 
   const isActive = (href: string) => {
-    if (href === '/golden-cp') return pathname === '/golden-cp';
+    if (href === '/algharbia-cp') return pathname === '/algharbia-cp';
     return pathname.startsWith(href);
   };
 
@@ -90,11 +90,11 @@ export default function AdminSidebar({
     try {
       const supabase = getSupabaseBrowserClient();
       await supabase.auth.signOut();
-      router.push('/golden-cp/login');
+      router.push('/algharbia-cp/login');
       router.refresh();
     } catch (err) {
       console.error('Logout error:', err);
-      window.location.href = '/golden-cp/login';
+      window.location.href = '/algharbia-cp/login';
     }
   };
 

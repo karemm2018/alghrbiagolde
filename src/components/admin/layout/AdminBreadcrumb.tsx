@@ -18,7 +18,7 @@ export default function AdminBreadcrumb({ items }: AdminBreadcrumbProps) {
   return (
     <nav aria-label="مسار التنقل" className="flex items-center gap-1.5 text-sm mb-6">
       <Link
-        href="/golden-cp"
+        href="/algharbia-cp"
         className="text-[var(--neu-text-muted)] hover:text-[var(--neu-gold)] transition-colors"
         title="الرئيسية"
       >

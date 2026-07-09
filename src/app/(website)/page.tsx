@@ -1,12 +1,14 @@
 // src/app/page.tsx
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion, useReducedMotion, AnimatePresence } from 'framer-motion';
 import { PROPERTIES, PROJECTS, Property, Project } from '@/lib/mockData';
+import { getPropertiesListAdmin, getProjectsListAdmin } from '@/app/actions/properties';
+import { normalizeProperty, normalizeProject } from '@/lib/normalizers';
 import PropertyCard from '@/components/property/PropertyCard';
 import {
   Search,
@@ -538,6 +540,28 @@ function SimplifiedProjectCard({ project, onExplore }: { project: Project; onExp
 }
 
 export default function HomePage() {
+  const [dbProperties, setDbProperties] = useState<Property[]>(PROPERTIES);
+  const [dbProjects, setDbProjects] = useState<Project[]>(PROJECTS);
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const [propsData, projsData] = await Promise.all([
+          getPropertiesListAdmin(),
+          getProjectsListAdmin()
+        ]);
+        if (propsData && propsData.length > 0) {
+          setDbProperties(propsData.map(normalizeProperty));
+        }
+        if (projsData && projsData.length > 0) {
+          setDbProjects(projsData.map(normalizeProject));
+        }
+      } catch (e) {
+        console.error("Error loading home page database data:", e);
+      }
+    }
+    loadData();
+  }, []);
   // Reduced motion hook for accessibility compliance
   const shouldReduceMotion = useReducedMotion();
 
@@ -643,7 +667,7 @@ export default function HomePage() {
 
   // Filter Logic
   const filteredProperties = useMemo(() => {
-    return PROPERTIES.filter(property => {
+    return dbProperties.filter(property => {
       const cityMatch = selectedCity === 'all' || property.location.city === selectedCity;
 
       let typeMatch = true;
@@ -666,7 +690,7 @@ export default function HomePage() {
 
       return cityMatch && typeMatch && roomsMatch && priceMatch && textMatch;
     });
-  }, [selectedCity, selectedType, selectedRooms, maxPrice, searchQuery]);
+  }, [dbProperties, selectedCity, selectedType, selectedRooms, maxPrice, searchQuery]);
 
   // Force horizontal scroll to start from the right (RTL behavior in LTR containers)
   React.useEffect(() => {
@@ -719,12 +743,13 @@ export default function HomePage() {
 
   // Projects configuration
   const featuredProject = useMemo(() => {
-    return PROJECTS.find(p => p.featured) || PROJECTS[0];
-  }, []);
+    return dbProjects.find(p => p.featured) || dbProjects[0];
+  }, [dbProjects]);
 
   const carouselProjects = useMemo(() => {
-    return PROJECTS.filter(p => p.id !== featuredProject.id);
-  }, [featuredProject]);
+    if (!featuredProject) return [];
+    return dbProjects.filter(p => p.id !== featuredProject.id);
+  }, [dbProjects, featuredProject]);
 
   const getProjectMarqueeItems = (items: Project[]) => {
     if (items.length === 0) return [];
@@ -1031,7 +1056,7 @@ export default function HomePage() {
                 <h3 className="text-xs sm:text-base md:text-xl font-extrabold text-white mb-0.5 font-el-messiri">جدة</h3>
                 <p className="text-[7px] sm:text-[9px] md:text-[10px] text-gold-light font-semibold uppercase tracking-wider">عروس البحر الأحمر</p>
                 <p className="text-[8px] sm:text-[10px] md:text-[11px] text-white/60 font-bold mt-0.5 sm:mt-2 font-mono">
-                  {PROPERTIES.filter(p => p.location.city === 'جدة').length} عقار متاح
+                  {dbProperties.filter(p => p.location.city === 'جدة').length} عقار متاح
                 </p>
               </div>
             </motion.div>
@@ -1075,7 +1100,7 @@ export default function HomePage() {
                 <h3 className="text-xs sm:text-base md:text-xl font-extrabold text-white mb-0.5 font-el-messiri">الرياض</h3>
                 <p className="text-[7px] sm:text-[9px] md:text-[10px] text-gold-light font-semibold uppercase tracking-wider">عاصمة الحداثة والفرص</p>
                 <p className="text-[8px] sm:text-[10px] md:text-[11px] text-white/60 font-bold mt-0.5 sm:mt-2 font-mono">
-                  {PROPERTIES.filter(p => p.location.city === 'الرياض').length} عقار متاح
+                  {dbProperties.filter(p => p.location.city === 'الرياض').length} عقار متاح
                 </p>
               </div>
             </motion.div>
@@ -1119,7 +1144,7 @@ export default function HomePage() {
                 <h3 className="text-xs sm:text-base md:text-xl font-extrabold text-white mb-0.5 font-el-messiri">مكة المكرمة</h3>
                 <p className="text-[7px] sm:text-[9px] md:text-[10px] text-gold-light font-semibold uppercase tracking-wider">قبلة العالم وبوابة الإيمان</p>
                 <p className="text-[8px] sm:text-[10px] md:text-[11px] text-white/60 font-bold mt-0.5 sm:mt-2 font-mono">
-                  {PROPERTIES.filter(p => p.location.city === 'مكه').length} عقار متاح
+                  {dbProperties.filter(p => p.location.city === 'مكه').length} عقار متاح
                 </p>
               </div>
             </motion.div>
@@ -1641,7 +1666,7 @@ export default function HomePage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border-gold/15 text-white bg-[#0F2342]/40">
-                  {PROJECTS.map((project) => {
+                  {dbProjects.map((project) => {
                     return (
                       <tr key={project.id} className="odd:bg-[#0F2342]/40 even:bg-[#142B4E]/60 hover:bg-gold-primary/[0.08] transition-colors duration-150 border-b border-border-gold/10 last:border-b-0">
                         <td className="py-3 px-5 border-x border-border-gold/10 first:border-r-0 last:border-l-0 text-right">

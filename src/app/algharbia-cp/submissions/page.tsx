@@ -1,4 +1,4 @@
-// src/app/golden-cp/submissions/page.tsx
+// src/app/algharbia-cp/submissions/page.tsx
 'use client';
 
 import React, { useState } from 'react';

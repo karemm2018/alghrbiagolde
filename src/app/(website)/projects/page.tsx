@@ -6,6 +6,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { PROJECTS, Project } from '@/lib/mockData';
+import { getProjectsListAdmin } from '@/app/actions/properties';
+import { normalizeProject } from '@/lib/normalizers';
 import CustomSelect from '@/components/ui/CustomSelect';
 import { useInquiryStore } from '@/store/useInquiryStore';
 import {
@@ -277,6 +279,22 @@ const ProjectCard = ({ project, openInquiry }: { project: Project; openInquiry: 
 };
 
 export default function ProjectsPage() {
+  const [dbProjects, setDbProjects] = useState<Project[]>(PROJECTS);
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const projsData = await getProjectsListAdmin();
+        if (projsData && projsData.length > 0) {
+          setDbProjects(projsData.map(normalizeProject));
+        }
+      } catch (e) {
+        console.error("Error loading projects page data:", e);
+      }
+    }
+    loadData();
+  }, []);
+
   const openInquiry = useInquiryStore((state) => state.open);
   const isReducedMotion = useReducedMotion();
 
@@ -298,13 +316,13 @@ export default function ProjectsPage() {
   // Extract unique cities dynamically
   const cityOptions = useMemo(() => {
     const citiesSet = new Set<string>();
-    PROJECTS.forEach(proj => citiesSet.add(proj.location.city));
+    dbProjects.forEach(proj => citiesSet.add(proj.location.city));
     const citiesArray = Array.from(citiesSet);
     return [
       { value: 'all', label: 'كل المدن' },
       ...citiesArray.map(c => ({ value: c, label: c }))
     ];
-  }, []);
+  }, [dbProjects]);
 
   const statusOptions = [
     { value: 'all', label: 'كل الحالات' },
@@ -318,7 +336,7 @@ export default function ProjectsPage() {
     const list = [{ value: 'all', label: 'كل الأحياء' }];
     const uniqueDistricts = new Set<string>();
 
-    PROJECTS.forEach(proj => {
+    dbProjects.forEach(proj => {
       if (selectedCity === 'all' || proj.location.city === selectedCity) {
         uniqueDistricts.add(proj.location.district);
       }
@@ -329,7 +347,7 @@ export default function ProjectsPage() {
     });
 
     return list;
-  }, [selectedCity]);
+  }, [dbProjects, selectedCity]);
 
   // Dynamic filter visibility depending on options availability
   const showCityFilter = useMemo(() => cityOptions.length > 2, [cityOptions]);
@@ -360,7 +378,7 @@ export default function ProjectsPage() {
 
   // Filtering Logic
   const filteredProjects = useMemo(() => {
-    return PROJECTS.filter(proj => {
+    return dbProjects.filter(proj => {
       // 1. Search Query
       if (searchQuery.trim() !== '') {
         const query = searchQuery.toLowerCase();
@@ -389,6 +407,7 @@ export default function ProjectsPage() {
       return true;
     });
   }, [
+    dbProjects,
     searchQuery,
     selectedCity,
     selectedDistrict,

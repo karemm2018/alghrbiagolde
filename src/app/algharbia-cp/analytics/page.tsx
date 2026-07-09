@@ -1,4 +1,4 @@
-// src/app/golden-cp/analytics/page.tsx
+// src/app/algharbia-cp/analytics/page.tsx
 'use client';
 
 import React from 'react';

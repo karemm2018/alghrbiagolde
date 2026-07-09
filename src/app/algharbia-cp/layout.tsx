@@ -1,4 +1,4 @@
-// src/app/golden-cp/layout.tsx
+// src/app/algharbia-cp/layout.tsx
 'use client';
 
 import React, { useState } from 'react';
@@ -16,7 +16,7 @@ export default function AdminLayout({
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const isLoginPage = pathname === '/golden-cp/login';
+  const isLoginPage = pathname === '/algharbia-cp/login';
 
   if (isLoginPage) {
     return children;

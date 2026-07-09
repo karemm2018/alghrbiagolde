@@ -1,4 +1,4 @@
-// src/app/golden-cp/settings/page.tsx
+// src/app/algharbia-cp/settings/page.tsx
 'use client';
 
 import React, { useState } from 'react';
@@ -15,9 +15,11 @@ import {
   Loader2,
   CheckCircle2,
   Upload,
+  RefreshCw,
 } from 'lucide-react';
+import { seedDatabase } from '@/app/actions/properties';
 
-type SettingsTab = 'hero' | 'stats' | 'testimonials' | 'partners' | 'contact' | 'seo';
+type SettingsTab = 'hero' | 'stats' | 'testimonials' | 'partners' | 'contact' | 'seo' | 'sync';
 
 const TABS: { id: SettingsTab; label: string; icon: React.ElementType }[] = [
   { id: 'hero', label: 'الصفحة الرئيسية', icon: ImageIcon },
@@ -26,12 +28,14 @@ const TABS: { id: SettingsTab; label: string; icon: React.ElementType }[] = [
   { id: 'partners', label: 'الشركاء', icon: Users },
   { id: 'contact', label: 'بيانات التواصل', icon: Phone },
   { id: 'seo', label: 'SEO', icon: Globe },
+  { id: 'sync', label: 'مزامنة البيانات', icon: RefreshCw },
 ];
 
 export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState<SettingsTab>('hero');
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [syncing, setSyncing] = useState(false);
 
   // Mock form states
   const [heroTitle, setHeroTitle] = useState('نعتمد أحدث التقنيات');
@@ -239,6 +243,59 @@ export default function SettingsPage() {
                 <label className="neu-label" htmlFor="seoDescriptionInput">وصف الصفحة (Meta Description)</label>
                 <textarea id="seoDescriptionInput" placeholder="وصف الصفحة" title="وصف الصفحة" value={seoDescription} onChange={(e) => setSeoDescription(e.target.value)} className="neu-input neu-textarea" rows={3} />
                 <p className="text-xs text-[var(--neu-text-muted)] mt-1">{seoDescription.length}/160 حرف</p>
+              </div>
+            </div>
+          )}
+
+          {/* Sync Tab */}
+          {activeTab === 'sync' && (
+            <div className="neu-card space-y-6">
+              <h3 className="text-lg font-bold text-[var(--neu-text-heading)] border-b border-white/5 pb-4">
+                مزامنة بيانات قاعدة البيانات
+              </h3>
+              <p className="text-sm text-[var(--neu-text-muted)]">
+                هذا الخيار يُتيح لك مزامنة قاعدة البيانات (Supabase) ورفع كافة البيانات الديمو الافتراضية المجهزة مسبقاً (16 عقاراً و5 مشاريع) إلى الجداول الحقيقية.
+              </p>
+              <div className="bg-[var(--neu-depressed)] border border-[var(--neu-gold)]/20 p-4 rounded-2xl flex flex-col gap-2">
+                <span className="font-semibold text-sm text-[var(--neu-gold)]">⚠️ تحذير هام:</span>
+                <span className="text-xs text-[var(--neu-text-secondary)]">
+                  عند القيام بالمزامنة، سيتم مسح أي عقارات أو مشاريع حالية في قاعدة البيانات، وإعادة إدراج العقارات والمشاريع التجريبية النظيفة كبيانات ديناميكية.
+                </span>
+              </div>
+              <div>
+                <button
+                  onClick={async () => {
+                    if (confirm("هل أنت متأكد من رغبتك في مسح الجداول ورفع البيانات الديمو الافتراضية؟")) {
+                      setSyncing(true);
+                      try {
+                        const res = await seedDatabase();
+                        if (res.success) {
+                          alert("تمت مزامنة كافة المشاريع والعقارات التجريبية بنجاح إلى قاعدة البيانات الديناميكية!");
+                        } else {
+                          alert("حدث خطأ أثناء المزامنة: " + res.error);
+                        }
+                      } catch (e: any) {
+                        alert("فشل إجراء المزامنة: " + e.message);
+                      } finally {
+                        setSyncing(false);
+                      }
+                    }
+                  }}
+                  disabled={syncing}
+                  className="neu-btn neu-btn-gold py-3 px-6 text-base font-semibold"
+                >
+                  {syncing ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      جاري المزامنة...
+                    </>
+                  ) : (
+                    <>
+                      <RefreshCw className="w-5 h-5" />
+                      مزامنة ورفع البيانات التجريبية
+                    </>
+                  )}
+                </button>
               </div>
             </div>
           )}

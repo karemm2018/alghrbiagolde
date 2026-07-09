@@ -1,20 +1,20 @@
 // src/middleware.ts
-// Protects /golden-cp/* routes — redirects unauthenticated users to login
+// Protects /algharbia-cp/* routes — redirects unauthenticated users to login
 
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Only protect admin routes
-  if (!pathname.startsWith('/golden-cp')) {
+  if (!pathname.startsWith('/algharbia-cp')) {
     return NextResponse.next();
   }
 
   // Allow login page without auth
-  if (pathname === '/golden-cp/login') {
+  if (pathname === '/algharbia-cp/login') {
     return NextResponse.next();
   }
 
@@ -129,7 +129,7 @@ export async function middleware(request: NextRequest) {
 
   // If no authenticated user, redirect to login
   if (error || !user) {
-    const loginUrl = new URL('/golden-cp/login', request.url);
+    const loginUrl = new URL('/algharbia-cp/login', request.url);
     loginUrl.searchParams.set('redirect', pathname);
     return NextResponse.redirect(loginUrl);
   }
@@ -138,5 +138,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/golden-cp/:path*'],
+  matcher: ['/algharbia-cp/:path*'],
 };

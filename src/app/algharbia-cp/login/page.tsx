@@ -1,4 +1,4 @@
-// src/app/golden-cp/login/page.tsx
+// src/app/algharbia-cp/login/page.tsx
 'use client';
 
 import React, { useState, Suspense } from 'react';
@@ -11,7 +11,7 @@ import '../.././../../src/styles/admin.css';
 function LoginFormContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirect = searchParams.get('redirect') || '/golden-cp';
+  const redirect = searchParams.get('redirect') || '/algharbia-cp';
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

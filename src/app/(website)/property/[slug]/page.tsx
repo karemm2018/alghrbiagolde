@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import { PROPERTIES } from '@/lib/mockData';
+import { getPropertyBySlug } from '@/app/actions/properties';
 import MediaGallery from '@/components/ui/MediaGallery';
 import { PropertyFavoriteShare, PropertySidebarInquiry } from '@/components/property/PropertyActions';
 import {
@@ -34,7 +35,7 @@ interface PageProps {
 // Generate metadata dynamically on the server for search engine optimization
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const property = PROPERTIES.find((p) => p.slug === slug);
+  const property = await getPropertyBySlug(slug);
   return {
     title: property ? `${property.title} | شركة الغربية الذهبية` : 'وحدة عقارية فاخرة',
     description: property?.description || 'تصفح تفاصيل ومواصفات الوحدة العقارية المعروضة تملّكاً واستثماراً.',
@@ -43,7 +44,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function PropertyDetailPage({ params }: PageProps) {
   const { slug } = await params;
-  const property = PROPERTIES.find((p) => p.slug === slug);
+  const property = await getPropertyBySlug(slug);
 
   if (!property) {
     notFound();

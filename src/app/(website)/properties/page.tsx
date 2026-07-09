@@ -6,6 +6,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { PROPERTIES, Property } from '@/lib/mockData';
+import { getPropertiesListAdmin } from '@/app/actions/properties';
+import { normalizeProperty } from '@/lib/normalizers';
 import PropertyCard from '@/components/property/PropertyCard';
 import CustomSelect from '@/components/ui/CustomSelect';
 import { useInquiryStore } from '@/store/useInquiryStore';
@@ -201,6 +203,22 @@ const DetailedPropertyCard = ({ property, openInquiry }: { property: Property; o
 };
 
 export default function PropertiesPage() {
+  const [dbProperties, setDbProperties] = useState<Property[]>(PROPERTIES);
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const propsData = await getPropertiesListAdmin();
+        if (propsData && propsData.length > 0) {
+          setDbProperties(propsData.map(normalizeProperty));
+        }
+      } catch (e) {
+        console.error("Error loading properties page data:", e);
+      }
+    }
+    loadData();
+  }, []);
+
   const shouldReduceMotion = useReducedMotion();
   const openInquiry = useInquiryStore((state) => state.open);
 
@@ -229,13 +247,13 @@ export default function PropertiesPage() {
   // Dynamic lists extraction
   const cityOptions = useMemo(() => {
     const citiesSet = new Set<string>();
-    PROPERTIES.forEach(p => citiesSet.add(p.location.city));
+    dbProperties.forEach(p => citiesSet.add(p.location.city));
     const citiesArray = Array.from(citiesSet);
     return [
       { value: 'all', label: 'كل المدن' },
       ...citiesArray.map(c => ({ value: c, label: c }))
     ];
-  }, []);
+  }, [dbProperties]);
 
   const typeOptions = useMemo(() => [
     { value: 'all', label: 'كل الأنواع' },
@@ -309,7 +327,7 @@ export default function PropertiesPage() {
   // Extract unique districts dynamically depending on the selected city
   const districtOptions = useMemo(() => {
     const districtsSet = new Set<string>();
-    PROPERTIES.forEach(p => {
+    dbProperties.forEach(p => {
       if (selectedCity === 'all' || p.location.city === selectedCity) {
         districtsSet.add(p.location.district);
       }
@@ -319,22 +337,22 @@ export default function PropertiesPage() {
       { value: 'all', label: 'كل الأحياء' },
       ...districtsArray.map(d => ({ value: d, label: d }))
     ];
-  }, [selectedCity]);
+  }, [dbProperties, selectedCity]);
 
   // Extract unique amenities list dynamically
   const availableAmenities = useMemo(() => {
     const amenitiesSet = new Set<string>();
-    PROPERTIES.forEach(p => {
+    dbProperties.forEach(p => {
       if (p.specs.features) {
         p.specs.features.forEach(feat => amenitiesSet.add(feat));
       }
     });
     return Array.from(amenitiesSet);
-  }, []);
+  }, [dbProperties]);
 
   // Filter properties logic
   const filteredProperties = useMemo(() => {
-    return PROPERTIES.filter(p => {
+    return dbProperties.filter(p => {
       // 1. Keyword search
       const query = searchQuery.trim().toLowerCase();
       if (query !== '') {
@@ -393,6 +411,7 @@ export default function PropertiesPage() {
       return true;
     });
   }, [
+    dbProperties,
     searchQuery,
     selectedCity,
     selectedDistrict,

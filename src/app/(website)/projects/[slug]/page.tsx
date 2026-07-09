@@ -4,7 +4,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
-import { PROJECTS, PROPERTIES } from '@/lib/mockData';
+import { PROJECTS } from '@/lib/mockData';
+import { getProjectBySlug, getPropertiesByProjectSlug } from '@/app/actions/properties';
 import MediaGallery from '@/components/ui/MediaGallery';
 import { ProjectSidebarInquiry } from '@/components/property/ProjectActions';
 import UnitsCarousel from '@/components/property/UnitsCarousel';
@@ -32,7 +33,7 @@ interface PageProps {
 // Generate dynamic metadata for SEO on Server Side
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const project = PROJECTS.find((p) => p.slug === slug);
+  const project = await getProjectBySlug(slug);
   return {
     title: project ? `${project.name} | شركة الغربية الذهبية` : 'مشروع سكني فاخر',
     description: project?.description || 'مجمعات سكنية فاخرة بتصاميم عصرية وتشطيبات راقية تناسب تطلعاتكم في المملكة العربية السعودية.',
@@ -41,14 +42,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function ProjectDetailPage({ params }: PageProps) {
   const { slug } = await params;
-  const project = PROJECTS.find((p) => p.slug === slug);
+  const project = await getProjectBySlug(slug);
 
   if (!project) {
     notFound();
   }
 
   // Filter properties belonging to this project
-  const associatedProperties = PROPERTIES.filter((p) => p.project.slug === project.slug);
+  const associatedProperties = await getPropertiesByProjectSlug(project.slug);
 
   // Project Gallery images list - falls back to interior assets if none exist
   const galleryImages =

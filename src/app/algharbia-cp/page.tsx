@@ -1,4 +1,4 @@
-// src/app/golden-cp/page.tsx
+// src/app/algharbia-cp/page.tsx
 'use client';
 
 import React from 'react';
@@ -209,7 +209,7 @@ export default function DashboardPage() {
       {/* Quick Actions */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-8">
         <Link
-          href="/golden-cp/properties/new"
+          href="/algharbia-cp/properties/new"
           className="neu-card neu-card-interactive flex items-center gap-4 group"
         >
           <div className="neu-raised-sm rounded-xl p-3 group-hover:shadow-[0_0_12px_var(--neu-gold-glow)]">
@@ -225,7 +225,7 @@ export default function DashboardPage() {
         </Link>
 
         <Link
-          href="/golden-cp/projects/new"
+          href="/algharbia-cp/projects/new"
           className="neu-card neu-card-interactive flex items-center gap-4 group"
         >
           <div className="neu-raised-sm rounded-xl p-3 group-hover:shadow-[0_0_12px_var(--neu-gold-glow)]">
@@ -241,7 +241,7 @@ export default function DashboardPage() {
         </Link>
 
         <Link
-          href="/golden-cp/submissions"
+          href="/algharbia-cp/submissions"
           className="neu-card neu-card-interactive flex items-center gap-4 group"
         >
           <div className="neu-raised-sm rounded-xl p-3 group-hover:shadow-[0_0_12px_var(--neu-gold-glow)] relative">
@@ -267,7 +267,7 @@ export default function DashboardPage() {
         <div className="flex items-center justify-between mb-5">
           <h3 className="text-lg font-bold text-[var(--neu-text-heading)]">آخر الاستفسارات</h3>
           <Link
-            href="/golden-cp/submissions"
+            href="/algharbia-cp/submissions"
             className="text-sm text-[var(--neu-gold)] hover:text-[var(--neu-gold-light)] transition-colors font-medium"
           >
             عرض الكل ←

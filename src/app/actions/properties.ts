@@ -1,0 +1,548 @@
+// src/app/actions/properties.ts
+'use server';
+
+import { getSupabaseServerClient } from '../../lib/supabase/server';
+import { getSupabaseAdminClient } from '../../lib/supabase/admin';
+import { revalidatePath } from 'next/cache';
+import { PROPERTIES, PROJECTS } from '../../lib/mockData';
+import { normalizeProperty, normalizeProject } from '../../lib/normalizers';
+
+// Load projects list for dynamic dropdowns
+export async function getProjectsList() {
+  try {
+    const supabase = (await getSupabaseServerClient()) as any;
+    const { data, error } = await supabase
+      .from('projects')
+      .select('id, name, slug')
+      .order('name');
+
+    if (error) throw error;
+    
+    // Fallback to mock data if the database projects list is completely empty
+    if (data && data.length > 0) {
+      return data;
+    }
+    
+    return PROJECTS.map((p) => ({ id: p.id, name: p.name, slug: p.slug }));
+  } catch (err: any) {
+    console.error('Error fetching projects list:', err);
+    // Return mock fallback to avoid crashes if DB is empty
+    return PROJECTS.map((p) => ({ id: p.id, name: p.name, slug: p.slug }));
+  }
+}
+
+// Get single property detail by ID
+export async function getPropertyById(id: string) {
+  // If it's a mock ID, return the mock data directly without querying Supabase
+  if (id.startsWith('prop-')) {
+    const mockProp = PROPERTIES.find((p) => p.id === id);
+    if (mockProp) {
+      console.log(`Direct mock data fallback for property: ${id}`);
+      return {
+        id: mockProp.id,
+        slug: mockProp.slug,
+        title: mockProp.title,
+        type: mockProp.type,
+        status: mockProp.status,
+        project_id: mockProp.project?.id || '',
+        description: mockProp.description,
+        featured: mockProp.featured,
+        published: true,
+        price: mockProp.pricing?.price || 0,
+        price_per_meter: mockProp.pricing?.pricePerMeter || 0,
+        is_negotiable: mockProp.pricing?.isNegotiable || false,
+        down_payment_pct: mockProp.pricing?.downPaymentPct || null,
+        monthly_installment: mockProp.pricing?.monthlyInstallment || null,
+        city: mockProp.location?.city || '',
+        district: mockProp.location?.district || '',
+        address: mockProp.location?.address || '',
+        lat: mockProp.location?.coordinates?.lat || '',
+        lng: mockProp.location?.coordinates?.lng || '',
+        area: mockProp.specs?.area || 0,
+        bedrooms: mockProp.specs?.bedrooms || '3',
+        bathrooms: mockProp.specs?.bathrooms || '3',
+        living_rooms: mockProp.specs?.livingRooms || '1',
+        parking: mockProp.specs?.parking || '1',
+        floor: mockProp.specs?.floor || '',
+        total_floors: mockProp.specs?.totalFloors || '',
+        view: mockProp.specs?.view || '',
+        direction: mockProp.specs?.direction || 'north',
+        features: mockProp.specs?.features || [],
+        thumbnail: mockProp.media?.thumbnail || '',
+        images: mockProp.media?.images || [],
+        videos: mockProp.media?.videos || [],
+        floor_plan: mockProp.media?.floorPlan || '',
+        virtual_tour: mockProp.media?.virtualTour || ''
+      };
+    }
+  }
+
+  try {
+    const supabase = (await getSupabaseServerClient()) as any;
+    const { data, error } = await supabase
+      .from('properties')
+      .select('*, projects(id, name, slug)')
+      .eq('id', id)
+      .single();
+
+    if (error) throw error;
+    return data;
+  } catch (err: any) {
+    console.error(`Error fetching property ${id}:`, err);
+    return null;
+  }
+}
+
+// Generate URL slug from Arabic/English text
+function generateSlug(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^\u0621-\u064A\u0660-\u0669a-zA-Z0-9\s-]/g, '') // Keep Arabic, alphanumeric, spaces, and dashes
+    .trim()
+    .replace(/\s+/g, '-') // Replace spaces with dashes
+    .replace(/-+/g, '-'); // Remove duplicate dashes
+}
+
+// Quick create a new project
+export async function quickCreateProject(name: string, city: string, district: string) {
+  try {
+    const supabase = (await getSupabaseServerClient()) as any;
+    
+    // Generate unique slug
+    let baseSlug = generateSlug(name);
+    if (!baseSlug) baseSlug = 'project';
+    const uniqueId = Math.random().toString(36).substring(2, 7);
+    const slug = `${baseSlug}-${uniqueId}`;
+
+    const newProject = {
+      slug,
+      name,
+      city,
+      district,
+      address: `${district}، ${city}`,
+      description: `مشروع سكني جديد في حي ${district} بمدينة ${city}.`,
+      status: 'upcoming',
+      price_min: 0,
+      price_max: 0,
+      total_units: 0,
+      available_units: 0,
+      completion_date: 'قريباً',
+      featured: false,
+      published: true
+    };
+
+    const { data, error } = await supabase
+      .from('projects')
+      .insert([newProject])
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    return { success: true, data };
+  } catch (err: any) {
+    console.error('Error quick creating project:', err);
+    return { success: false, error: err.message || 'فشل إضافة المشروع السريع' };
+  }
+}
+
+// Create new property
+export async function createProperty(formData: any) {
+  try {
+    const supabase = (await getSupabaseServerClient()) as any;
+    
+    // Generate unique slug
+    let baseSlug = generateSlug(formData.title);
+    if (!baseSlug) baseSlug = 'property';
+    const uniqueId = Math.random().toString(36).substring(2, 7);
+    const slug = `${baseSlug}-${uniqueId}`;
+
+    const insertData = {
+      slug,
+      title: formData.title,
+      type: formData.type,
+      status: formData.status,
+      project_id: formData.projectId || null,
+      city: formData.city,
+      district: formData.district,
+      address: formData.address || '',
+      lat: formData.lat || null,
+      lng: formData.lng || null,
+      area: parseInt(formData.area) || 0,
+      bedrooms: parseInt(formData.bedrooms) || 0,
+      bathrooms: parseInt(formData.bathrooms) || 0,
+      living_rooms: parseInt(formData.livingRooms) || 0,
+      parking: parseInt(formData.parking) || 0,
+      floor: formData.floor !== undefined && formData.floor !== '' ? parseInt(formData.floor) : null,
+      total_floors: formData.totalFloors !== undefined && formData.totalFloors !== '' ? parseInt(formData.totalFloors) : null,
+      view: formData.view || '',
+      direction: formData.direction || '',
+      features: formData.features || [],
+      price: parseInt(formData.price) || 0,
+      price_per_meter: parseInt(formData.pricePerMeter) || 0,
+      is_negotiable: formData.isNegotiable || false,
+      down_payment_pct: formData.downPaymentPct !== undefined && formData.downPaymentPct !== '' ? parseInt(formData.downPaymentPct) : null,
+      monthly_installment: formData.monthlyInstallment !== undefined && formData.monthlyInstallment !== '' ? parseInt(formData.monthlyInstallment) : null,
+      description: formData.description || '',
+      thumbnail: formData.thumbnail || '',
+      images: formData.images || [],
+      videos: formData.videos || [],
+      floor_plan: formData.floorPlan || null,
+      virtual_tour: formData.virtualTour || null,
+      featured: formData.featured || false,
+      published: formData.published || false,
+      published_at: formData.published ? new Date().toISOString() : null,
+    };
+
+    const { data, error } = await supabase
+      .from('properties')
+      .insert([insertData])
+      .select()
+      .single();
+
+    if (error) throw error;
+    
+    revalidatePath('/algharbia-cp/properties');
+    return { success: true, data };
+  } catch (err: any) {
+    console.error('Error creating property:', err);
+    return { success: false, error: err.message || 'فشل إضافة العقار الجديد' };
+  }
+}
+
+// Update existing property
+export async function updateProperty(id: string, formData: any) {
+  try {
+    const supabase = (await getSupabaseServerClient()) as any;
+
+    const updateData = {
+      title: formData.title,
+      type: formData.type,
+      status: formData.status,
+      project_id: formData.projectId || null,
+      city: formData.city,
+      district: formData.district,
+      address: formData.address || '',
+      lat: formData.lat || null,
+      lng: formData.lng || null,
+      area: parseInt(formData.area) || 0,
+      bedrooms: parseInt(formData.bedrooms) || 0,
+      bathrooms: parseInt(formData.bathrooms) || 0,
+      living_rooms: parseInt(formData.livingRooms) || 0,
+      parking: parseInt(formData.parking) || 0,
+      floor: formData.floor !== undefined && formData.floor !== '' ? parseInt(formData.floor) : null,
+      total_floors: formData.totalFloors !== undefined && formData.totalFloors !== '' ? parseInt(formData.totalFloors) : null,
+      view: formData.view || '',
+      direction: formData.direction || '',
+      features: formData.features || [],
+      price: parseInt(formData.price) || 0,
+      price_per_meter: parseInt(formData.pricePerMeter) || 0,
+      is_negotiable: formData.isNegotiable || false,
+      down_payment_pct: formData.downPaymentPct !== undefined && formData.downPaymentPct !== '' ? parseInt(formData.downPaymentPct) : null,
+      monthly_installment: formData.monthlyInstallment !== undefined && formData.monthlyInstallment !== '' ? parseInt(formData.monthlyInstallment) : null,
+      description: formData.description || '',
+      thumbnail: formData.thumbnail || '',
+      images: formData.images || [],
+      videos: formData.videos || [],
+      floor_plan: formData.floorPlan || null,
+      virtual_tour: formData.virtualTour || null,
+      featured: formData.featured || false,
+      published: formData.published || false,
+      published_at: formData.published ? new Date().toISOString() : null,
+    };
+
+    const { data, error } = await supabase
+      .from('properties')
+      .update(updateData)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    revalidatePath('/algharbia-cp/properties');
+    return { success: true, data };
+  } catch (err: any) {
+    console.error(`Error updating property ${id}:`, err);
+    return { success: false, error: err.message || 'فشل تحديث بيانات العقار' };
+  }
+}
+
+// Delete property
+export async function deleteProperty(id: string) {
+  try {
+    const supabase = (await getSupabaseServerClient()) as any;
+    const { error } = await supabase
+      .from('properties')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
+
+    revalidatePath('/algharbia-cp/properties');
+    return { success: true };
+  } catch (err: any) {
+    console.error(`Error deleting property ${id}:`, err);
+    return { success: false, error: err.message || 'فشل حذف العقار' };
+  }
+}
+
+// Fetch all properties for admin dashboard list
+export async function getPropertiesListAdmin() {
+  try {
+    const supabase = (await getSupabaseServerClient()) as any;
+    const { data, error } = await supabase
+      .from('properties')
+      .select('*, projects(id, name, slug)')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    return data || [];
+  } catch (err: any) {
+    console.error('Error fetching admin properties list:', err);
+    return [];
+  }
+}
+
+// Fetch all projects for admin dashboard list
+export async function getProjectsListAdmin() {
+  try {
+    const supabase = (await getSupabaseServerClient()) as any;
+    const { data, error } = await supabase
+      .from('projects')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    return data || [];
+  } catch (err: any) {
+    console.error('Error fetching admin projects list:', err);
+    return [];
+  }
+}
+
+// Helper to generate a valid UUID from mock IDs consistently
+function getUuidFromMockId(id: string): string {
+  // If it's already a valid UUID, return it
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  if (uuidRegex.test(id)) {
+    return id;
+  }
+  
+  // Map standard mock project/property IDs to static valid UUIDs
+  const mockIdMap: Record<string, string> = {
+    // Projects
+    'proj-1': '11111111-1111-4111-a111-111111111111',
+    'proj-2': '22222222-2222-4222-a222-222222222222',
+    'proj-3': '33333333-3333-4333-a333-333333333333',
+    'proj-4': '44444444-4444-4444-a444-444444444444',
+    'proj-5': '55555555-5555-4555-a555-555555555555',
+    
+    // Properties
+    'prop-1': 'a1111111-1111-4111-b111-111111111111',
+    'prop-2': 'a2222222-2222-4222-b222-222222222222',
+    'prop-3': 'a3333333-3333-4333-b333-333333333333',
+    'prop-4': 'a4444444-4444-4444-b444-444444444444',
+    'prop-5': 'a5555555-5555-4555-b555-555555555555',
+    'prop-6': 'a6666666-6666-4666-b666-666666666666',
+    'prop-7': 'a7777777-7777-4777-b777-777777777777',
+    'prop-8': 'a8888888-8888-4888-b888-888888888888',
+    'prop-9': 'a9999999-9999-4999-b999-999999999999',
+    'prop-10': 'b1111111-1111-4111-c111-111111111111',
+    'prop-11': 'b2222222-2222-4222-c222-222222222222',
+    'prop-12': 'b3333333-3333-4333-c333-333333333333',
+    'prop-13': 'b4444444-4444-4444-c444-444444444444',
+    'prop-14': 'b5555555-5555-4555-c555-555555555555',
+    'prop-15': 'b6666666-6666-4666-c666-666666666666',
+    'prop-16': 'b7777777-7777-4777-c777-777777777777',
+  };
+
+  if (mockIdMap[id]) {
+    return mockIdMap[id];
+  }
+
+  const digits = id.replace(/[^0-9]/g, '');
+  if (digits) {
+    const pad = digits.padStart(12, '0');
+    return `00000000-0000-4000-8000-${pad}`;
+  }
+
+  return '00000000-0000-4000-8000-000000000000';
+}
+
+// Seed Database with mock data from lib/mockData.ts
+export async function seedDatabase() {
+  try {
+    const supabase = getSupabaseAdminClient() as any;
+
+    // Delete existing records to avoid unique constraint violations
+    await supabase.from('properties').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+    await supabase.from('projects').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+
+    // 1. Seed Projects
+    const projectInsertData = PROJECTS.map((proj) => ({
+      id: getUuidFromMockId(proj.id),
+      slug: proj.slug,
+      name: proj.name,
+      tagline: proj.tagline || '',
+      status: proj.status,
+      city: proj.location.city,
+      district: proj.location.district,
+      address: proj.location.address || '',
+      description: proj.description || '',
+      hero_image: proj.media.hero || '',
+      gallery: proj.media.gallery || [],
+      videos: proj.media.videos || [],
+      price_min: proj.priceRange.min,
+      price_max: proj.priceRange.max,
+      total_units: proj.specs.totalUnits,
+      available_units: proj.specs.availableUnits,
+      completion_date: proj.specs.completionDate,
+      featured: proj.featured || false,
+      published: true,
+    }));
+
+    const { error: projError } = await supabase.from('projects').insert(projectInsertData);
+    if (projError) throw projError;
+
+    // 2. Seed Properties
+    const propertyInsertData = PROPERTIES.map((prop) => ({
+      id: getUuidFromMockId(prop.id),
+      slug: prop.slug,
+      title: prop.title,
+      type: prop.type,
+      status: prop.status,
+      project_id: prop.project?.id && prop.project.id !== 'none' ? getUuidFromMockId(prop.project.id) : null,
+      city: prop.location.city,
+      district: prop.location.district,
+      address: prop.location.address || '',
+      lat: prop.location.coordinates?.lat || null,
+      lng: prop.location.coordinates?.lng || null,
+      area: Math.round(prop.specs.area),
+      bedrooms: Math.round(prop.specs.bedrooms),
+      bathrooms: Math.round(prop.specs.bathrooms),
+      living_rooms: Math.round(prop.specs.livingRooms || 0),
+      parking: Math.round(prop.specs.parking || 0),
+      floor: prop.specs.floor !== undefined && prop.specs.floor !== null ? Math.round(prop.specs.floor) : null,
+      total_floors: prop.specs.totalFloors !== undefined && prop.specs.totalFloors !== null ? Math.round(prop.specs.totalFloors) : null,
+      view: prop.specs.view || '',
+      direction: prop.specs.direction || '',
+      features: prop.specs.features || [],
+      price: Math.round(prop.pricing.price),
+      price_per_meter: Math.round(prop.pricing.pricePerMeter),
+      is_negotiable: prop.pricing.isNegotiable || false,
+      down_payment_pct: prop.pricing.downPaymentPct !== undefined && prop.pricing.downPaymentPct !== null ? Math.round(prop.pricing.downPaymentPct) : null,
+      monthly_installment: prop.pricing.monthlyInstallment !== undefined && prop.pricing.monthlyInstallment !== null ? Math.round(prop.pricing.monthlyInstallment) : null,
+      description: prop.description || '',
+      thumbnail: prop.media.thumbnail,
+      images: prop.media.images || [],
+      videos: prop.media.videos || [],
+      floor_plan: prop.media.floorPlan || null,
+      virtual_tour: prop.media.virtualTour || null,
+      featured: prop.featured || false,
+      published: true,
+      published_at: new Date().toISOString(),
+    }));
+
+    const { error: propError } = await supabase.from('properties').insert(propertyInsertData);
+    if (propError) throw propError;
+
+    revalidatePath('/algharbia-cp/properties');
+    revalidatePath('/algharbia-cp/projects');
+    revalidatePath('/');
+    
+    return { success: true };
+  } catch (err: any) {
+    console.error('Error seeding database:', err);
+    return { success: false, error: err.message || 'فشل مزامنة البيانات' };
+  }
+}
+
+// Delete project
+export async function deleteProject(id: string) {
+  try {
+    const supabase = (await getSupabaseServerClient()) as any;
+    const { error } = await supabase
+      .from('projects')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
+
+    revalidatePath('/algharbia-cp/projects');
+    return { success: true };
+  } catch (err: any) {
+    console.error(`Error deleting project ${id}:`, err);
+    return { success: false, error: err.message || 'فشل حذف المشروع' };
+  }
+}
+
+// Fetch single property details by slug
+export async function getPropertyBySlug(slug: string) {
+  try {
+    const decodedSlug = decodeURIComponent(slug);
+    const supabase = getSupabaseAdminClient() as any;
+    const { data, error } = await supabase
+      .from('properties')
+      .select('*, projects(id, name, slug)')
+      .eq('slug', decodedSlug)
+      .single();
+
+    if (error) throw error;
+    return normalizeProperty(data);
+  } catch (err: any) {
+    console.error(`Error fetching property by slug ${slug}:`, err);
+    // Fallback to mock data
+    const decodedSlug = decodeURIComponent(slug);
+    const mockProp = PROPERTIES.find((p) => p.slug === decodedSlug || p.slug === slug);
+    if (mockProp) {
+      return mockProp;
+    }
+    return null;
+  }
+}
+
+// Fetch single project details by slug
+export async function getProjectBySlug(slug: string) {
+  try {
+    const decodedSlug = decodeURIComponent(slug);
+    const supabase = getSupabaseAdminClient() as any;
+    const { data, error } = await supabase
+      .from('projects')
+      .select('*')
+      .eq('slug', decodedSlug)
+      .single();
+
+    if (error) throw error;
+    return normalizeProject(data);
+  } catch (err: any) {
+    console.error(`Error fetching project by slug ${slug}:`, err);
+    // Fallback to mock data
+    const decodedSlug = decodeURIComponent(slug);
+    const mockProj = PROJECTS.find((p) => p.slug === decodedSlug || p.slug === slug);
+    if (mockProj) {
+      return mockProj;
+    }
+    return null;
+  }
+}
+
+// Fetch properties belonging to a specific project by project slug
+export async function getPropertiesByProjectSlug(projectSlug: string) {
+  try {
+    const decodedSlug = decodeURIComponent(projectSlug);
+    const supabase = getSupabaseAdminClient() as any;
+    const { data, error } = await supabase
+      .from('properties')
+      .select('*, projects!inner(id, name, slug)')
+      .eq('projects.slug', decodedSlug);
+
+    if (error) throw error;
+    return (data || []).map(normalizeProperty);
+  } catch (err: any) {
+    console.error(`Error fetching properties for project slug ${projectSlug}:`, err);
+    // Fallback to mock properties filtered by project slug
+    const decodedSlug = decodeURIComponent(projectSlug);
+    return PROPERTIES.filter((p) => p.project?.slug === decodedSlug || p.project?.slug === projectSlug);
+  }
+}
