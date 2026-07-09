@@ -16,6 +16,7 @@ import {
   ChevronsLeft,
   ChevronsRight,
   X,
+  Users,
 } from 'lucide-react';
 
 interface AdminSidebarProps {
@@ -63,6 +64,7 @@ const NAV_ITEMS: NavSection[] = [
     section: 'النظام',
     items: [
       { label: 'التحليلات', href: '/golden-cp/analytics', icon: BarChart3 },
+      { label: 'إدارة الحسابات', href: '/golden-cp/users', icon: Users },
       { label: 'إعدادات الموقع', href: '/golden-cp/settings', icon: Settings },
     ],
   },
