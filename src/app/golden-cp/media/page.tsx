@@ -4,6 +4,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import AdminBreadcrumb from '../../../components/admin/layout/AdminBreadcrumb';
+import AdminSelect from '../../../components/admin/AdminSelect';
 import {
   Upload,
   Search,
@@ -546,27 +547,25 @@ export default function MediaPage() {
       <div className="neu-card mb-6">
         <div className="flex flex-col md:flex-row items-stretch md:items-center gap-4">
           <div className="flex-1 relative">
-            <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--neu-text-muted)]" />
+            <Search className="absolute start-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--neu-text-muted)]" />
             <input
               type="text"
               placeholder="ابحث باسم الملف أو المصدر..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="neu-input pe-10"
+              className="neu-input ps-10"
             />
           </div>
-          <select
+          <AdminSelect
             value={typeFilter}
-            onChange={(e) => setTypeFilter(e.target.value as FilterType)}
-            className="neu-input neu-select w-full md:w-44"
-            title="تصفية حسب النوع"
-          >
-            {Object.entries(TYPE_LABELS).map(([key, label]) => (
-              <option key={key} value={key}>
-                {label}
-              </option>
-            ))}
-          </select>
+            onChange={(val) => setTypeFilter(val as FilterType)}
+            options={Object.entries(TYPE_LABELS).map(([key, label]) => ({
+              value: key,
+              label,
+            }))}
+            className="w-full md:w-44"
+            placeholder="تصفية حسب النوع"
+          />
         </div>
       </div>
 

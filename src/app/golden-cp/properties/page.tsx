@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import AdminBreadcrumb from '../../../components/admin/layout/AdminBreadcrumb';
+import AdminSelect from '../../../components/admin/AdminSelect';
 import {
   Plus,
   Search,
@@ -73,44 +74,46 @@ export default function PropertiesPage() {
         <div className="flex flex-col md:flex-row items-stretch md:items-center gap-4">
           {/* Search */}
           <div className="flex-1 relative">
-            <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--neu-text-muted)]" />
+            <Search className="absolute start-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--neu-text-muted)]" />
             <input
               type="text"
               placeholder="ابحث بالعنوان، المدينة، أو الحي..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="neu-input pe-10"
+              className="neu-input ps-10"
             />
           </div>
 
           {/* Status Filter */}
-          <select
+          <AdminSelect
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="neu-input neu-select w-full md:w-40"
-            title="تصفية حسب الحالة"
-          >
-            <option value="all">كل الحالات</option>
-            <option value="available">متاح</option>
-            <option value="reserved">محجوز</option>
-            <option value="sold">مُباع</option>
-            <option value="coming_soon">قريباً</option>
-          </select>
+            onChange={setStatusFilter}
+            options={[
+              { value: 'all', label: 'كل الحالات' },
+              { value: 'available', label: 'متاح' },
+              { value: 'reserved', label: 'محجوز' },
+              { value: 'sold', label: 'مُباع' },
+              { value: 'coming_soon', label: 'قريباً' },
+            ]}
+            className="w-full md:w-40"
+            placeholder="تصفية حسب الحالة"
+          />
 
           {/* Type Filter */}
-          <select
+          <AdminSelect
             value={typeFilter}
-            onChange={(e) => setTypeFilter(e.target.value)}
-            className="neu-input neu-select w-full md:w-40"
-            title="تصفية حسب النوع"
-          >
-            <option value="all">كل الأنواع</option>
-            <option value="apartment">شقة</option>
-            <option value="villa">فيلا</option>
-            <option value="annex">ملحق</option>
-            <option value="penthouse">بنتهاوس</option>
-            <option value="duplex">دوبلكس</option>
-          </select>
+            onChange={setTypeFilter}
+            options={[
+              { value: 'all', label: 'كل الأنواع' },
+              { value: 'apartment', label: 'شقة' },
+              { value: 'villa', label: 'فيلا' },
+              { value: 'annex', label: 'ملحق' },
+              { value: 'penthouse', label: 'بنتهاوس' },
+              { value: 'duplex', label: 'دوبلكس' },
+            ]}
+            className="w-full md:w-40"
+            placeholder="تصفية حسب النوع"
+          />
         </div>
       </div>
 

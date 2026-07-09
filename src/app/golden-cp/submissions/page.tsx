@@ -3,6 +3,7 @@
 
 import React, { useState } from 'react';
 import AdminBreadcrumb from '../../../components/admin/layout/AdminBreadcrumb';
+import AdminSelect from '../../../components/admin/AdminSelect';
 import {
   Search,
   Phone,
@@ -66,27 +67,39 @@ export default function SubmissionsPage() {
       <div className="neu-card mb-6">
         <div className="flex flex-col md:flex-row items-stretch md:items-center gap-4">
           <div className="flex-1 relative">
-            <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--neu-text-muted)]" />
+            <Search className="absolute start-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--neu-text-muted)]" />
             <input
               type="text"
               placeholder="ابحث بالاسم أو رقم الجوال..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="neu-input pe-10"
+              className="neu-input ps-10"
             />
           </div>
-          <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="neu-input neu-select w-full md:w-40" title="تصفية حسب الحالة">
-            <option value="all">كل الحالات</option>
-            <option value="new">جديد</option>
-            <option value="reviewed">تمت المراجعة</option>
-            <option value="closed">مغلق</option>
-          </select>
-          <select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} className="neu-input neu-select w-full md:w-44" title="تصفية حسب النوع">
-            <option value="all">كل الأنواع</option>
-            <option value="contact">تواصل عام</option>
-            <option value="inquiry">استفسار مشروع</option>
-            <option value="property_inquiry">استفسار عقار</option>
-          </select>
+          <AdminSelect
+            value={statusFilter}
+            onChange={setStatusFilter}
+            options={[
+              { value: 'all', label: 'كل الحالات' },
+              { value: 'new', label: 'جديد' },
+              { value: 'reviewed', label: 'تمت المراجعة' },
+              { value: 'closed', label: 'مغلق' },
+            ]}
+            className="w-full md:w-40"
+            placeholder="تصفية حسب الحالة"
+          />
+          <AdminSelect
+            value={typeFilter}
+            onChange={setTypeFilter}
+            options={[
+              { value: 'all', label: 'كل الأنواع' },
+              { value: 'contact', label: 'تواصل عام' },
+              { value: 'inquiry', label: 'استفسار مشروع' },
+              { value: 'property_inquiry', label: 'استفسار عقار' },
+            ]}
+            className="w-full md:w-44"
+            placeholder="تصفية حسب النوع"
+          />
         </div>
       </div>
 

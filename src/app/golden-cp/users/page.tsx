@@ -314,13 +314,13 @@ export default function UsersManagementPage() {
               {/* Search bar */}
               <div className="neu-card mb-6">
                 <div className="relative">
-                  <Users className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--neu-text-muted)]" />
+                  <Users className="absolute start-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--neu-text-muted)]" />
                   <input
                     type="text"
                     placeholder="ابحث باسم الموظف أو البريد الإلكتروني..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="neu-input pe-10"
+                    className="neu-input ps-10"
                   />
                 </div>
               </div>
