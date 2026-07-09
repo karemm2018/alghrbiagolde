@@ -169,7 +169,7 @@
   transition: width var(--neu-transition-slow);
   overflow: hidden;
   box-shadow: none; /* Seamless, no shadow */
-  border-left: none;
+  border-left: 1px solid rgba(165, 180, 203, 0.25);
 }
 
 .admin-sidebar.collapsed {
