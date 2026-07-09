@@ -345,6 +345,28 @@ export default async function PropertyDetailPage({ params }: PageProps) {
           </p>
         </section>
 
+        {/* 6.5. Floor Plan (if available) */}
+        {property.media.floorPlan && (
+          <section className="bg-[#0E203D]/50 backdrop-blur-xl border border-gold-primary/35 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 start-0 w-24 h-24 bg-gold-primary/5 rounded-full blur-2xl pointer-events-none" />
+            <h2 className="text-base sm:text-lg font-extrabold text-white mb-6 font-el-messiri flex items-center gap-2">
+              <Maximize2 className="w-5 h-5 text-gold-primary" />
+              <span>مخطط الطابق الهندسي</span>
+            </h2>
+            <div className="relative w-full max-w-4xl mx-auto aspect-[4/3] sm:aspect-[16/9] rounded-2xl overflow-hidden border border-white/10 bg-[#060D1A]/60 flex items-center justify-center p-4">
+              <div className="relative w-full h-full">
+                <Image
+                  src={property.media.floorPlan}
+                  alt={`مخطط الطابق لـ ${property.title}`}
+                  fill
+                  className="object-contain"
+                  sizes="(max-width: 1024px) 100vw, 1024px"
+                />
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* 7. Amenities, Project Banner & Safety summary Cards Grid */}
         <div className={`grid grid-cols-1 ${property.project.slug !== 'independent' ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-8 items-stretch`}>
           

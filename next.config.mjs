@@ -57,6 +57,7 @@ const nextConfig = {
               "img-src 'self' data: blob: https://zrbwtxufgtwtrkjvlwwi.supabase.co https://res.cloudinary.com",
               "media-src 'self' blob: https://res.cloudinary.com",
               "connect-src 'self' https://zrbwtxufgtwtrkjvlwwi.supabase.co https://api.cloudinary.com https://res.cloudinary.com",
+              "frame-src 'self' https://maps.google.com https://www.google.com https://my.matterport.com",
               "frame-ancestors 'none'",
               "base-uri 'self'",
               "form-action 'self'",
