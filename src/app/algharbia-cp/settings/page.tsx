@@ -2,6 +2,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import AdminBreadcrumb from '../../../components/admin/layout/AdminBreadcrumb';
 import {
   Image as ImageIcon,
@@ -123,11 +124,15 @@ export default function SettingsPage() {
                 <label className="neu-label">صور الخلفية (Hero Slider)</label>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-2">
                   {['/hero-bg-3.webp', '/hero-bg-luxury.webp', '/hero-bg-2.webp'].map((src, i) => (
-                    <div key={i} className="relative h-32 rounded-xl overflow-hidden bg-[var(--neu-depressed)] group">
-                      <div className="w-full h-full bg-[var(--neu-surface)] flex items-center justify-center">
-                        <span className="text-xs text-[var(--neu-text-muted)]">صورة {i + 1}</span>
-                      </div>
-                      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <div key={i} className="relative h-32 rounded-xl overflow-hidden bg-[var(--neu-depressed)] group border border-white/5">
+                      <Image
+                        src={src}
+                        alt={`صورة الخلفية ${i + 1}`}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                      />
+                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                         <button className="neu-btn neu-btn-primary neu-btn-sm">
                           <Upload className="w-3.5 h-3.5" />
                           تغيير

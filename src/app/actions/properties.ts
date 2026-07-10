@@ -514,12 +514,98 @@ export async function seedDatabase() {
 export async function deleteProject(id: string) {
   try {
     const supabase = (await getSupabaseServerClient()) as any;
+    
+    // 1. Fetch project details to retrieve asset paths before deleting
+    const { data: project, error: fetchError } = await supabase
+      .from('projects')
+      .select('hero_image, gallery, videos')
+      .eq('id', id)
+      .single();
+
+    if (fetchError && fetchError.code !== 'PGRST116') {
+      throw fetchError;
+    }
+
+    // 2. Delete database record
     const { error } = await supabase
       .from('projects')
       .delete()
       .eq('id', id);
 
     if (error) throw error;
+
+    // 3. Clean up associated media files
+    if (project) {
+      const getStoragePathFromUrl = (url: string) => {
+        if (!url) return null;
+        const match = url.match(/\/storage\/v1\/object\/public\/media\/(.+)$/);
+        if (match && match[1]) {
+          return decodeURIComponent(match[1]);
+        }
+        return null;
+      };
+
+      const getCloudinaryPublicId = (url: string) => {
+        if (!url || !url.includes('cloudinary.com')) return null;
+        try {
+          const parts = url.split('/upload/');
+          if (parts.length < 2) return null;
+          const segments = parts[1].split('/');
+          const filteredSegments = segments.filter(seg => {
+            if (/^v\d+$/.test(seg)) return false;
+            if (seg.includes(',') || seg.includes(':') || seg.includes('=')) return false;
+            if (['br_', 'c_', 'd_', 'e_', 'fl_', 'h_', 'l_', 'o_', 'p_', 'q_', 'r_', 't_', 'w_', 'x_', 'y_', 'z_'].some(prefix => seg.startsWith(prefix))) return false;
+            return true;
+          });
+          const fullPath = filteredSegments.join('/');
+          const dotIndex = fullPath.lastIndexOf('.');
+          if (dotIndex !== -1) {
+            return fullPath.substring(0, dotIndex);
+          }
+          return fullPath;
+        } catch (err) {
+          console.error('Failed to parse Cloudinary publicId:', err);
+          return null;
+        }
+      };
+
+      const storagePaths: string[] = [];
+      if (project.hero_image) {
+        const path = getStoragePathFromUrl(project.hero_image);
+        if (path) storagePaths.push(path);
+      }
+      if (Array.isArray(project.gallery)) {
+        project.gallery.forEach((img: string) => {
+          const path = getStoragePathFromUrl(img);
+          if (path) storagePaths.push(path);
+        });
+      }
+
+      // Delete from Supabase Storage media bucket
+      if (storagePaths.length > 0) {
+        const { error: deleteStorageError } = await supabase.storage
+          .from('media')
+          .remove(storagePaths);
+        if (deleteStorageError) {
+          console.error('Failed to delete Supabase storage files:', deleteStorageError.message);
+        }
+      }
+
+      // Delete from Cloudinary
+      if (Array.isArray(project.videos)) {
+        for (const videoUrl of project.videos) {
+          const publicId = getCloudinaryPublicId(videoUrl);
+          if (publicId) {
+            try {
+              const res = await deleteCloudinaryVideo(publicId);
+              console.log(`Cloudinary video delete result for project:`, res);
+            } catch (err) {
+              console.error('Error deleting Cloudinary video:', err);
+            }
+          }
+        }
+      }
+    }
 
     revalidatePath('/algharbia-cp/projects');
     return { success: true };

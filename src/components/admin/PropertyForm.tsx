@@ -39,7 +39,7 @@ import {
 } from 'lucide-react';
 import { getProjectsList, createProperty, updateProperty, quickCreateProject } from '../../app/actions/properties';
 import { getCloudinarySignature } from '../../app/actions/cloudinary';
-import { uploadFile } from '../../lib/supabase/storage';
+import { uploadFile, deleteFile } from '../../lib/supabase/storage';
 import { compressImageToWebP } from '../../lib/image';
 import AdminSelect from './AdminSelect';
 
@@ -277,6 +277,15 @@ export default function PropertyForm({ initialData, propertyId }: PropertyFormPr
     }
   };
 
+const getStoragePathFromUrl = (url: string) => {
+  if (!url) return null;
+  const match = url.match(/\/storage\/v1\/object\/public\/media\/(.+)$/);
+  if (match && match[1]) {
+    return decodeURIComponent(match[1]);
+  }
+  return null;
+};
+
   // Upload Thumbnail
   const handleThumbnailUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -286,6 +295,12 @@ export default function PropertyForm({ initialData, propertyId }: PropertyFormPr
     setError('');
 
     try {
+      if (thumbnail) {
+        const oldPath = getStoragePathFromUrl(thumbnail);
+        if (oldPath) {
+          await deleteFile('media', oldPath);
+        }
+      }
       const webpFile = await compressImageToWebP(file);
       const uniqueName = `thumbnail-${Date.now()}.webp`;
       const filePath = `properties/${uniqueName}`;
@@ -341,6 +356,12 @@ export default function PropertyForm({ initialData, propertyId }: PropertyFormPr
     setError('');
 
     try {
+      if (floorPlan) {
+        const oldPath = getStoragePathFromUrl(floorPlan);
+        if (oldPath) {
+          await deleteFile('media', oldPath);
+        }
+      }
       const webpFile = await compressImageToWebP(file);
       const uniqueName = `floorplan-${Date.now()}.webp`;
       const filePath = `properties/plans/${uniqueName}`;
@@ -419,6 +440,12 @@ export default function PropertyForm({ initialData, propertyId }: PropertyFormPr
     setError('');
 
     try {
+      if (virtualTour) {
+        const oldPath = getStoragePathFromUrl(virtualTour);
+        if (oldPath) {
+          await deleteFile('media', oldPath);
+        }
+      }
       const extension = file.name.split('.').pop() || 'html';
       const uniqueName = `tour-${Date.now()}.${extension}`;
       const filePath = `properties/tours/${uniqueName}`;

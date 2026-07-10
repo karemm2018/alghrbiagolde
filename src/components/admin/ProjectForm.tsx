@@ -27,7 +27,7 @@ import {
 } from 'lucide-react';
 import { createProject, updateProject, getProjectById } from '../../app/actions/properties';
 import { getCloudinarySignature } from '../../app/actions/cloudinary';
-import { uploadFile } from '../../lib/supabase/storage';
+import { uploadFile, deleteFile } from '../../lib/supabase/storage';
 import { compressImageToWebP } from '../../lib/image';
 import AdminSelect from './AdminSelect';
 import { toast } from 'sonner';
@@ -108,6 +108,15 @@ export default function ProjectForm({ initialData, projectId }: ProjectFormProps
   const videoInputRef = useRef<HTMLInputElement>(null);
   const excelInputRef = useRef<HTMLInputElement>(null);
 
+const getStoragePathFromUrl = (url: string) => {
+  if (!url) return null;
+  const match = url.match(/\/storage\/v1\/object\/public\/media\/(.+)$/);
+  if (match && match[1]) {
+    return decodeURIComponent(match[1]);
+  }
+  return null;
+};
+
   // Auto populate address on city/district change
   useEffect(() => {
     if (district && city) {
@@ -122,6 +131,12 @@ export default function ProjectForm({ initialData, projectId }: ProjectFormProps
 
     setUploadingHero(true);
     try {
+      if (heroImage) {
+        const oldPath = getStoragePathFromUrl(heroImage);
+        if (oldPath) {
+          await deleteFile('media', oldPath);
+        }
+      }
       // Compress to WebP
       const compressedFile = await compressImageToWebP(file);
       
