@@ -206,6 +206,7 @@ async function compressImageToWebP(file: File, quality = 0.8): Promise<File> {
 
 export default function MediaPage() {
   const [searchQuery, setSearchQuery] = useState('');
+  const [loading, setLoading] = useState(true);
   const [typeFilter, setTypeFilter] = useState<FilterType>('all');
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [previewItem, setPreviewItem] = useState<MediaItem | null>(null);
@@ -220,6 +221,7 @@ export default function MediaPage() {
   // Load media from database and mock files
   const loadAllMedia = useCallback(async () => {
     try {
+      setLoading(true);
       const mockGallery = buildMediaGallery();
       const realProperties = await getPropertiesListAdmin();
       const realProjects = await getProjectsListAdmin();
@@ -370,6 +372,8 @@ export default function MediaPage() {
       setMediaList(uniqueItems.filter((item) => !deletedIds.includes(item.id) && !deletedIds.includes(item.src)));
     } catch (err) {
       console.error('Failed to load media items:', err);
+    } finally {
+      setLoading(false);
     }
   }, []);
 
@@ -694,8 +698,15 @@ export default function MediaPage() {
     <div>
       <AdminBreadcrumb items={[{ label: 'الوسائط' }]} />
 
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+      {loading ? (
+        <div className="neu-card p-12 text-center flex flex-col items-center justify-center min-h-[400px]">
+          <div className="w-10 h-10 border-4 border-[var(--neu-gold)] border-t-transparent rounded-full animate-spin mb-4"></div>
+          <p className="text-sm text-[var(--neu-text-secondary)] font-medium">جاري تحميل واسترجاع الوسائط السحابية...</p>
+        </div>
+      ) : (
+        <>
+          {/* Header */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
         <div>
           <h2 className="text-2xl font-bold text-[var(--neu-text-heading)]">إدارة الوسائط</h2>
           <p className="text-sm text-[var(--neu-text-muted)] mt-1">
@@ -1165,6 +1176,8 @@ export default function MediaPage() {
             </div>
           </div>
         </div>
+      )}
+        </>
       )}
     </div>
   );
