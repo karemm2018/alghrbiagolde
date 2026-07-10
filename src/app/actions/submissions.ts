@@ -20,14 +20,7 @@ export interface Submission {
   project_id?: string;
 }
 
-const MOCK_SUBMISSIONS: Submission[] = [
-  { id: '1', name: 'أبو محمد الشهري', phone: '0554498018', email: 'mohammed@email.com', subject: 'استفسار عن ملحق أمل ستارز', message: 'أرغب في معرفة تفاصيل الملحق المتوفر في مشروع أمل ستارز وأقرب موعد لمعاينة الموقع.', type: 'property_inquiry', resident_type: 'citizen', status: 'new', created_at: '2026-07-08T14:30:00' },
-  { id: '2', name: 'سارة القحطاني', phone: '0551234567', email: '', subject: 'استفسار عام', message: 'أريد معرفة المشاريع المتاحة في جدة.', type: 'contact', resident_type: 'citizen', status: 'new', created_at: '2026-07-08T12:15:00' },
-  { id: '3', name: 'خالد العمري', phone: '0559876543', email: 'khalid@gmail.com', subject: 'استفسار عن مشروع ريناد غاليري', message: 'هل يوجد وحدات متاحة في مشروع ريناد غاليري؟', type: 'inquiry', resident_type: 'resident', status: 'reviewed', created_at: '2026-07-07T18:00:00' },
-  { id: '4', name: 'فاطمة الحربي', phone: '0557654321', email: '', subject: 'طلب معاينة', message: 'أرغب في حجز موعد لمعاينة فيلا أبو هايل.', type: 'property_inquiry', resident_type: 'citizen', status: 'closed', created_at: '2026-07-06T09:45:00' },
-];
-
-// Fetch all submissions from the database (fallback to mock if empty)
+// Fetch all submissions from the database (returns empty array if none exist)
 export async function getSubmissionsList(): Promise<Submission[]> {
   try {
     const supabase = (await getSupabaseServerClient()) as any;
@@ -56,33 +49,10 @@ export async function getSubmissionsList(): Promise<Submission[]> {
       }));
     }
 
-    // Seed mock data if database is empty to let user have initial items
-    await seedMockSubmissionsIfEmpty();
-    return MOCK_SUBMISSIONS;
+    return [];
   } catch (err: any) {
     console.error('Error fetching submissions list:', err);
-    return MOCK_SUBMISSIONS;
-  }
-}
-
-// Seed mock data if database table is completely empty
-async function seedMockSubmissionsIfEmpty() {
-  try {
-    const supabase = (await getSupabaseServerClient()) as any;
-    const { count } = await supabase
-      .from('submissions')
-      .select('*', { count: 'exact', head: true });
-
-    if (count === 0) {
-      const dataToInsert = MOCK_SUBMISSIONS.map(({ id, ...rest }) => ({
-        ...rest,
-        email: rest.email || null,
-        notes: rest.notes || null
-      }));
-      await supabase.from('submissions').insert(dataToInsert);
-    }
-  } catch (err) {
-    console.error('Failed to seed mock submissions:', err);
+    return [];
   }
 }
 

@@ -18,80 +18,15 @@ export async function getProjectsList() {
       .order('name');
 
     if (error) throw error;
-    
-    // Fallback to mock data if the database projects list is completely empty
-    if (data && data.length > 0) {
-      return data;
-    }
-    
-    return PROJECTS.map((p) => ({
-      id: p.id,
-      name: p.name,
-      slug: p.slug,
-      city: p.location?.city || '',
-      district: p.location?.district || '',
-      address: p.location?.address || ''
-    }));
+    return data || [];
   } catch (err: any) {
     console.error('Error fetching projects list:', err);
-    // Return mock fallback to avoid crashes if DB is empty
-    return PROJECTS.map((p) => ({
-      id: p.id,
-      name: p.name,
-      slug: p.slug,
-      city: p.location?.city || '',
-      district: p.location?.district || '',
-      address: p.location?.address || ''
-    }));
+    return [];
   }
 }
 
 // Get single property detail by ID
 export async function getPropertyById(id: string) {
-  // If it's a mock ID, return the mock data directly without querying Supabase
-  if (id.startsWith('prop-')) {
-    const mockProp = PROPERTIES.find((p) => p.id === id);
-    if (mockProp) {
-      console.log(`Direct mock data fallback for property: ${id}`);
-      return {
-        id: mockProp.id,
-        slug: mockProp.slug,
-        title: mockProp.title,
-        type: mockProp.type,
-        status: mockProp.status,
-        project_id: mockProp.project?.id || '',
-        description: mockProp.description,
-        featured: mockProp.featured,
-        published: true,
-        price: mockProp.pricing?.price || 0,
-        price_per_meter: mockProp.pricing?.pricePerMeter || 0,
-        is_negotiable: mockProp.pricing?.isNegotiable || false,
-        down_payment_pct: mockProp.pricing?.downPaymentPct || null,
-        monthly_installment: mockProp.pricing?.monthlyInstallment || null,
-        city: mockProp.location?.city || '',
-        district: mockProp.location?.district || '',
-        address: mockProp.location?.address || '',
-        lat: mockProp.location?.coordinates?.lat || '',
-        lng: mockProp.location?.coordinates?.lng || '',
-        area: mockProp.specs?.area || 0,
-        bedrooms: mockProp.specs?.bedrooms || '3',
-        bathrooms: mockProp.specs?.bathrooms || '3',
-        living_rooms: mockProp.specs?.livingRooms || '1',
-        parking: mockProp.specs?.parking || '1',
-        floor: mockProp.specs?.floor || '',
-        total_floors: mockProp.specs?.totalFloors || '',
-        view: mockProp.specs?.view || '',
-        direction: mockProp.specs?.direction || 'north',
-        features: mockProp.specs?.features || [],
-        thumbnail: mockProp.media?.thumbnail || '',
-        images: mockProp.media?.images || [],
-        videos: mockProp.media?.videos || [],
-        floor_plan: mockProp.media?.floorPlan || '',
-        virtual_tour: mockProp.media?.virtualTour || ''
-      };
-    }
-  }
-
   try {
     const supabase = (await getSupabaseServerClient()) as any;
     const { data, error } = await supabase
@@ -609,12 +544,6 @@ export async function getPropertyBySlug(slug: string) {
     return normalizeProperty(data);
   } catch (err: any) {
     console.error(`Error fetching property by slug ${slug}:`, err);
-    // Fallback to mock data
-    const decodedSlug = decodeURIComponent(slug);
-    const mockProp = PROPERTIES.find((p) => p.slug === decodedSlug || p.slug === slug);
-    if (mockProp) {
-      return mockProp;
-    }
     return null;
   }
 }
@@ -634,12 +563,6 @@ export async function getProjectBySlug(slug: string) {
     return normalizeProject(data);
   } catch (err: any) {
     console.error(`Error fetching project by slug ${slug}:`, err);
-    // Fallback to mock data
-    const decodedSlug = decodeURIComponent(slug);
-    const mockProj = PROJECTS.find((p) => p.slug === decodedSlug || p.slug === slug);
-    if (mockProj) {
-      return mockProj;
-    }
     return null;
   }
 }
@@ -658,8 +581,6 @@ export async function getPropertiesByProjectSlug(projectSlug: string) {
     return (data || []).map(normalizeProperty);
   } catch (err: any) {
     console.error(`Error fetching properties for project slug ${projectSlug}:`, err);
-    // Fallback to mock properties filtered by project slug
-    const decodedSlug = decodeURIComponent(projectSlug);
-    return PROPERTIES.filter((p) => p.project?.slug === decodedSlug || p.project?.slug === projectSlug);
+    return [];
   }
 }
