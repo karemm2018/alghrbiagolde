@@ -4,6 +4,9 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import AdminBreadcrumb from '../../../components/admin/layout/AdminBreadcrumb';
+import { uploadFile, deleteFile } from '../../../lib/supabase/storage';
+import { compressImageToWebP } from '../../../lib/image';
+import { toast } from 'sonner';
 import {
   Image as ImageIcon,
   Type,
@@ -47,6 +50,64 @@ export default function SettingsPage() {
   const [address, setAddress] = useState('جدة، حي الصفا، شارع الأمير سلطان');
   const [seoTitle, setSeoTitle] = useState('شركة الغربية الذهبية | عقارات فاخرة بالسعودية');
   const [seoDescription, setSeoDescription] = useState('حرفية تشييد وتميّز عقاري — نعتمد أحدث التقنيات لربط عملائنا بأفضل الفرص السكنية والاستثمارية');
+
+  // Slider Images State & Logic
+  const [sliderImages, setSliderImages] = useState<string[]>([
+    '/hero-bg-3.webp',
+    '/hero-bg-luxury.webp',
+    '/hero-bg-2.webp',
+  ]);
+  const [activeImageIndex, setActiveImageIndex] = useState<number | null>(null);
+  const [uploadingIndex, setUploadingIndex] = useState<number | null>(null);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+  const triggerImageChange = (index: number) => {
+    setActiveImageIndex(index);
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || activeImageIndex === null) return;
+
+    const index = activeImageIndex;
+    setUploadingIndex(index);
+
+    try {
+      const oldUrl = sliderImages[index];
+      if (oldUrl && oldUrl.includes('/storage/')) {
+        const getStoragePathFromUrl = (url: string) => {
+          const match = url.match(/\/storage\/v1\/object\/public\/media\/(.+)$/);
+          return match && match[1] ? decodeURIComponent(match[1]) : null;
+        };
+        const oldPath = getStoragePathFromUrl(oldUrl);
+        if (oldPath) {
+          await deleteFile('media', oldPath);
+        }
+      }
+
+      const webpFile = await compressImageToWebP(file);
+      const uniqueName = `hero-slider-${index}-${Date.now()}.webp`;
+      const filePath = `settings/${uniqueName}`;
+
+      const res = await uploadFile('media', filePath, webpFile, { contentType: 'image/webp' });
+      if (res) {
+        setSliderImages((prev) => {
+          const next = [...prev];
+          next[index] = res.url;
+          return next;
+        });
+        toast.success(`تم تغيير الصورة ${index + 1} بنجاح`);
+      }
+    } catch (err: any) {
+      console.error('Failed to change slider image:', err);
+      toast.error('فشل تغيير الصورة: ' + (err.message || 'خطأ غير معروف'));
+    } finally {
+      setUploadingIndex(null);
+      setActiveImageIndex(null);
+      if (e.target) e.target.value = '';
+    }
+  };
 
   const handleSave = () => {
     setSaving(true);
@@ -123,7 +184,7 @@ export default function SettingsPage() {
               <div>
                 <label className="neu-label">صور الخلفية (Hero Slider)</label>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-2">
-                  {['/hero-bg-3.webp', '/hero-bg-luxury.webp', '/hero-bg-2.webp'].map((src, i) => (
+                  {sliderImages.map((src, i) => (
                     <div key={i} className="relative h-32 rounded-xl overflow-hidden bg-[var(--neu-depressed)] group border border-white/5">
                       <Image
                         src={src}
@@ -133,14 +194,31 @@ export default function SettingsPage() {
                         sizes="(max-width: 768px) 100vw, 33vw"
                       />
                       <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                        <button className="neu-btn neu-btn-primary neu-btn-sm">
-                          <Upload className="w-3.5 h-3.5" />
-                          تغيير
+                        <button
+                          type="button"
+                          onClick={() => triggerImageChange(i)}
+                          disabled={uploadingIndex !== null}
+                          className="neu-btn neu-btn-primary neu-btn-sm"
+                        >
+                          {uploadingIndex === i ? (
+                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                          ) : (
+                            <Upload className="w-3.5 h-3.5" />
+                          )}
+                          <span>{uploadingIndex === i ? 'جاري الرفع...' : 'تغيير'}</span>
                         </button>
                       </div>
                     </div>
                   ))}
                 </div>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="hidden"
+                  title="تغيير صورة الخلفية"
+                />
               </div>
             </div>
           )}
