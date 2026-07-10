@@ -23,6 +23,7 @@ import {
   HelpCircle
 } from 'lucide-react';
 import { useInquiryStore } from '@/store/useInquiryStore';
+import { createSubmission } from '@/app/actions/submissions';
 
 export default function ContactPage() {
   const openInquiry = useInquiryStore((state) => state.open);
@@ -51,26 +52,47 @@ export default function ContactPage() {
   };
 
   // Submit Handler for contact form
-  const handleContactSubmit = (e: React.FormEvent) => {
+  const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSending(true);
-    // Simulate API request
-    setTimeout(() => {
+
+    const type = 'contact';
+    const subStr = subject === 'general' ? 'استفسار عام' : subject === 'sales' ? 'طلب مبيعات' : 'طلب معاينة أو حجز';
+
+    try {
+      const res = await createSubmission({
+        name,
+        phone,
+        email,
+        subject: subStr,
+        message,
+        type,
+        resident_type: residentType
+      });
+
+      if (res.success) {
+        setFormSuccess(true);
+        // Reset form fields
+        setResidentType('citizen');
+        setName('');
+        setPhone('');
+        setEmail('');
+        setSubject('general');
+        setMessage('');
+        
+        // Auto dismiss success screen after 4 seconds
+        setTimeout(() => {
+          setFormSuccess(false);
+        }, 4000);
+      } else {
+        alert(res.error || 'حدث خطأ أثناء إرسال طلبك');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('حدث خطأ في الشبكة، يرجى المحاولة لاحقاً');
+    } finally {
       setIsSending(false);
-      setFormSuccess(true);
-      // Reset form fields
-      setResidentType('citizen');
-      setName('');
-      setPhone('');
-      setEmail('');
-      setSubject('general');
-      setMessage('');
-      
-      // Auto dismiss success screen after 4 seconds
-      setTimeout(() => {
-        setFormSuccess(false);
-      }, 4000);
-    }, 1800);
+    }
   };
 
   return (

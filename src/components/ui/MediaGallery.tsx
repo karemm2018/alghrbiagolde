@@ -3,22 +3,25 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { Camera, Video, ChevronRight, ChevronLeft } from 'lucide-react';
+import { Camera, Video, ChevronRight, ChevronLeft, Rotate3d } from 'lucide-react';
 
 interface MediaGalleryProps {
   images: string[];
   videos?: string[];
+  virtualTour?: string;
   title: string;
 }
 
-export default function MediaGallery({ images, videos = [], title }: MediaGalleryProps) {
-  const [activeTab, setActiveTab] = useState<'photos' | 'video'>('photos');
+export default function MediaGallery({ images, videos = [], virtualTour, title }: MediaGalleryProps) {
+  const [activeTab, setActiveTab] = useState<'photos' | 'video' | 'tour'>('photos');
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [animateZoom, setAnimateZoom] = useState(false);
 
   const hasVideo = videos && videos.length > 0;
-  const activeVideoUrl = hasVideo ? videos[0] : null;
+  const activeVideoUrl = hasVideo ? videos[currentVideoIndex] : null;
+  const hasTour = !!virtualTour;
 
   // Autoplay slideshow for photos
   useEffect(() => {
@@ -79,6 +82,21 @@ export default function MediaGallery({ images, videos = [], title }: MediaGaller
             <span>فيديو العرض</span>
           </button>
         )}
+
+        {hasTour && (
+          <button
+            type="button"
+            onClick={() => setActiveTab('tour')}
+            className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+              activeTab === 'tour'
+                ? 'bg-gold-primary text-bg-midnight font-extrabold shadow-md shadow-gold-primary/10'
+                : 'text-text-muted hover:text-white'
+            }`}
+          >
+            <Rotate3d className="w-4 h-4" />
+            <span>جولة افتراضية 3D</span>
+          </button>
+        )}
       </div>
 
       {/* Media Display Container */}
@@ -109,7 +127,7 @@ export default function MediaGallery({ images, videos = [], title }: MediaGaller
               </div>
             ))}
           </div>
-        ) : (
+        ) : activeTab === 'video' ? (
           <div className="w-full h-full bg-black flex items-center justify-center relative z-20">
             {activeVideoUrl && (
               <video
@@ -118,6 +136,18 @@ export default function MediaGallery({ images, videos = [], title }: MediaGaller
                 autoPlay
                 playsInline
                 className="w-full h-full object-contain"
+              />
+            )}
+          </div>
+        ) : (
+          <div className="w-full h-full bg-black flex items-center justify-center relative z-20">
+            {virtualTour && (
+              <iframe
+                src={virtualTour}
+                className="w-full h-full border-0"
+                allowFullScreen
+                allow="xr-spatial-tracking; gyroscope; accelerometer"
+                title={`الجولة الافتراضية 3D لـ ${title}`}
               />
             )}
           </div>
@@ -172,6 +202,30 @@ export default function MediaGallery({ images, videos = [], title }: MediaGaller
                   sizes="96px"
                   className="object-cover"
                 />
+              </button>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Video Thumbnails */}
+      {activeTab === 'video' && videos.length > 1 && (
+        <div className="p-4 bg-black/10 flex items-center gap-3 overflow-x-auto custom-scrollbar shrink-0">
+          {videos.map((vid, idx) => {
+            const isSelected = idx === currentVideoIndex;
+            return (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => setCurrentVideoIndex(idx)}
+                className={`relative w-20 sm:w-24 aspect-[16/10] rounded-xl overflow-hidden shrink-0 border-2 transition-all duration-300 cursor-pointer flex items-center justify-center bg-[var(--neu-depressed)] ${
+                  isSelected ? 'border-gold-primary scale-102 shadow-md shadow-gold-primary/10' : 'border-transparent opacity-65 hover:opacity-100'
+                }`}
+              >
+                <Video className="w-6 h-6 text-[var(--neu-gold)]" />
+                <span className="absolute bottom-1 right-1 bg-black/75 text-[9px] text-white px-1.5 py-0.5 rounded font-mono font-bold">
+                  فيديو {idx + 1}
+                </span>
               </button>
             );
           })}

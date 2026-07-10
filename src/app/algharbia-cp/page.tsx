@@ -1,7 +1,6 @@
-// src/app/algharbia-cp/page.tsx
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import AdminBreadcrumb from '../../components/admin/layout/AdminBreadcrumb';
 import {
@@ -10,6 +9,8 @@ import {
   MessageSquareText,
   Eye,
   TrendingUp,
+  Activity,
+  Calendar,
   Users,
   Plus,
   ArrowUpLeft,
@@ -17,8 +18,9 @@ import {
   CheckCircle2,
   Phone,
   BarChart2,
-  Activity,
-  Calendar,
+  Loader2,
+  X,
+  BellRing,
 } from 'lucide-react';
 import {
   ResponsiveContainer,
@@ -31,22 +33,7 @@ import {
   BarChart,
   Bar,
 } from 'recharts';
-
-// Temporary mock stats until Supabase is connected
-const MOCK_STATS = {
-  totalProperties: 17,
-  totalProjects: 5,
-  newSubmissions: 3,
-  totalViews: 2450,
-  soldUnits: 42,
-  activeClients: 128,
-};
-
-const MOCK_RECENT_SUBMISSIONS = [
-  { id: '1', name: 'أبو محمد الشهري', phone: '0554498018', subject: 'استفسار عن ملحق أمل ستارز', type: 'property_inquiry' as const, status: 'new' as const, created_at: '2026-07-08T14:30:00' },
-  { id: '2', name: 'سارة القحطاني', phone: '0551234567', subject: 'استفسار عام', type: 'contact' as const, status: 'new' as const, created_at: '2026-07-08T12:15:00' },
-  { id: '3', name: 'خالد العمري', phone: '0559876543', subject: 'استفسار عن مشروع ريناد غاليري', type: 'inquiry' as const, status: 'reviewed' as const, created_at: '2026-07-07T18:00:00' },
-];
+import { getSubmissionsList, getDashboardStats, Submission } from '@/app/actions/submissions';
 
 const MOCK_ANALYTICS_DATA = [
   { name: 'السبت', views: 320, submissions: 4 },
@@ -78,13 +65,57 @@ const TYPE_MAP = {
 };
 
 export default function DashboardPage() {
+  const [statsData, setStatsData] = useState({
+    properties: 0,
+    projects: 0,
+    newSubmissions: 0,
+    totalViews: 2450,
+    soldUnits: 42,
+    activeClients: 128
+  });
+  const [submissions, setSubmissions] = useState<Submission[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [dismissedAlertIds, setDismissedAlertIds] = useState<string[]>([]);
+
+  useEffect(() => {
+    async function loadDashboardData() {
+      try {
+        const stats = await getDashboardStats();
+        const subs = await getSubmissionsList();
+        
+        setStatsData((prev) => ({
+          ...prev,
+          properties: stats.properties,
+          projects: stats.projects,
+          newSubmissions: stats.newSubmissions
+        }));
+        setSubmissions(subs);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadDashboardData();
+  }, []);
+
+  const handleDismissAlert = (id: string) => {
+    setDismissedAlertIds((prev) => [...prev, id]);
+  };
+
+  const newSubmissionsAlerts = submissions.filter(
+    (s) => s.status === 'new' && !dismissedAlertIds.includes(s.id)
+  );
+
+  const recentSubmissions = submissions.slice(0, 4);
+
   const stats = [
-    { label: 'إجمالي العقارات', value: MOCK_STATS.totalProperties, icon: Building2, color: 'gold', change: '+3 هذا الشهر' },
-    { label: 'المشاريع النشطة', value: MOCK_STATS.totalProjects, icon: FolderKanban, color: 'info', change: '2 قيد الإنشاء' },
-    { label: 'استفسارات جديدة', value: MOCK_STATS.newSubmissions, icon: MessageSquareText, color: 'danger', change: 'بحاجة للمراجعة' },
-    { label: 'مشاهدات الموقع', value: MOCK_STATS.totalViews, icon: Eye, color: 'success', change: '+12% عن الشهر السابق' },
-    { label: 'وحدات مُباعة', value: MOCK_STATS.soldUnits, icon: TrendingUp, color: 'warning', change: 'من إجمالي 225' },
-    { label: 'عملاء نشطين', value: MOCK_STATS.activeClients, icon: Users, color: 'info', change: 'مسجلون بالنظام' },
+    { label: 'إجمالي العقارات', value: statsData.properties, icon: Building2, color: 'gold', change: '+3 هذا الشهر' },
+    { label: 'المشاريع النشطة', value: statsData.projects, icon: FolderKanban, color: 'info', change: '2 قيد الإنشاء' },
+    { label: 'استفسارات جديدة', value: statsData.newSubmissions, icon: MessageSquareText, color: 'danger', change: 'بحاجة للمراجعة' },
+    { label: 'مشاهدات الموقع', value: statsData.totalViews, icon: Eye, color: 'success', change: '+12% عن الشهر السابق' },
+    { label: 'وحدات مُباعة', value: statsData.soldUnits, icon: TrendingUp, color: 'warning', change: 'من إجمالي 225' },
+    { label: 'عملاء نشطين', value: statsData.activeClients, icon: Users, color: 'info', change: 'مسجلون بالنظام' },
   ];
 
   return (
@@ -104,6 +135,44 @@ export default function DashboardPage() {
           <span>اليوم، {new Date().toLocaleDateString('ar-SA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span>
         </div>
       </div>
+
+      {/* Alert Notifications for New Submissions */}
+      {newSubmissionsAlerts.length > 0 && (
+        <div className="mb-8 space-y-3">
+          {newSubmissionsAlerts.map((sub) => (
+            <div
+              key={sub.id}
+              className="neu-card border-s-4 border-s-red-500 bg-red-950/10 p-4 flex items-center justify-between gap-4 animate-in fade-in slide-in-from-top-3 duration-300"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-red-950/20 flex items-center justify-center shrink-0">
+                  <BellRing className="w-5 h-5 text-red-500" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-sm text-[var(--neu-text-heading)]">استفسار جديد من {sub.name}</h4>
+                  <p className="text-xs text-[var(--neu-text-secondary)] mt-0.5">{sub.subject}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <Link
+                  href={`/algharbia-cp/submissions?id=${sub.id}`}
+                  className="neu-btn neu-btn-primary py-1.5 px-3 text-[10px] font-bold shrink-0"
+                >
+                  عرض وتفاصيل
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => handleDismissAlert(sub.id)}
+                  className="neu-btn neu-btn-ghost p-2 shrink-0 text-[var(--neu-text-secondary)] hover:text-white"
+                  title="إخفاء التنبيه"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Stats Cards Grid */}
       <div className="grid grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-5 mb-8">
@@ -246,9 +315,9 @@ export default function DashboardPage() {
         >
           <div className="neu-raised-sm rounded-xl p-3 group-hover:shadow-[0_0_12px_var(--neu-gold-glow)] relative">
             <MessageSquareText className="w-6 h-6 text-[var(--neu-gold)]" />
-            {MOCK_STATS.newSubmissions > 0 && (
-              <span className="absolute -top-1 -left-1 w-5 h-5 bg-[var(--neu-danger)] text-white text-[10px] font-bold rounded-full flex items-center justify-center">
-                {MOCK_STATS.newSubmissions}
+            {statsData.newSubmissions > 0 && (
+              <span className="absolute -top-1 -left-1 w-5 h-5 bg-[var(--neu-danger)] text-white text-[10px] font-bold rounded-full flex items-center justify-center animate-pulse">
+                {statsData.newSubmissions}
               </span>
             )}
           </div>
@@ -262,10 +331,13 @@ export default function DashboardPage() {
         </Link>
       </div>
 
-      {/* Recent Submissions Table */}
+      {/* Recent Submissions Section (Cards) */}
       <div className="neu-card">
-        <div className="flex items-center justify-between mb-5">
-          <h3 className="text-lg font-bold text-[var(--neu-text-heading)]">آخر الاستفسارات</h3>
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h3 className="text-lg font-bold text-[var(--neu-text-heading)]">آخر الاستفسارات المستلمة</h3>
+            <p className="text-xs text-[var(--neu-text-muted)] mt-0.5">أحدث 4 طلبات واستفسارات بحاجة للمتابعة</p>
+          </div>
           <Link
             href="/algharbia-cp/submissions"
             className="text-sm text-[var(--neu-gold)] hover:text-[var(--neu-gold-light)] transition-colors font-medium"
@@ -274,44 +346,46 @@ export default function DashboardPage() {
           </Link>
         </div>
 
-        <div className="neu-table-wrapper overflow-x-auto">
-          <table className="neu-table">
-            <thead>
-              <tr>
-                <th>الاسم</th>
-                <th className="hidden sm:table-cell">النوع</th>
-                <th>الموضوع</th>
-                <th>الحالة</th>
-                <th className="hidden md:table-cell">التاريخ</th>
-                <th>إجراء</th>
-              </tr>
-            </thead>
-            <tbody>
-              {MOCK_RECENT_SUBMISSIONS.map((sub) => (
-                <tr key={sub.id}>
-                  <td>
-                    <div>
-                      <p className="font-semibold text-[var(--neu-text-heading)]">{sub.name}</p>
-                      <p className="text-xs text-[var(--neu-text-muted)] mt-0.5 direction-ltr text-right">{sub.phone}</p>
+        {loading ? (
+          <div className="flex flex-col items-center justify-center py-16 text-center">
+            <Loader2 className="w-8 h-8 text-[var(--neu-gold)] animate-spin mb-2" />
+            <p className="text-xs text-[var(--neu-text-secondary)]">جاري تحميل الاستفسارات الحديثة...</p>
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {recentSubmissions.map((sub) => (
+                <div
+                  key={sub.id}
+                  className="neu-card p-4 flex flex-col justify-between relative overflow-hidden transition-all duration-300 border border-white/5 hover:border-[var(--neu-gold)]/20"
+                >
+                  {/* Card Header */}
+                  <div className="flex justify-between items-start gap-2 mb-3">
+                    <div className="min-w-0 flex-1">
+                      <h4 className="font-bold text-sm text-[var(--neu-text-heading)] truncate">{sub.name}</h4>
+                      <p className="text-[10px] text-[var(--neu-text-muted)] font-mono mt-0.5" dir="ltr text-right">{sub.phone}</p>
                     </div>
-                  </td>
-                  <td className="hidden sm:table-cell">
-                    <span className="text-xs text-[var(--neu-text-secondary)]">
-                      {TYPE_MAP[sub.type]}
-                    </span>
-                  </td>
-                  <td>
-                    <span className="text-sm truncate max-w-[200px] inline-block">
-                      {sub.subject}
-                    </span>
-                  </td>
-                  <td>
-                    <span className={`neu-badge ${STATUS_MAP[sub.status].class}`}>
-                      {STATUS_MAP[sub.status].label}
-                    </span>
-                  </td>
-                  <td className="hidden md:table-cell">
-                    <div className="flex items-center gap-1.5 text-xs text-[var(--neu-text-muted)]">
+                    <div className="flex flex-col items-end gap-1 shrink-0">
+                      <span className={`neu-badge text-[9px] py-0.5 px-2 ${STATUS_MAP[sub.status].class}`}>
+                        {STATUS_MAP[sub.status].label}
+                      </span>
+                      <span className="neu-badge neu-badge-gold text-[9px] py-0.5 px-2">
+                        {TYPE_MAP[sub.type]}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Card Body */}
+                  <div className="mb-4">
+                    <p className="font-semibold text-xs text-[var(--neu-text-secondary)] mb-1 truncate">{sub.subject}</p>
+                    <p className="text-xs text-[var(--neu-text-muted)] line-clamp-2 leading-relaxed bg-black/15 p-2 rounded-lg min-h-[40px]">
+                      {sub.message}
+                    </p>
+                  </div>
+
+                  {/* Card Footer */}
+                  <div className="flex items-center justify-between pt-3 border-t border-white/5 text-[10px] text-[var(--neu-text-muted)]">
+                    <span className="flex items-center gap-1">
                       <Clock className="w-3.5 h-3.5" />
                       {new Date(sub.created_at).toLocaleDateString('ar-SA', {
                         month: 'short',
@@ -319,29 +393,35 @@ export default function DashboardPage() {
                         hour: '2-digit',
                         minute: '2-digit',
                       })}
+                    </span>
+                    <div className="flex gap-2">
+                      <Link
+                        href={`/algharbia-cp/submissions?id=${sub.id}`}
+                        className="neu-btn neu-btn-ghost py-1 px-3 text-[10px] flex items-center gap-1"
+                      >
+                        <span>عرض وتعديل</span>
+                      </Link>
+                      <a
+                        href={`tel:${sub.phone}`}
+                        className="neu-btn neu-btn-ghost neu-btn-sm p-1.5"
+                        title="اتصال مباشر"
+                      >
+                        <Phone className="w-3.5 h-3.5" />
+                      </a>
                     </div>
-                  </td>
-                  <td>
-                    <a
-                      href={`tel:${sub.phone}`}
-                      className="neu-btn neu-btn-ghost neu-btn-sm"
-                      title="اتصال"
-                    >
-                      <Phone className="w-4 h-4" />
-                    </a>
-                  </td>
-                </tr>
+                  </div>
+                </div>
               ))}
-            </tbody>
-          </table>
-        </div>
+            </div>
 
-        {MOCK_RECENT_SUBMISSIONS.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-12 text-center">
-            <CheckCircle2 className="w-12 h-12 text-[var(--neu-success)] mb-3 opacity-50" />
-            <p className="text-[var(--neu-text-secondary)] font-medium">لا توجد استفسارات جديدة</p>
-            <p className="text-xs text-[var(--neu-text-muted)] mt-1">تم مراجعة جميع الاستفسارات ✓</p>
-          </div>
+            {recentSubmissions.length === 0 && (
+              <div className="flex flex-col items-center justify-center py-12 text-center">
+                <CheckCircle2 className="w-12 h-12 text-[var(--neu-success)] mb-3 opacity-50" />
+                <p className="text-[var(--neu-text-secondary)] font-medium">لا توجد استفسارات جديدة</p>
+                <p className="text-xs text-[var(--neu-text-muted)] mt-1">تم مراجعة جميع الاستفسارات بنجاح ✓</p>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>

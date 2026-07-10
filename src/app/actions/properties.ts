@@ -6,6 +6,7 @@ import { getSupabaseAdminClient } from '../../lib/supabase/admin';
 import { revalidatePath } from 'next/cache';
 import { PROPERTIES, PROJECTS } from '../../lib/mockData';
 import { normalizeProperty, normalizeProject } from '../../lib/normalizers';
+import { deleteCloudinaryVideo } from './cloudinary';
 
 // Load projects list for dynamic dropdowns
 export async function getProjectsList() {
@@ -13,7 +14,7 @@ export async function getProjectsList() {
     const supabase = (await getSupabaseServerClient()) as any;
     const { data, error } = await supabase
       .from('projects')
-      .select('id, name, slug')
+      .select('id, name, slug, city, district, address')
       .order('name');
 
     if (error) throw error;
@@ -23,11 +24,25 @@ export async function getProjectsList() {
       return data;
     }
     
-    return PROJECTS.map((p) => ({ id: p.id, name: p.name, slug: p.slug }));
+    return PROJECTS.map((p) => ({
+      id: p.id,
+      name: p.name,
+      slug: p.slug,
+      city: p.location?.city || '',
+      district: p.location?.district || '',
+      address: p.location?.address || ''
+    }));
   } catch (err: any) {
     console.error('Error fetching projects list:', err);
     // Return mock fallback to avoid crashes if DB is empty
-    return PROJECTS.map((p) => ({ id: p.id, name: p.name, slug: p.slug }));
+    return PROJECTS.map((p) => ({
+      id: p.id,
+      name: p.name,
+      slug: p.slug,
+      city: p.location?.city || '',
+      district: p.location?.district || '',
+      address: p.location?.address || ''
+    }));
   }
 }
 
@@ -272,12 +287,114 @@ export async function updateProperty(id: string, formData: any) {
 export async function deleteProperty(id: string) {
   try {
     const supabase = (await getSupabaseServerClient()) as any;
+
+    // 1. Fetch property details to retrieve asset paths before deleting
+    const { data: property, error: fetchError } = await supabase
+      .from('properties')
+      .select('thumbnail, images, videos, floor_plan')
+      .eq('id', id)
+      .single();
+
+    if (fetchError && fetchError.code !== 'PGRST116') {
+      throw fetchError;
+    }
+
+    // 2. Delete database record
     const { error } = await supabase
       .from('properties')
       .delete()
       .eq('id', id);
 
     if (error) throw error;
+
+    // 3. Clean up associated media files in background/sequence
+    if (property) {
+      const getStoragePathFromUrl = (url: string) => {
+        if (!url) return null;
+        const match = url.match(/\/storage\/v1\/object\/public\/media\/(.+)$/);
+        if (match && match[1]) {
+          return decodeURIComponent(match[1]);
+        }
+        if (!url.startsWith('http') && url.includes('properties/')) {
+          return url;
+        }
+        return null;
+      };
+
+      const getCloudinaryPublicId = (url: string) => {
+        if (!url || !url.includes('cloudinary.com')) return null;
+        try {
+          const parts = url.split('/upload/');
+          if (parts.length < 2) return null;
+          
+          // Split segments after /upload/
+          const segments = parts[1].split('/');
+          
+          // Filter out transformations and version identifier
+          const filteredSegments = segments.filter(seg => {
+            // 1. Version matches v followed by digits, e.g., v1584348
+            if (/^v\d+$/.test(seg)) return false;
+            // 2. Transformation segments usually contain comma (,), colon (:), or equal (=), or are named transformations
+            if (seg.includes(',') || seg.includes(':') || seg.includes('=')) return false;
+            // 3. Common cloudinary defaults/transforms that don't have commas but shouldn't be in public ID
+            if (['br_', 'c_', 'd_', 'e_', 'fl_', 'h_', 'l_', 'o_', 'p_', 'q_', 'r_', 't_', 'w_', 'x_', 'y_', 'z_'].some(prefix => seg.startsWith(prefix))) return false;
+            return true;
+          });
+
+          const fullPath = filteredSegments.join('/');
+          const dotIndex = fullPath.lastIndexOf('.');
+          if (dotIndex !== -1) {
+            return fullPath.substring(0, dotIndex);
+          }
+          return fullPath;
+        } catch (err) {
+          console.error('Failed to parse Cloudinary publicId:', err);
+          return null;
+        }
+      };
+
+      const storagePaths: string[] = [];
+      if (property.thumbnail) {
+        const path = getStoragePathFromUrl(property.thumbnail);
+        if (path) storagePaths.push(path);
+      }
+      if (property.floor_plan) {
+        const path = getStoragePathFromUrl(property.floor_plan);
+        if (path) storagePaths.push(path);
+      }
+      if (Array.isArray(property.images)) {
+        property.images.forEach((img: string) => {
+          const path = getStoragePathFromUrl(img);
+          if (path) storagePaths.push(path);
+        });
+      }
+
+      // Delete from Supabase Storage media bucket
+      if (storagePaths.length > 0) {
+        const { error: deleteStorageError } = await supabase.storage
+          .from('media')
+          .remove(storagePaths);
+        if (deleteStorageError) {
+          console.error('Failed to delete Supabase storage files:', deleteStorageError.message);
+        }
+      }
+
+      // Delete from Cloudinary
+      if (Array.isArray(property.videos)) {
+        for (const videoUrl of property.videos) {
+          const publicId = getCloudinaryPublicId(videoUrl);
+          console.log(`Parsed Cloudinary video publicId: ${publicId} from URL: ${videoUrl}`);
+          if (publicId) {
+            try {
+              const res = await deleteCloudinaryVideo(publicId);
+              console.log(`Cloudinary video delete result for ${publicId}:`, res);
+            } catch (err) {
+              console.error('Error deleting Cloudinary video:', err);
+            }
+          }
+        }
+      }
+    }
 
     revalidatePath('/algharbia-cp/properties');
     return { success: true };

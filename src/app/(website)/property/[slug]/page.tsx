@@ -50,16 +50,21 @@ export default async function PropertyDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  // Generate backup images if the property has only 1 image in mockup data
-  const galleryImages =
-    property.media.images && property.media.images.length > 1
-      ? property.media.images
-      : [
-          property.media.images[0] || '/properties/apartment.webp',
-          '/properties/villa.webp',
-          '/properties/penthouse.webp',
-          '/properties/apartment.webp'
-        ];
+  // Combine thumbnail and gallery images, ensuring thumbnail is the first image and no duplicates
+  const galleryImages: string[] = [];
+  if (property.media.thumbnail) {
+    galleryImages.push(property.media.thumbnail);
+  }
+  if (Array.isArray(property.media.images)) {
+    property.media.images.forEach((img: string) => {
+      if (img && !galleryImages.includes(img)) {
+        galleryImages.push(img);
+      }
+    });
+  }
+  if (galleryImages.length === 0) {
+    galleryImages.push('/properties/apartment.webp');
+  }
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(price) + ' ر.س';
@@ -172,7 +177,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
 
         {/* 3. Reusable Client Photo Gallery & Video Player (Full Width) */}
         <div className="w-full">
-          <MediaGallery images={galleryImages} videos={property.media.videos} title={property.title} />
+          <MediaGallery images={galleryImages} videos={property.media.videos} virtualTour={property.media.virtualTour} title={property.title} />
         </div>
 
         {/* 4. Split Layout Section: Pricing & Inquiry (Right) vs Map (Left) - Equal Height */}

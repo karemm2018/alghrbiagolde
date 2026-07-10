@@ -22,8 +22,9 @@ import {
 } from 'lucide-react';
 
 import { PROPERTIES, PROJECTS } from '../../../lib/mockData';
-import { getCloudinarySignature, deleteCloudinaryVideo } from '../../actions/cloudinary';
+import { getCloudinarySignature, deleteCloudinaryVideo, listCloudinaryVideos } from '../../actions/cloudinary';
 import { uploadFile, deleteFile } from '../../../lib/supabase/storage';
+import { getPropertiesListAdmin, getProjectsListAdmin } from '../../actions/properties';
 
 type MediaKind = 'image' | 'video';
 
@@ -216,14 +217,166 @@ export default function MediaPage() {
   const [isDeleting, setIsDeleting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Load media from database and mock files
+  const loadAllMedia = useCallback(async () => {
+    try {
+      const mockGallery = buildMediaGallery();
+      const realProperties = await getPropertiesListAdmin();
+      const realProjects = await getProjectsListAdmin();
+
+      // Fetch actual files in Cloudinary
+      const cloudinaryResult = await listCloudinaryVideos();
+      const cloudinaryItems: MediaItem[] = [];
+      if (cloudinaryResult.success && Array.isArray(cloudinaryResult.resources)) {
+        cloudinaryResult.resources.forEach((res: any) => {
+          cloudinaryItems.push({
+            id: res.public_id,
+            src: res.secure_url,
+            thumbnail: res.secure_url.replace(/\.[^/.]+$/, '.jpg'),
+            name: res.public_id.split('/').pop() + '.' + res.format,
+            category: 'general',
+            kind: 'video',
+            parentName: 'سحابة Cloudinary',
+            size: `${(res.bytes / 1024 / 1024).toFixed(1)} MB`,
+          });
+        });
+      }
+
+      const databaseItems: MediaItem[] = [];
+
+      // Extract media from real properties
+      if (Array.isArray(realProperties)) {
+        realProperties.forEach((prop) => {
+          if (prop.thumbnail) {
+            databaseItems.push({
+              id: prop.thumbnail,
+              src: prop.thumbnail,
+              thumbnail: prop.thumbnail,
+              name: prop.thumbnail.split('/').pop() || 'thumbnail.webp',
+              category: 'property',
+              kind: 'image',
+              parentName: prop.title,
+              size: 'مرفوع',
+            });
+          }
+
+          if (prop.floor_plan) {
+            databaseItems.push({
+              id: prop.floor_plan,
+              src: prop.floor_plan,
+              thumbnail: prop.floor_plan,
+              name: prop.floor_plan.split('/').pop() || 'floor-plan.webp',
+              category: 'property',
+              kind: 'image',
+              parentName: prop.title,
+              size: 'مخطط',
+            });
+          }
+
+          if (Array.isArray(prop.images)) {
+            prop.images.forEach((img: string, i: number) => {
+              databaseItems.push({
+                id: img,
+                src: img,
+                thumbnail: img,
+                name: img.split('/').pop() || `image-${i}.webp`,
+                category: 'property',
+                kind: 'image',
+                parentName: prop.title,
+                size: 'معرض',
+              });
+            });
+          }
+
+          if (Array.isArray(prop.videos)) {
+            prop.videos.forEach((vid: string, i: number) => {
+              databaseItems.push({
+                id: vid,
+                src: vid,
+                thumbnail: vid.includes('cloudinary.com') ? vid.replace(/\.[^/.]+$/, '.jpg') : '/hero-bg-3.webp',
+                name: vid.split('/').pop() || `video-${i}.mp4`,
+                category: 'property',
+                kind: 'video',
+                parentName: prop.title,
+                size: 'فيديو',
+              });
+            });
+          }
+        });
+      }
+
+      // Extract media from real projects
+      if (Array.isArray(realProjects)) {
+        realProjects.forEach((proj) => {
+          if (proj.hero_image) {
+            databaseItems.push({
+              id: proj.hero_image,
+              src: proj.hero_image,
+              thumbnail: proj.hero_image,
+              name: proj.hero_image.split('/').pop() || 'hero.webp',
+              category: 'project',
+              kind: 'image',
+              parentName: proj.name,
+              size: 'واجهة',
+            });
+          }
+
+          if (Array.isArray(proj.gallery)) {
+            proj.gallery.forEach((img: string, i: number) => {
+              databaseItems.push({
+                id: img,
+                src: img,
+                thumbnail: img,
+                name: img.split('/').pop() || `project-${i}.webp`,
+                category: 'project',
+                kind: 'image',
+                parentName: proj.name,
+                size: 'معرض',
+              });
+            });
+          }
+
+          if (Array.isArray(proj.videos)) {
+            proj.videos.forEach((vid: string, i: number) => {
+              databaseItems.push({
+                id: vid,
+                src: vid,
+                thumbnail: vid.includes('cloudinary.com') ? vid.replace(/\.[^/.]+$/, '.jpg') : '/hero-bg-3.webp',
+                name: vid.split('/').pop() || `project-video-${i}.mp4`,
+                category: 'project',
+                kind: 'video',
+                parentName: proj.name,
+                size: 'فيديو',
+              });
+            });
+          }
+        });
+      }
+
+      const uploadedMedia = JSON.parse(localStorage.getItem('algharbia-cp-uploaded-media') || '[]');
+
+      // Deduplicate by src URL
+      const combined = [...uploadedMedia, ...databaseItems, ...cloudinaryItems, ...mockGallery];
+      const uniqueItemsMap: Record<string, MediaItem> = {};
+      combined.forEach((item) => {
+        if (item.src && !uniqueItemsMap[item.src]) {
+          uniqueItemsMap[item.src] = item;
+        }
+      });
+
+      const uniqueItems = Object.values(uniqueItemsMap);
+      const deletedIds = JSON.parse(localStorage.getItem('algharbia-cp-deleted-media') || '[]');
+
+      setMediaList(uniqueItems.filter((item) => !deletedIds.includes(item.id) && !deletedIds.includes(item.src)));
+    } catch (err) {
+      console.error('Failed to load media items:', err);
+    }
+  }, []);
+
   // Initialize media gallery once on client side mount
   useEffect(() => {
-    const mockGallery = buildMediaGallery();
-    const uploadedMedia = JSON.parse(localStorage.getItem('algharbia-cp-uploaded-media') || '[]');
-    const combinedGallery = [...uploadedMedia, ...mockGallery];
-    const deletedIds = JSON.parse(localStorage.getItem('algharbia-cp-deleted-media') || '[]');
-    setMediaList(combinedGallery.filter((item) => !deletedIds.includes(item.id)));
-  }, []);
+    loadAllMedia();
+  }, [loadAllMedia]);
 
   // Automatically close upload modal after all files are successfully uploaded
   useEffect(() => {
@@ -467,8 +620,30 @@ export default function MediaPage() {
 
       if (!isMockAsset) {
         if (confirmDeleteFile.kind === 'video') {
-          // Delete from Cloudinary
-          await deleteCloudinaryVideo(confirmDeleteFile.id);
+          // Delete from Cloudinary (extract publicId if it is a full URL)
+          let publicId = confirmDeleteFile.id;
+          if (publicId.startsWith('http')) {
+            const parts = publicId.split('/upload/');
+            if (parts.length >= 2) {
+              const segments = parts[1].split('/');
+              const filteredSegments = segments.filter(seg => {
+                if (/^v\d+$/.test(seg)) return false;
+                if (seg.includes(',') || seg.includes(':') || seg.includes('=')) return false;
+                if (['br_', 'c_', 'd_', 'e_', 'fl_', 'h_', 'l_', 'o_', 'p_', 'q_', 'r_', 't_', 'w_', 'x_', 'y_', 'z_'].some(prefix => seg.startsWith(prefix))) return false;
+                return true;
+              });
+              const fullPath = filteredSegments.join('/');
+              const dotIndex = fullPath.lastIndexOf('.');
+              if (dotIndex !== -1) {
+                publicId = fullPath.substring(0, dotIndex);
+              } else {
+                publicId = fullPath;
+              }
+            }
+          }
+          console.log(`Deleting Cloudinary video from media panel: ${publicId}`);
+          const res = await deleteCloudinaryVideo(publicId);
+          console.log(`Cloudinary video delete result:`, res);
         } else {
           // Delete from Supabase Storage 'media' bucket
           let storagePath = confirmDeleteFile.id;
@@ -479,20 +654,23 @@ export default function MediaPage() {
         }
       }
 
-      // Save deleted item id to localStorage to persist deletion
+      // Save deleted item id and src to localStorage to persist deletion
       const deletedIds = JSON.parse(localStorage.getItem('algharbia-cp-deleted-media') || '[]');
       if (!deletedIds.includes(confirmDeleteFile.id)) {
         deletedIds.push(confirmDeleteFile.id);
-        localStorage.setItem('algharbia-cp-deleted-media', JSON.stringify(deletedIds));
       }
+      if (confirmDeleteFile.src && !deletedIds.includes(confirmDeleteFile.src)) {
+        deletedIds.push(confirmDeleteFile.src);
+      }
+      localStorage.setItem('algharbia-cp-deleted-media', JSON.stringify(deletedIds));
 
       // If it was a manually uploaded file, also remove it from uploaded-media storage to free space
       const uploaded = JSON.parse(localStorage.getItem('algharbia-cp-uploaded-media') || '[]');
-      const updatedUploaded = uploaded.filter((m: any) => m.id !== confirmDeleteFile.id);
+      const updatedUploaded = uploaded.filter((m: any) => m.id !== confirmDeleteFile.id && m.src !== confirmDeleteFile.src);
       localStorage.setItem('algharbia-cp-uploaded-media', JSON.stringify(updatedUploaded));
 
       // Remove from state list
-      setMediaList((prev) => prev.filter((m) => m.id !== confirmDeleteFile.id));
+      setMediaList((prev) => prev.filter((m) => m.id !== confirmDeleteFile.id && m.src !== confirmDeleteFile.src));
     } catch (err) {
       console.error('Error deleting file from storage:', err);
     } finally {

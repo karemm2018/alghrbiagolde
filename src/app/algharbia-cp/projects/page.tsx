@@ -28,6 +28,10 @@ export default function ProjectsPage() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
 
+  const [projectToDelete, setProjectToDelete] = useState<{ id: string; name: string } | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState('');
+
   const fetchProjects = async () => {
     setLoading(true);
     const data = await getProjectsListAdmin();
@@ -39,15 +43,9 @@ export default function ProjectsPage() {
     fetchProjects();
   }, []);
 
-  const handleDelete = async (id: string, name: string) => {
-    if (confirm(`هل أنت متأكد من رغبتك في حذف المشروع "${name}"؟`)) {
-      const res = await deleteProject(id);
-      if (res.success) {
-        setProjects((prev) => prev.filter((p) => p.id !== id));
-      } else {
-        alert("فشل حذف المشروع: " + res.error);
-      }
-    }
+  const handleDelete = (id: string, name: string) => {
+    setDeleteError('');
+    setProjectToDelete({ id, name });
   };
 
   const filteredProjects = projects.filter((proj) => {
@@ -191,6 +189,65 @@ export default function ProjectsPage() {
             </div>
           )}
         </>
+      )}
+      {/* Delete Confirmation Modal */}
+      {projectToDelete && (
+        <div
+          className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[210] flex items-center justify-center p-4"
+          onClick={() => !isDeleting && setProjectToDelete(null)}
+          role="dialog"
+          aria-label="تأكيد الحذف"
+        >
+          <div
+            className="neu-card w-full max-w-md p-6 text-center animate-in fade-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="w-16 h-16 rounded-full bg-[var(--neu-danger)]/10 border-2 border-[var(--neu-danger)]/20 flex items-center justify-center mx-auto mb-4">
+              <Trash2 className="w-8 h-8 text-[var(--neu-danger)]" />
+            </div>
+            
+            <h3 className="text-lg font-bold text-[var(--neu-text-heading)] mb-2">تأكيد حذف المشروع</h3>
+            <p className="text-sm text-[var(--neu-text-secondary)] mb-6">
+              هل أنت متأكد من رغبتك في حذف المشروع <strong className="text-[var(--neu-text-heading)]">"{projectToDelete.name}"</strong>؟
+              <br />
+              سيتم حذف كافة البيانات المرتبطة بهذا المشروع نهائياً من قاعدة البيانات، ولا يمكن التراجع عن هذا الإجراء.
+            </p>
+
+            {deleteError && (
+              <p className="text-xs text-[var(--neu-danger)] mb-4 font-bold">
+                ⚠️ {deleteError}
+              </p>
+            )}
+
+            <div className="flex gap-3">
+              <button
+                onClick={async () => {
+                  setIsDeleting(true);
+                  setDeleteError('');
+                  const res = await deleteProject(projectToDelete.id);
+                  if (res.success) {
+                    setProjects((prev) => prev.filter((p) => p.id !== projectToDelete.id));
+                    setProjectToDelete(null);
+                  } else {
+                    setDeleteError(res.error || 'فشل حذف المشروع');
+                  }
+                  setIsDeleting(false);
+                }}
+                disabled={isDeleting}
+                className="neu-btn neu-btn-primary bg-[var(--neu-danger)] hover:bg-[var(--neu-danger)]/90 border-0 flex-1"
+              >
+                {isDeleting ? 'جاري الحذف...' : 'نعم، احذف المشروع'}
+              </button>
+              <button
+                onClick={() => setProjectToDelete(null)}
+                disabled={isDeleting}
+                className="neu-btn neu-btn-secondary flex-1"
+              >
+                إلغاء
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

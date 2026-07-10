@@ -24,6 +24,18 @@ import {
   Maximize,
   ArrowRight,
   Film,
+  Percent,
+  Waves,
+  Trees,
+  Car,
+  Bed,
+  UserCheck,
+  Wind,
+  ArrowUpDown,
+  ShieldCheck,
+  Cpu,
+  Droplet,
+  Zap,
 } from 'lucide-react';
 import { getProjectsList, createProperty, updateProperty, quickCreateProject } from '../../app/actions/properties';
 import { getCloudinarySignature } from '../../app/actions/cloudinary';
@@ -79,6 +91,32 @@ const AVAILABLE_FEATURES = [
   { id: 'electricity_meter', label: 'عداد كهرباء مستقل' },
 ];
 
+const SAUDI_CITIES = [
+  { value: 'جدة', label: 'جدة' },
+  { value: 'الرياض', label: 'الرياض' },
+  { value: 'مكة المكرمة', label: 'مكة المكرمة' },
+  { value: 'المدينة المنورة', label: 'المدينة المنورة' },
+  { value: 'الدمام', label: 'الدمام' },
+  { value: 'الخبر', label: 'الخبر' },
+  { value: 'الطائف', label: 'الطائف' },
+  { value: 'أبها', label: 'أبها' },
+];
+
+const FEATURE_ICONS: Record<string, React.ComponentType<any>> = {
+  pool: Waves,
+  garden: Trees,
+  parking: Car,
+  maid_room: Bed,
+  driver_room: UserCheck,
+  central_ac: Wind,
+  elevator: ArrowUpDown,
+  security: ShieldCheck,
+  smart: Cpu,
+  view: Eye,
+  water_tank: Droplet,
+  electricity_meter: Zap,
+};
+
 export default function PropertyForm({ initialData, propertyId }: PropertyFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -104,6 +142,8 @@ export default function PropertyForm({ initialData, propertyId }: PropertyFormPr
 
   // Location State
   const [city, setCity] = useState(initialData?.city || 'جدة');
+  const isInitialCityManual = initialData?.city ? !SAUDI_CITIES.some(c => c.value === initialData.city) : false;
+  const [isManualCity, setIsManualCity] = useState(isInitialCityManual);
   const [district, setDistrict] = useState(initialData?.district || '');
   const [address, setAddress] = useState(initialData?.address || '');
   const [lat, setLat] = useState(initialData?.lat || '');
@@ -134,6 +174,7 @@ export default function PropertyForm({ initialData, propertyId }: PropertyFormPr
   const [uploadingGallery, setUploadingGallery] = useState(false);
   const [uploadingFloorPlan, setUploadingFloorPlan] = useState(false);
   const [uploadingVideo, setUploadingVideo] = useState(false);
+  const [uploadingVirtualTour, setUploadingVirtualTour] = useState(false);
   const [videoProgress, setVideoProgress] = useState(0);
   const [hasInstallment, setHasInstallment] = useState(initialData?.down_payment_pct || initialData?.monthly_installment ? true : false);
   const [showNewProjectModal, setShowNewProjectModal] = useState(false);
@@ -142,11 +183,13 @@ export default function PropertyForm({ initialData, propertyId }: PropertyFormPr
   const [newProjectDistrict, setNewProjectDistrict] = useState('');
   const [quickProjectLoading, setQuickProjectLoading] = useState(false);
   const [quickProjectError, setQuickProjectError] = useState('');
+  const [typedVideoUrl, setTypedVideoUrl] = useState('');
 
   const thumbnailInputRef = useRef<HTMLInputElement>(null);
   const galleryInputRef = useRef<HTMLInputElement>(null);
   const floorPlanInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
+  const virtualTourInputRef = useRef<HTMLInputElement>(null);
 
   // Fetch Projects List on Mount
   useEffect(() => {
@@ -156,6 +199,18 @@ export default function PropertyForm({ initialData, propertyId }: PropertyFormPr
     }
     loadProjects();
   }, []);
+
+  // Synchronize location fields when projectId is selected
+  useEffect(() => {
+    if (projectId) {
+      const selectedProject = projects.find((proj) => proj.id === projectId);
+      if (selectedProject) {
+        setCity(selectedProject.city || 'جدة');
+        setDistrict(selectedProject.district || '');
+        setAddress(selectedProject.address || '');
+      }
+    }
+  }, [projectId, projects]);
 
   // Parse Google Maps Link for Lat/Lng if possible
   useEffect(() => {
@@ -335,7 +390,7 @@ export default function PropertyForm({ initialData, propertyId }: PropertyFormPr
         xhr.onload = () => {
           if (xhr.status >= 200 && xhr.status < 300) {
             const res = JSON.parse(xhr.responseText);
-            setVideos([res.secure_url]);
+            setVideos((prev) => [...prev, res.secure_url]);
             resolve();
           } else {
             reject(new Error(xhr.responseText || 'فشل الرفع إلى Cloudinary'));
@@ -353,9 +408,43 @@ export default function PropertyForm({ initialData, propertyId }: PropertyFormPr
     }
   };
 
+  // Upload Virtual Tour to Supabase
+  const handleVirtualTourUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingVirtualTour(true);
+    setError('');
+
+    try {
+      const extension = file.name.split('.').pop() || 'html';
+      const uniqueName = `tour-${Date.now()}.${extension}`;
+      const filePath = `properties/tours/${uniqueName}`;
+
+      const res = await uploadFile('media', filePath, file, { contentType: file.type || 'text/html' });
+      if (res) {
+        setVirtualTour(res.url);
+      } else {
+        throw new Error('فشل الرفع إلى الخادم');
+      }
+    } catch (err: any) {
+      setError(err.message || 'فشل رفع الجولة الافتراضية');
+    } finally {
+      setUploadingVirtualTour(false);
+    }
+  };
+
   // Remove Gallery Image
   const removeGalleryImage = (indexToRemove: number) => {
     setImages((prev) => prev.filter((_, idx) => idx !== indexToRemove));
+  };
+
+  // Add typed video URL to list
+  const addTypedVideo = () => {
+    if (typedVideoUrl.trim()) {
+      setVideos((prev) => [...prev, typedVideoUrl.trim()]);
+      setTypedVideoUrl('');
+    }
   };
 
   // Form Submit
@@ -509,14 +598,17 @@ export default function PropertyForm({ initialData, propertyId }: PropertyFormPr
                 <div className="space-y-4">
                   <div>
                     <label className="neu-label">عنوان العقار بالعربية *</label>
-                    <input
-                      type="text"
-                      value={title}
-                      onChange={(e) => setTitle(e.target.value)}
-                      placeholder="مثال: شقة فاخرة 4 غرف - مشروع أمل ستارز"
-                      className="neu-input"
-                      required
-                    />
+                    <div className="relative">
+                      <Building2 className="absolute right-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-[var(--neu-gold)]/60" />
+                      <input
+                        type="text"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        placeholder="مثال: شقة فاخرة 4 غرف - مشروع أمل ستارز"
+                        className="neu-input neu-input-icon-right font-medium"
+                        required
+                      />
+                    </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -590,26 +682,32 @@ export default function PropertyForm({ initialData, propertyId }: PropertyFormPr
                 <div className="space-y-4">
                   <div>
                     <label className="neu-label">سعر البيع الكامل (ر.س) *</label>
-                    <input
-                      type="number"
-                      value={price}
-                      onChange={(e) => setPrice(e.target.value)}
-                      placeholder="850000"
-                      className="neu-input font-semibold text-lg text-[var(--neu-gold)]"
-                      required
-                    />
+                    <div className="relative">
+                      <CircleDollarSign className="absolute right-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-[var(--neu-gold)]" />
+                      <input
+                        type="number"
+                        value={price}
+                        onChange={(e) => setPrice(e.target.value)}
+                        placeholder="850000"
+                        className="neu-input neu-input-icon-right font-semibold text-lg text-[var(--neu-gold)]"
+                        required
+                      />
+                    </div>
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="neu-label">سعر المتر المربع</label>
-                      <input
-                        type="number"
-                        value={pricePerMeter}
-                        onChange={(e) => setPricePerMeter(e.target.value)}
-                        placeholder="7080"
-                        className="neu-input text-center"
-                      />
+                      <div className="relative">
+                        <Maximize className="absolute right-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-[var(--neu-text-muted)]/60" />
+                        <input
+                          type="number"
+                          value={pricePerMeter}
+                          onChange={(e) => setPricePerMeter(e.target.value)}
+                          placeholder="7080"
+                          className="neu-input neu-input-icon-right text-center"
+                        />
+                      </div>
                     </div>
                     <div className="flex flex-col justify-end pb-3">
                       <button
@@ -643,23 +741,29 @@ export default function PropertyForm({ initialData, propertyId }: PropertyFormPr
                       <div className="space-y-3 animation-fade-in">
                         <div>
                           <label className="neu-label">نسبة الدفعة الأولى (%)</label>
-                          <input
-                            type="number"
-                            value={downPaymentPct}
-                            onChange={(e) => setDownPaymentPct(e.target.value)}
-                            placeholder="10"
-                            className="neu-input"
-                          />
+                          <div className="relative">
+                            <Percent className="absolute right-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-[var(--neu-text-muted)]/60" />
+                            <input
+                              type="number"
+                              value={downPaymentPct}
+                              onChange={(e) => setDownPaymentPct(e.target.value)}
+                              placeholder="10"
+                              className="neu-input neu-input-icon-right"
+                            />
+                          </div>
                         </div>
                         <div>
                           <label className="neu-label">القسط الشهري المتوقع (ر.س)</label>
-                          <input
-                            type="number"
-                            value={monthlyInstallment}
-                            onChange={(e) => setMonthlyInstallment(e.target.value)}
-                            placeholder="2500"
-                            className="neu-input"
-                          />
+                          <div className="relative">
+                            <CircleDollarSign className="absolute right-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-[var(--neu-text-muted)]/60" />
+                            <input
+                              type="number"
+                              value={monthlyInstallment}
+                              onChange={(e) => setMonthlyInstallment(e.target.value)}
+                              placeholder="2500"
+                              className="neu-input neu-input-icon-right"
+                            />
+                          </div>
                         </div>
                       </div>
                     )}
@@ -680,14 +784,17 @@ export default function PropertyForm({ initialData, propertyId }: PropertyFormPr
               <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4">
                 <div>
                   <label className="neu-label text-center block">المساحة (م²) *</label>
-                  <input
-                    type="number"
-                    value={area}
-                    onChange={(e) => setArea(e.target.value)}
-                    placeholder="120"
-                    className="neu-input text-center font-bold"
-                    required
-                  />
+                  <div className="relative">
+                    <Maximize className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--neu-gold)]/60" />
+                    <input
+                      type="number"
+                      value={area}
+                      onChange={(e) => setArea(e.target.value)}
+                      placeholder="120"
+                      className="neu-input neu-input-icon-right text-center font-bold"
+                      required
+                    />
+                  </div>
                 </div>
                 <div>
                   <label className="neu-label text-center block">غرف النوم</label>
@@ -718,23 +825,29 @@ export default function PropertyForm({ initialData, propertyId }: PropertyFormPr
                 </div>
                 <div>
                   <label className="neu-label text-center block">رقم الدور</label>
-                  <input
-                    type="number"
-                    value={floor}
-                    onChange={(e) => setFloor(e.target.value)}
-                    placeholder="2"
-                    className="neu-input text-center"
-                  />
+                  <div className="relative">
+                    <Layers className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--neu-text-muted)]/60" />
+                    <input
+                      type="number"
+                      value={floor}
+                      onChange={(e) => setFloor(e.target.value)}
+                      placeholder="2"
+                      className="neu-input neu-input-icon-right text-center"
+                    />
+                  </div>
                 </div>
                 <div>
                   <label className="neu-label text-center block">إجمالي الأدوار</label>
-                  <input
-                    type="number"
-                    value={totalFloors}
-                    onChange={(e) => setTotalFloors(e.target.value)}
-                    placeholder="5"
-                    className="neu-input text-center"
-                  />
+                  <div className="relative">
+                    <Building2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--neu-text-muted)]/60" />
+                    <input
+                      type="number"
+                      value={totalFloors}
+                      onChange={(e) => setTotalFloors(e.target.value)}
+                      placeholder="5"
+                      className="neu-input neu-input-icon-right text-center"
+                    />
+                  </div>
                 </div>
                 <div>
                   <label className="neu-label text-center block">مواقف السيارات</label>
@@ -758,13 +871,16 @@ export default function PropertyForm({ initialData, propertyId }: PropertyFormPr
 
               <div>
                 <label className="neu-label">إطلالة المسكن</label>
-                <input
-                  type="text"
-                  value={view}
-                  onChange={(e) => setView(e.target.value)}
-                  placeholder="مثال: إطلالة بحرية مباشرة، إطلالة على شارعين، على المسبح..."
-                  className="neu-input"
-                />
+                <div className="relative">
+                  <Compass className="absolute right-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-[var(--neu-text-muted)]/60" />
+                  <input
+                    type="text"
+                    value={view}
+                    onChange={(e) => setView(e.target.value)}
+                    placeholder="مثال: إطلالة بحرية مباشرة، إطلالة على شارعين، على المسبح..."
+                    className="neu-input neu-input-icon-right"
+                  />
+                </div>
               </div>
 
               {/* Amenities checkboxes (Expanded columns to fill width) */}
@@ -773,12 +889,13 @@ export default function PropertyForm({ initialData, propertyId }: PropertyFormPr
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
                   {AVAILABLE_FEATURES.map((feat) => {
                     const isChecked = features.includes(feat.id);
+                    const IconComponent = FEATURE_ICONS[feat.id] || Sparkles;
                     return (
                       <button
                         key={feat.id}
                         type="button"
                         onClick={() => handleFeatureToggle(feat.id)}
-                        className={`flex items-center gap-2 p-3 rounded-xl border text-xs font-semibold transition-all duration-200 text-right ${isChecked
+                        className={`flex items-center gap-2.5 p-3 rounded-xl border text-xs font-semibold transition-all duration-200 text-right ${isChecked
                           ? 'bg-[var(--neu-gold)]/10 border-[var(--neu-gold)] text-[var(--neu-gold)] shadow-inner'
                           : 'bg-[var(--neu-raised)] border-transparent text-[var(--neu-text-secondary)] hover:bg-[var(--neu-depressed)]'
                           }`}
@@ -787,6 +904,7 @@ export default function PropertyForm({ initialData, propertyId }: PropertyFormPr
                           }`}>
                           {isChecked && <Check className="w-3 h-3 stroke-[3]" />}
                         </span>
+                        <IconComponent className={`w-4 h-4 shrink-0 ${isChecked ? 'text-[var(--neu-gold)]' : 'text-[var(--neu-text-muted)]/60'}`} />
                         <span>{feat.label}</span>
                       </button>
                     );
@@ -806,61 +924,123 @@ export default function PropertyForm({ initialData, propertyId }: PropertyFormPr
             <div className="space-y-4">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div>
-                  <label className="neu-label">المدينة *</label>
-                  <input
-                    type="text"
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                    placeholder="جدة"
-                    className="neu-input"
-                    required
-                  />
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="neu-label mb-0">المدينة *</label>
+                    {projectId ? (
+                      <span className="text-[10px] bg-[var(--neu-gold)]/10 text-[var(--neu-gold)] px-2 py-0.5 rounded-full font-bold">
+                        تلقائي من المشروع
+                      </span>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => setIsManualCity(!isManualCity)}
+                        className="text-[10px] text-[var(--neu-gold)] font-bold hover:underline"
+                      >
+                        {isManualCity ? "اختر من القائمة" : "كتابة يدوية"}
+                      </button>
+                    )}
+                  </div>
+                  <div className="relative">
+                    <MapPin className="absolute right-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-[var(--neu-gold)]/60 z-10 pointer-events-none" />
+                    {projectId ? (
+                      <input
+                        type="text"
+                        value={city}
+                        disabled
+                        className="neu-input neu-input-icon-right opacity-70 bg-[var(--neu-depressed)] border-[var(--neu-depressed)]"
+                      />
+                    ) : isManualCity ? (
+                      <input
+                        type="text"
+                        value={city}
+                        onChange={(e) => setCity(e.target.value)}
+                        placeholder="جدة"
+                        className="neu-input neu-input-icon-right"
+                        required
+                      />
+                    ) : (
+                      <AdminSelect
+                        value={city}
+                        onChange={setCity}
+                        options={SAUDI_CITIES}
+                        className="w-full [&>button]:pr-11"
+                      />
+                    )}
+                  </div>
                 </div>
                 <div>
-                  <label className="neu-label">الحي *</label>
-                  <input
-                    type="text"
-                    value={district}
-                    onChange={(e) => setDistrict(e.target.value)}
-                    placeholder="السلامة"
-                    className="neu-input"
-                    required
-                  />
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="neu-label mb-0">الحي *</label>
+                    {projectId && (
+                      <span className="text-[10px] bg-[var(--neu-gold)]/10 text-[var(--neu-gold)] px-2 py-0.5 rounded-full font-bold">
+                        تلقائي من المشروع
+                      </span>
+                    )}
+                  </div>
+                  <div className="relative">
+                    <MapPin className="absolute right-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-[var(--neu-gold)]/60" />
+                    <input
+                      type="text"
+                      value={district}
+                      onChange={(e) => setDistrict(e.target.value)}
+                      placeholder="السلامة"
+                      className={`neu-input neu-input-icon-right ${projectId ? 'opacity-70 bg-[var(--neu-depressed)] border-[var(--neu-depressed)]' : ''}`}
+                      required
+                      disabled={!!projectId}
+                    />
+                  </div>
                 </div>
                 <div>
                   <label className="neu-label">خط العرض (Latitude)</label>
-                  <input
-                    type="number"
-                    step="any"
-                    value={lat}
-                    onChange={(e) => setLat(e.target.value)}
-                    placeholder="21.573981"
-                    className="neu-input"
-                  />
+                  <div className="relative">
+                    <MapPin className="absolute right-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-[var(--neu-text-muted)]/60" />
+                    <input
+                      type="number"
+                      step="any"
+                      value={lat}
+                      onChange={(e) => setLat(e.target.value)}
+                      placeholder="21.573981"
+                      className="neu-input neu-input-icon-right"
+                    />
+                  </div>
                 </div>
                 <div>
                   <label className="neu-label">خط الطول (Longitude)</label>
-                  <input
-                    type="number"
-                    step="any"
-                    value={lng}
-                    onChange={(e) => setLng(e.target.value)}
-                    placeholder="39.155021"
-                    className="neu-input"
-                  />
+                  <div className="relative">
+                    <MapPin className="absolute right-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-[var(--neu-text-muted)]/60" />
+                    <input
+                      type="number"
+                      step="any"
+                      value={lng}
+                      onChange={(e) => setLng(e.target.value)}
+                      placeholder="39.155021"
+                      className="neu-input neu-input-icon-right"
+                    />
+                  </div>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="neu-label">العنوان بالتفصيل</label>
-                  <input
-                    type="text"
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    placeholder="شارع قريش، عمارة أمل ستارز، الطابق الثالث"
-                    className="neu-input"
-                  />
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="neu-label mb-0">العنوان بالتفصيل</label>
+                    {projectId && (
+                      <span className="text-[10px] bg-[var(--neu-gold)]/10 text-[var(--neu-gold)] px-2 py-0.5 rounded-full font-bold">
+                        تلقائي من المشروع
+                      </span>
+                    )}
+                  </div>
+                  <div className="relative">
+                    <Compass className="absolute right-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-[var(--neu-gold)]/60" />
+                    <input
+                      type="text"
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                      placeholder="شارع قريش، عمارة أمل ستارز، الطابق الثالث"
+                      className={`neu-input neu-input-icon-right ${projectId ? 'opacity-70 bg-[var(--neu-depressed)] border-[var(--neu-depressed)]' : ''}`}
+                      disabled={!!projectId}
+                    />
+                  </div>
                 </div>
                 <div>
                   <label className="neu-label">رابط لوكيشن قوقل ماب (رسمي)</label>
@@ -1049,40 +1229,100 @@ export default function PropertyForm({ initialData, propertyId }: PropertyFormPr
               {/* Videos and virtual tour */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="neu-label">رابط جولة افتراضية ثلاثية الأبعاد (3D Tour)</label>
-                  <input
-                    type="text"
-                    value={virtualTour}
-                    onChange={(e) => setVirtualTour(e.target.value)}
-                    placeholder="مثل: Matterport URL..."
-                    className="neu-input"
-                  />
-                </div>
-                <div>
-                  <label className="neu-label">الفيديو الترويجي (Promotional Video)</label>
+                  <label className="neu-label">الجولة الافتراضية ثلاثية الأبعاد (3D Tour)</label>
                   <div className="flex flex-col sm:flex-row gap-4 items-center">
-                    <div className="relative w-36 h-28 bg-[var(--neu-depressed)] rounded-2xl overflow-hidden border border-white/20 shrink-0 flex items-center justify-center">
-                      {videos[0] ? (
-                        <video
-                          src={videos[0]}
-                          className="w-full h-full object-cover"
-                          controls
-                        />
-                      ) : (
-                        <div className="w-full h-full flex flex-col items-center justify-center text-[var(--neu-text-muted)] text-[10px]">
-                          <Film className="w-8 h-8 mb-1 opacity-45" />
-                          بلا فيديو
-                        </div>
-                      )}
-                    </div>
                     <div className="flex-1 w-full space-y-2">
                       <input
                         type="text"
-                        value={videos[0] || ''}
-                        onChange={(e) => setVideos(e.target.value ? [e.target.value] : [])}
-                        placeholder="رابط الفيديو المباشر أو ارفعه بالزر الجانبي"
+                        value={virtualTour}
+                        onChange={(e) => setVirtualTour(e.target.value)}
+                        placeholder="رابط الجولة الافتراضية أو ارفعه بالزر الجانبي"
                         className="neu-input"
                       />
+                      <button
+                        type="button"
+                        onClick={() => virtualTourInputRef.current?.click()}
+                        className="neu-btn neu-btn-secondary text-xs w-full sm:w-auto"
+                        disabled={uploadingVirtualTour}
+                      >
+                        {uploadingVirtualTour ? (
+                          <div className="flex items-center gap-1.5">
+                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                            <span>جاري الرفع...</span>
+                          </div>
+                        ) : (
+                          <>
+                            <Upload className="w-3.5 h-3.5" />
+                            <span>رفع ملف الجولة</span>
+                          </>
+                        )}
+                      </button>
+                      <input
+                        ref={virtualTourInputRef}
+                        type="file"
+                        accept=".html,.zip,.pdf,image/*"
+                        className="hidden"
+                        onChange={handleVirtualTourUpload}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="md:col-span-2 mt-4">
+                  <label className="neu-label mb-2">مقاطع الفيديو الترويجية للعقار (متعدد)</label>
+                  
+                  {videos.length > 0 && (
+                    <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4 mb-4">
+                      {videos.map((vidUrl, idx) => (
+                        <div key={idx} className="relative aspect-video bg-[var(--neu-depressed)] rounded-2xl overflow-hidden group border border-white/20">
+                          <video src={vidUrl} className="w-full h-full object-cover" />
+                          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                window.open(vidUrl, '_blank');
+                              }}
+                              className="bg-white/25 hover:bg-white/40 text-white rounded-full p-2"
+                              title="معاينة"
+                            >
+                              <Film className="w-4 h-4" />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setVideos((prev) => prev.filter((_, i) => i !== idx));
+                              }}
+                              className="bg-red-600/80 hover:bg-red-600 text-white rounded-full p-2"
+                              title="حذف"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                          <span className="absolute bottom-1 right-1 bg-black/60 text-white text-[9px] px-1.5 py-0.5 rounded font-mono font-bold">
+                            فيديو {idx + 1}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="flex flex-col sm:flex-row gap-4 items-center">
+                    <div className="flex-1 w-full space-y-2">
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          value={typedVideoUrl}
+                          onChange={(e) => setTypedVideoUrl(e.target.value)}
+                          placeholder="رابط فيديو مباشر (MP4 / Cloudinary)..."
+                          className="neu-input flex-1"
+                        />
+                        <button
+                          type="button"
+                          onClick={addTypedVideo}
+                          className="neu-btn neu-btn-primary px-4 shrink-0"
+                        >
+                          إضافة الرابط
+                        </button>
+                      </div>
                       <button
                         type="button"
                         onClick={() => videoInputRef.current?.click()}
@@ -1097,7 +1337,7 @@ export default function PropertyForm({ initialData, propertyId }: PropertyFormPr
                         ) : (
                           <>
                             <Upload className="w-3.5 h-3.5" />
-                            <span>رفع مقطع فيديو</span>
+                            <span>رفع مقطع فيديو جديد</span>
                           </>
                         )}
                       </button>

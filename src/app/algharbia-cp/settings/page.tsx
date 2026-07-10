@@ -16,6 +16,7 @@ import {
   CheckCircle2,
   Upload,
   RefreshCw,
+  AlertCircle,
 } from 'lucide-react';
 import { seedDatabase } from '@/app/actions/properties';
 
@@ -36,6 +37,9 @@ export default function SettingsPage() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [syncing, setSyncing] = useState(false);
+
+  const [showSyncConfirm, setShowSyncConfirm] = useState(false);
+  const [syncResult, setSyncResult] = useState<{ success: boolean; message: string } | null>(null);
 
   // Mock form states
   const [heroTitle, setHeroTitle] = useState('نعتمد أحدث التقنيات');
@@ -264,23 +268,7 @@ export default function SettingsPage() {
               </div>
               <div>
                 <button
-                  onClick={async () => {
-                    if (confirm("هل أنت متأكد من رغبتك في مسح الجداول ورفع البيانات الديمو الافتراضية؟")) {
-                      setSyncing(true);
-                      try {
-                        const res = await seedDatabase();
-                        if (res.success) {
-                          alert("تمت مزامنة كافة المشاريع والعقارات التجريبية بنجاح إلى قاعدة البيانات الديناميكية!");
-                        } else {
-                          alert("حدث خطأ أثناء المزامنة: " + res.error);
-                        }
-                      } catch (e: any) {
-                        alert("فشل إجراء المزامنة: " + e.message);
-                      } finally {
-                        setSyncing(false);
-                      }
-                    }
-                  }}
+                  onClick={() => setShowSyncConfirm(true)}
                   disabled={syncing}
                   className="neu-btn neu-btn-gold py-3 px-6 text-base font-semibold"
                 >
@@ -301,6 +289,105 @@ export default function SettingsPage() {
           )}
         </div>
       </div>
+
+      {/* Sync Confirmation Modal */}
+      {showSyncConfirm && (
+        <div
+          className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[210] flex items-center justify-center p-4"
+          onClick={() => !syncing && setShowSyncConfirm(false)}
+          role="dialog"
+          aria-label="تأكيد المزامنة"
+        >
+          <div
+            className="neu-card w-full max-w-md p-6 text-center animate-in fade-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="w-16 h-16 rounded-full bg-[var(--neu-gold)]/10 border-2 border-[var(--neu-gold)]/20 flex items-center justify-center mx-auto mb-4">
+              <RefreshCw className="w-8 h-8 text-[var(--neu-gold)]" />
+            </div>
+            
+            <h3 className="text-lg font-bold text-[var(--neu-text-heading)] mb-2">تأكيد مزامنة البيانات</h3>
+            <p className="text-sm text-[var(--neu-text-secondary)] mb-6 font-medium">
+              هل أنت متأكد من رغبتك في مسح الجداول ورفع البيانات الديمو الافتراضية؟
+              <br />
+              <strong>تحذير:</strong> هذا الإجراء سيقوم بحذف كافة العقارات والمشاريع المضافة حالياً واستبدالها بالبيانات التجريبية الافتراضية.
+            </p>
+
+            <div className="flex gap-3">
+              <button
+                onClick={async () => {
+                  setSyncing(true);
+                  try {
+                    const res = await seedDatabase();
+                    if (res.success) {
+                      setSyncResult({ success: true, message: "تمت مزامنة كافة المشاريع والعقارات التجريبية بنجاح إلى قاعدة البيانات الديناميكية!" });
+                    } else {
+                      setSyncResult({ success: false, message: "حدث خطأ أثناء المزامنة: " + res.error });
+                    }
+                  } catch (e: any) {
+                    setSyncResult({ success: false, message: "فشل إجراء المزامنة: " + e.message });
+                  } finally {
+                    setSyncing(false);
+                    setShowSyncConfirm(false);
+                  }
+                }}
+                disabled={syncing}
+                className="neu-btn neu-btn-primary bg-[var(--neu-gold)] hover:bg-[var(--neu-gold)]/90 border-0 flex-1 text-[var(--neu-bg-primary)] font-bold animate-pulse"
+              >
+                {syncing ? 'جاري المزامنة...' : 'نعم، ابدأ المزامنة'}
+              </button>
+              <button
+                onClick={() => setShowSyncConfirm(false)}
+                disabled={syncing}
+                className="neu-btn neu-btn-secondary flex-1"
+              >
+                إلغاء
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Sync Result Notification Modal */}
+      {syncResult && (
+        <div
+          className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[210] flex items-center justify-center p-4"
+          onClick={() => setSyncResult(null)}
+          role="dialog"
+          aria-label="نتيجة المزامنة"
+        >
+          <div
+            className="neu-card w-full max-w-md p-6 text-center animate-in fade-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${
+              syncResult.success 
+                ? 'bg-green-500/10 border-2 border-green-500/20 text-green-500' 
+                : 'bg-[var(--neu-danger)]/10 border-2 border-[var(--neu-danger)]/20 text-[var(--neu-danger)]'
+            }`}>
+              {syncResult.success ? (
+                <CheckCircle2 className="w-8 h-8" />
+              ) : (
+                <AlertCircle className="w-8 h-8" />
+              )}
+            </div>
+            
+            <h3 className="text-lg font-bold text-[var(--neu-text-heading)] mb-2">
+              {syncResult.success ? 'نجاح العملية' : 'فشل العملية'}
+            </h3>
+            <p className="text-sm text-[var(--neu-text-secondary)] mb-6 font-medium">
+              {syncResult.message}
+            </p>
+
+            <button
+              onClick={() => setSyncResult(null)}
+              className="neu-btn neu-btn-primary w-full"
+            >
+              موافق
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -78,3 +78,34 @@ export async function deleteCloudinaryVideo(publicId: string): Promise<{ success
     return { success: false, error: err.message || 'فشل حذف الفيديو من Cloudinary' };
   }
 }
+
+export async function listCloudinaryVideos(): Promise<{ success: boolean; resources?: any[]; error?: string }> {
+  const apiSecret = process.env.CLOUDINARY_API_SECRET;
+  const apiKey = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY;
+  const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+
+  if (!apiSecret || apiSecret === 'your_api_secret_here') {
+    return { success: false, error: 'Cloudinary credentials not configured' };
+  }
+  if (!apiKey || !cloudName) {
+    return { success: false, error: 'Cloudinary config is incomplete' };
+  }
+
+  cloudinary.config({
+    cloud_name: cloudName,
+    api_key: apiKey,
+    api_secret: apiSecret,
+  });
+
+  try {
+    const result = await cloudinary.api.resources({
+      resource_type: 'video',
+      type: 'upload',
+      max_results: 100,
+    });
+    return { success: true, resources: result.resources };
+  } catch (err: any) {
+    console.error('Error listing Cloudinary resources:', err);
+    return { success: false, error: err.message || 'فشل جلب ملفات الفيديو من Cloudinary' };
+  }
+}

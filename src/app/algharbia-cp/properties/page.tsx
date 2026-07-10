@@ -42,6 +42,10 @@ export default function PropertiesPage() {
   const [statusFilter, setStatusFilter] = useState('all');
   const [typeFilter, setTypeFilter] = useState('all');
 
+  const [propertyToDelete, setPropertyToDelete] = useState<{ id: string; title: string } | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState('');
+
   const fetchProperties = async () => {
     setLoading(true);
     const data = await getPropertiesListAdmin();
@@ -53,15 +57,9 @@ export default function PropertiesPage() {
     fetchProperties();
   }, []);
 
-  const handleDelete = async (id: string, title: string) => {
-    if (confirm(`هل أنت متأكد من رغبتك في حذف العقار "${title}"؟`)) {
-      const res = await deleteProperty(id);
-      if (res.success) {
-        setProperties((prev) => prev.filter((p) => p.id !== id));
-      } else {
-        alert("فشل حذف العقار: " + res.error);
-      }
-    }
+  const handleDelete = (id: string, title: string) => {
+    setDeleteError('');
+    setPropertyToDelete({ id, title });
   };
 
   const filteredProperties = properties.filter((prop) => {
@@ -145,7 +143,7 @@ export default function PropertiesPage() {
       </div>
 
       {/* Properties Table */}
-      <div className="neu-table-wrapper overflow-x-auto">
+      <div>
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20 text-center">
             <Loader2 className="w-10 h-10 text-[var(--neu-gold)] animate-spin mb-3" />
@@ -153,112 +151,222 @@ export default function PropertiesPage() {
           </div>
         ) : (
           <>
-            <table className="neu-table">
-              <thead>
-                <tr>
-                  <th>العقار</th>
-                  <th className="hidden md:table-cell">النوع</th>
-                  <th>الحالة</th>
-                  <th className="hidden sm:table-cell">السعر</th>
-                  <th className="hidden lg:table-cell">المشروع</th>
-                  <th className="hidden xl:table-cell">المدينة</th>
-                  <th>إجراءات</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredProperties.map((prop) => {
-                  const bedroomsVal = prop.bedrooms !== undefined ? prop.bedrooms : prop.specs?.bedrooms;
-                  const areaVal = prop.area !== undefined ? prop.area : prop.specs?.area;
-                  const priceVal = prop.price !== undefined ? prop.price : prop.pricing?.price;
-                  const thumbnailSrc = prop.thumbnail || prop.media?.thumbnail || '/properties/placeholder.webp';
-                  const projectName = prop.projects?.name || prop.project?.name || 'عقار منفصل';
-                  const cityVal = prop.city || prop.location?.city || '';
-                  const districtVal = prop.district || prop.location?.district || '';
+            {/* Desktop Table View */}
+            <div className="neu-table-wrapper overflow-x-auto hidden md:block">
+              <table className="neu-table">
+                <thead>
+                  <tr>
+                    <th>العقار</th>
+                    <th className="hidden md:table-cell">النوع</th>
+                    <th>الحالة</th>
+                    <th className="hidden sm:table-cell">السعر</th>
+                    <th className="hidden lg:table-cell">المشروع</th>
+                    <th className="hidden xl:table-cell">المدينة</th>
+                    <th>إجراءات</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredProperties.map((prop) => {
+                    const bedroomsVal = prop.bedrooms !== undefined ? prop.bedrooms : prop.specs?.bedrooms;
+                    const areaVal = prop.area !== undefined ? prop.area : prop.specs?.area;
+                    const priceVal = prop.price !== undefined ? prop.price : prop.pricing?.price;
+                    const thumbnailSrc = prop.thumbnail || prop.media?.thumbnail || '/properties/placeholder.webp';
+                    const projectName = prop.projects?.name || prop.project?.name || 'عقار منفصل';
+                    const cityVal = prop.city || prop.location?.city || '';
+                    const districtVal = prop.district || prop.location?.district || '';
 
-                  return (
-                    <tr key={prop.id}>
-                      <td>
-                        <div className="flex items-center gap-3">
-                          <div className="w-14 h-14 rounded-xl overflow-hidden bg-[var(--neu-depressed)] shrink-0 relative">
-                            <Image
-                              src={thumbnailSrc}
-                              alt={prop.title}
-                              fill
-                              className="object-cover"
-                              sizes="56px"
-                            />
+                    return (
+                      <tr key={prop.id}>
+                        <td>
+                          <div className="flex items-center gap-3">
+                            <div className="w-14 h-14 rounded-xl overflow-hidden bg-[var(--neu-depressed)] shrink-0 relative">
+                              <Image
+                                src={thumbnailSrc}
+                                alt={prop.title}
+                                fill
+                                className="object-cover"
+                                sizes="56px"
+                              />
+                            </div>
+                            <div className="min-w-0">
+                              <p className="font-semibold text-[var(--neu-text-heading)] truncate max-w-[200px]">
+                                {prop.title}
+                              </p>
+                              <p className="text-xs text-[var(--neu-text-muted)] mt-0.5">
+                                {bedroomsVal} غرف · {areaVal} م²
+                              </p>
+                            </div>
+                            {prop.featured && (
+                              <Star className="w-4 h-4 text-[var(--neu-gold)] fill-[var(--neu-gold)] shrink-0" />
+                            )}
                           </div>
-                          <div className="min-w-0">
-                            <p className="font-semibold text-[var(--neu-text-heading)] truncate max-w-[200px]">
-                              {prop.title}
-                            </p>
-                            <p className="text-xs text-[var(--neu-text-muted)] mt-0.5">
-                              {bedroomsVal} غرف · {areaVal} م²
-                            </p>
+                        </td>
+                        <td className="hidden md:table-cell">
+                          <span className="neu-badge neu-badge-gold">
+                            {TYPE_LABELS[prop.type] || prop.type}
+                          </span>
+                        </td>
+                        <td>
+                          <span className={`neu-badge ${STATUS_LABELS[prop.status]?.class || ''}`}>
+                            {STATUS_LABELS[prop.status]?.label || prop.status}
+                          </span>
+                        </td>
+                        <td className="hidden sm:table-cell">
+                          <span className="font-semibold text-[var(--neu-gold)]">
+                            {priceVal ? priceVal.toLocaleString('en-US') : '0'}
+                          </span>
+                          <span className="text-xs text-[var(--neu-text-muted)] ms-1">ر.س</span>
+                        </td>
+                        <td className="hidden lg:table-cell">
+                          <span className="text-sm text-[var(--neu-text-secondary)]">
+                            {projectName}
+                          </span>
+                        </td>
+                        <td className="hidden xl:table-cell">
+                          <span className="text-sm text-[var(--neu-text-secondary)]">
+                            {cityVal}، {districtVal}
+                          </span>
+                        </td>
+                        <td>
+                          <div className="flex items-center gap-1">
+                            <Link
+                              href={`/property/${prop.slug}`}
+                              target="_blank"
+                              className="neu-btn neu-btn-ghost neu-btn-sm"
+                              title="معاينة"
+                            >
+                              <Eye className="w-4 h-4" />
+                            </Link>
+                            <Link
+                              href={`/algharbia-cp/properties/${prop.id}`}
+                              className="neu-btn neu-btn-ghost neu-btn-sm"
+                              title="تعديل"
+                            >
+                              <Edit3 className="w-4 h-4" />
+                            </Link>
+                            <button
+                              onClick={() => handleDelete(prop.id, prop.title)}
+                              className="neu-btn neu-btn-ghost neu-btn-sm text-[var(--neu-danger)] hover:!text-[var(--neu-danger)]"
+                              title="حذف"
+                              aria-label={`حذف عقار ${prop.title}`}
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
                           </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile Cards List View */}
+            <div className="grid grid-cols-1 gap-4 md:hidden">
+              {filteredProperties.map((prop) => {
+                const bedroomsVal = prop.bedrooms !== undefined ? prop.bedrooms : prop.specs?.bedrooms;
+                const bathroomsVal = prop.bathrooms !== undefined ? prop.bathrooms : prop.specs?.bathrooms;
+                const areaVal = prop.area !== undefined ? prop.area : prop.specs?.area;
+                const priceVal = prop.price !== undefined ? prop.price : prop.pricing?.price;
+                const thumbnailSrc = prop.thumbnail || prop.media?.thumbnail || '/properties/placeholder.webp';
+                const projectName = prop.projects?.name || prop.project?.name || 'عقار منفصل';
+                const cityVal = prop.city || prop.location?.city || '';
+                const districtVal = prop.district || prop.location?.district || '';
+
+                return (
+                  <div key={prop.id} className="neu-card flex flex-col gap-4 p-4 relative overflow-hidden">
+                    {/* Top Header section: Image, Title, Project, Featured Star */}
+                    <div className="flex gap-4 items-start">
+                      <div className="w-20 h-20 rounded-2xl overflow-hidden bg-[var(--neu-depressed)] shrink-0 relative border border-white/10">
+                        <Image
+                          src={thumbnailSrc}
+                          alt={prop.title}
+                          fill
+                          className="object-cover"
+                          sizes="80px"
+                        />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-1.5 mb-1 flex-wrap">
+                          <span className={`neu-badge text-[10px] py-0.5 px-2 ${STATUS_LABELS[prop.status]?.class || ''}`}>
+                            {STATUS_LABELS[prop.status]?.label || prop.status}
+                          </span>
+                          <span className="neu-badge neu-badge-gold text-[10px] py-0.5 px-2">
+                            {TYPE_LABELS[prop.type] || prop.type}
+                          </span>
                           {prop.featured && (
-                            <Star className="w-4 h-4 text-[var(--neu-gold)] fill-[var(--neu-gold)] shrink-0" />
+                            <Star className="w-3.5 h-3.5 text-[var(--neu-gold)] fill-[var(--neu-gold)] shrink-0" />
                           )}
                         </div>
-                      </td>
-                      <td className="hidden md:table-cell">
-                        <span className="neu-badge neu-badge-gold">
-                          {TYPE_LABELS[prop.type] || prop.type}
-                        </span>
-                      </td>
-                      <td>
-                        <span className={`neu-badge ${STATUS_LABELS[prop.status]?.class || ''}`}>
-                          {STATUS_LABELS[prop.status]?.label || prop.status}
-                        </span>
-                      </td>
-                      <td className="hidden sm:table-cell">
-                        <span className="font-semibold text-[var(--neu-gold)]">
-                          {priceVal ? priceVal.toLocaleString('en-US') : '0'}
-                        </span>
-                        <span className="text-xs text-[var(--neu-text-muted)] ms-1">ر.س</span>
-                      </td>
-                      <td className="hidden lg:table-cell">
-                        <span className="text-sm text-[var(--neu-text-secondary)]">
-                          {projectName}
-                        </span>
-                      </td>
-                      <td className="hidden xl:table-cell">
-                        <span className="text-sm text-[var(--neu-text-secondary)]">
+                        <h4 className="font-bold text-sm text-[var(--neu-text-heading)] line-clamp-1">
+                          {prop.title}
+                        </h4>
+                        <p className="text-xs text-[var(--neu-text-muted)] mt-1 flex items-center gap-1">
+                          <Building2 className="w-3 h-3 text-[var(--neu-gold)]" />
+                          <span>{projectName}</span>
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Details Info List */}
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-2 py-3 border-y border-white/5 text-xs">
+                      <div>
+                        <span className="text-[10px] text-[var(--neu-text-muted)] block">المدينة والحي</span>
+                        <span className="font-semibold text-[var(--neu-text-secondary)]">
                           {cityVal}، {districtVal}
                         </span>
-                      </td>
-                      <td>
-                        <div className="flex items-center gap-1">
-                          <Link
-                            href={`/property/${prop.slug}`}
-                            target="_blank"
-                            className="neu-btn neu-btn-ghost neu-btn-sm"
-                            title="معاينة"
-                          >
-                            <Eye className="w-4 h-4" />
-                          </Link>
-                          <Link
-                            href={`/algharbia-cp/properties/${prop.id}`}
-                            className="neu-btn neu-btn-ghost neu-btn-sm"
-                            title="تعديل"
-                          >
-                            <Edit3 className="w-4 h-4" />
-                          </Link>
-                          <button
-                            onClick={() => handleDelete(prop.id, prop.title)}
-                            className="neu-btn neu-btn-ghost neu-btn-sm text-[var(--neu-danger)] hover:!text-[var(--neu-danger)]"
-                            title="حذف"
-                            aria-label={`حذف عقار ${prop.title}`}
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+                      </div>
+                      <div>
+                        <span className="text-[10px] text-[var(--neu-text-muted)] block">السعر</span>
+                        <span className="font-extrabold text-[var(--neu-gold)]">
+                          {priceVal ? priceVal.toLocaleString('en-US') : '0'} ر.س
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-[10px] text-[var(--neu-text-muted)] block">المساحة</span>
+                        <span className="font-semibold text-[var(--neu-text-secondary)] font-sans">{areaVal} م²</span>
+                      </div>
+                      <div>
+                        <span className="text-[10px] text-[var(--neu-text-muted)] block">توزيع الغرف</span>
+                        <span className="font-semibold text-[var(--neu-text-secondary)]">
+                          {bedroomsVal} غرف {bathroomsVal !== undefined && bathroomsVal !== null && `· ${bathroomsVal} حمام`}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Action buttons footer */}
+                    <div className="flex gap-2 w-full mt-1">
+                      <Link
+                        href={`/property/${prop.slug}`}
+                        target="_blank"
+                        className="neu-btn neu-btn-ghost flex-1 py-2 text-xs flex items-center justify-center gap-1.5"
+                        title="معاينة"
+                      >
+                        <Eye className="w-4 h-4" />
+                        <span>عرض</span>
+                      </Link>
+                      <Link
+                        href={`/algharbia-cp/properties/${prop.id}`}
+                        className="neu-btn neu-btn-ghost flex-1 py-2 text-xs flex items-center justify-center gap-1.5"
+                        title="تعديل"
+                      >
+                        <Edit3 className="w-4 h-4" />
+                        <span>تعديل</span>
+                      </Link>
+                      <button
+                        onClick={() => handleDelete(prop.id, prop.title)}
+                        className="neu-btn neu-btn-ghost text-[var(--neu-danger)] hover:!text-[var(--neu-danger)] flex-1 py-2 text-xs flex items-center justify-center gap-1.5"
+                        title="حذف"
+                        aria-label={`حذف عقار ${prop.title}`}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        <span>حذف</span>
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
 
             {filteredProperties.length === 0 && (
               <div className="flex flex-col items-center justify-center py-16 text-center">
@@ -270,6 +378,66 @@ export default function PropertiesPage() {
           </>
         )}
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {propertyToDelete && (
+        <div
+          className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[210] flex items-center justify-center p-4"
+          onClick={() => !isDeleting && setPropertyToDelete(null)}
+          role="dialog"
+          aria-label="تأكيد الحذف"
+        >
+          <div
+            className="neu-card w-full max-w-md p-6 text-center animate-in fade-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="w-16 h-16 rounded-full bg-[var(--neu-danger)]/10 border-2 border-[var(--neu-danger)]/20 flex items-center justify-center mx-auto mb-4">
+              <Trash2 className="w-8 h-8 text-[var(--neu-danger)]" />
+            </div>
+            
+            <h3 className="text-lg font-bold text-[var(--neu-text-heading)] mb-2">تأكيد حذف العقار</h3>
+            <p className="text-sm text-[var(--neu-text-secondary)] mb-6">
+              هل أنت متأكد من رغبتك في حذف العقار <strong className="text-[var(--neu-text-heading)]">"{propertyToDelete.title}"</strong>؟
+              <br />
+              سيتم حذف كافة البيانات والصور والفيديوهات الخاصة بهذا العقار نهائياً من مساحة التخزين السحابي وقاعدة البيانات، ولا يمكن التراجع عن هذا الإجراء.
+            </p>
+
+            {deleteError && (
+              <p className="text-xs text-[var(--neu-danger)] mb-4 font-bold">
+                ⚠️ {deleteError}
+              </p>
+            )}
+
+            <div className="flex gap-3">
+              <button
+                onClick={async () => {
+                  setIsDeleting(true);
+                  setDeleteError('');
+                  const res = await deleteProperty(propertyToDelete.id);
+                  if (res.success) {
+                    setProperties((prev) => prev.filter((p) => p.id !== propertyToDelete.id));
+                    setPropertyToDelete(null);
+                  } else {
+                    setDeleteError(res.error || 'فشل حذف العقار');
+                  }
+                  setIsDeleting(false);
+                }}
+                disabled={isDeleting}
+                className="neu-btn neu-btn-primary bg-[var(--neu-danger)] hover:bg-[var(--neu-danger)]/90 border-0 flex-1"
+              >
+                {isDeleting ? 'جاري الحذف...' : 'نعم، احذف العقار'}
+              </button>
+              <button
+                onClick={() => setPropertyToDelete(null)}
+                disabled={isDeleting}
+                className="neu-btn neu-btn-secondary flex-1"
+              >
+                إلغاء
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

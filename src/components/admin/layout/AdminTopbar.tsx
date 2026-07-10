@@ -8,9 +8,10 @@ import { Menu, Bell, ExternalLink, Search } from 'lucide-react';
 interface AdminTopbarProps {
   onToggleMobile: () => void;
   pageTitle?: string;
+  newSubmissionsCount?: number;
 }
 
-export default function AdminTopbar({ onToggleMobile, pageTitle }: AdminTopbarProps) {
+export default function AdminTopbar({ onToggleMobile, pageTitle, newSubmissionsCount = 0 }: AdminTopbarProps) {
   return (
     <header className="admin-topbar">
       {/* Mobile menu button */}
@@ -65,6 +66,11 @@ export default function AdminTopbar({ onToggleMobile, pageTitle }: AdminTopbarPr
         title="الإشعارات"
       >
         <Bell className="w-5 h-5 text-[var(--neu-text-secondary)]" />
+        {newSubmissionsCount > 0 && (
+          <span className="absolute -top-1.5 -end-1.5 min-w-[18px] h-[18px] rounded-full bg-red-600 border-2 border-[var(--neu-bg)] text-[9px] font-bold text-white flex items-center justify-center px-1">
+            {newSubmissionsCount}
+          </span>
+        )}
       </button>
 
       {/* View site link */}

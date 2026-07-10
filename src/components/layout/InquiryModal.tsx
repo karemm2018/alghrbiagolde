@@ -3,21 +3,54 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Send, CheckCircle } from 'lucide-react';
+import { X, Send, CheckCircle, Loader2 } from 'lucide-react';
 import { useInquiryStore } from '../../store/useInquiryStore';
+import { createSubmission } from '../../app/actions/submissions';
 
 export default function InquiryModal() {
   const isOpen = useInquiryStore((state) => state.isOpen);
   const close = useInquiryStore((state) => state.close);
   const [inquirySuccess, setInquirySuccess] = useState<boolean>(false);
+  const [isSending, setIsSending] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
 
-  const handleInquirySubmit = (e: React.FormEvent) => {
+  const handleInquirySubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setInquirySuccess(true);
-    setTimeout(() => {
-      close();
-      setInquirySuccess(false);
-    }, 2000);
+    setIsSending(true);
+    setError('');
+
+    const form = e.currentTarget;
+    const nameInput = form.querySelector('#inquiry-name') as HTMLInputElement;
+    const phoneInput = form.querySelector('#inquiry-phone') as HTMLInputElement;
+    const cityInput = form.querySelector('#inquiry-city') as HTMLInputElement;
+    const notesInput = form.querySelector('#inquiry-notes') as HTMLTextAreaElement;
+
+    try {
+      const res = await createSubmission({
+        name: nameInput.value,
+        phone: phoneInput.value,
+        email: '',
+        subject: `طلب حجز معاينة في ${cityInput.value}`,
+        message: notesInput.value || `طلب حجز معاينة خاصة. المدينة المفضلة: ${cityInput.value}`,
+        type: 'property_inquiry',
+        resident_type: 'citizen'
+      });
+
+      if (res.success) {
+        setInquirySuccess(true);
+        form.reset();
+        setTimeout(() => {
+          close();
+          setInquirySuccess(false);
+        }, 2500);
+      } else {
+        setError(res.error || 'فشل إرسال طلب المعاينة');
+      }
+    } catch (err) {
+      setError('حدث خطأ في الشبكة، يرجى المحاولة لاحقاً');
+    } finally {
+      setIsSending(false);
+    }
   };
 
   return (
@@ -108,13 +141,29 @@ export default function InquiryModal() {
                 />
               </div>
 
+              {error && (
+                <p className="text-xs text-red-600 font-bold mb-3">
+                  ⚠️ {error}
+                </p>
+              )}
+
               <div className="pt-2">
                 <button
                   type="submit"
-                  className="w-full py-4 px-6 rounded-xl text-xs sm:text-sm font-extrabold btn-premium-gold flex items-center justify-center gap-2 cursor-pointer transition-all duration-300 font-el-messiri"
+                  disabled={isSending}
+                  className="w-full py-4 px-6 rounded-xl text-xs sm:text-sm font-extrabold btn-premium-gold flex items-center justify-center gap-2 cursor-pointer transition-all duration-300 font-el-messiri disabled:opacity-50"
                 >
-                  <Send className="w-4 h-4 shrink-0" />
-                  <span>تأكيد طلب حجز المعاينة الخاصة</span>
+                  {isSending ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin shrink-0" />
+                      <span>جاري إرسال طلبك...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4 shrink-0" />
+                      <span>تأكيد طلب حجز المعاينة الخاصة</span>
+                    </>
+                  )}
                 </button>
               </div>
             </form>
