@@ -155,15 +155,22 @@ export default function AdminSidebar({
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`sidebar-nav-item ${active ? 'active' : ''}`}
+                    className={`sidebar-nav-item ${active ? 'active' : ''} ${collapsed ? 'justify-center px-2' : ''}`}
                     onClick={() => {
                       if (mobileOpen) onToggleMobile();
                     }}
                     title={collapsed ? item.label : undefined}
                   >
-                    <Icon className="w-[20px] h-[20px] shrink-0" />
+                    <div className="relative flex items-center justify-center">
+                      <Icon className="w-[20px] h-[20px] shrink-0" />
+                      {collapsed && item.badge && newSubmissionsCount > 0 && (
+                        <span className="absolute -top-1.5 -left-1.5 min-w-[16px] h-4 bg-[var(--neu-danger)] text-white text-[9px] font-bold rounded-full flex items-center justify-center border border-[var(--neu-raised)] px-1">
+                          {newSubmissionsCount}
+                        </span>
+                      )}
+                    </div>
                     {!collapsed && <span>{item.label}</span>}
-                    {item.badge && newSubmissionsCount > 0 && (
+                    {!collapsed && item.badge && newSubmissionsCount > 0 && (
                       <span className="badge">{newSubmissionsCount}</span>
                     )}
                   </Link>
@@ -174,14 +181,18 @@ export default function AdminSidebar({
         </nav>
 
         {/* Bottom: Logout */}
-        <div className="p-3">
+        <div className="p-3 flex justify-center">
           <button
             type="button"
             onClick={handleLogout}
-            className="neu-btn neu-btn-danger w-full flex items-center justify-center gap-2"
+            className={collapsed 
+              ? "w-12 h-12 flex items-center justify-center rounded-xl bg-red-950/20 text-red-500 hover:bg-red-600 hover:text-white border border-red-500/20 transition-all shadow-md shrink-0 cursor-pointer" 
+              : "neu-btn neu-btn-danger w-full flex items-center justify-center gap-2"
+            }
             title={collapsed ? 'تسجيل الخروج' : undefined}
+            aria-label="تسجيل الخروج"
           >
-            <LogOut className="w-5 h-5" />
+            <LogOut className={collapsed ? "w-6 h-6" : "w-5 h-5"} />
             {!collapsed && <span>تسجيل الخروج</span>}
           </button>
         </div>

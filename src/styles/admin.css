@@ -233,6 +233,7 @@
   flex: 1;
   padding: 18px 12px;
   overflow-y: auto;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -887,11 +888,13 @@
     top: var(--topbar-height) !important; /* Start below topbar on mobile */
     right: -280px !important; /* Hide off-screen right */
     width: 280px !important; /* Force full width mobile drawer */
-    height: calc(100vh - var(--topbar-height)) !important; /* Height offset by topbar */
+    height: calc(100dvh - var(--topbar-height)) !important; /* Height offset by topbar using dynamic viewport */
+    height: calc(100vh - var(--topbar-height)) !important; /* Fallback height */
     z-index: 100 !important;
     transform: none !important; /* Disable LTR/RTL translation conflicts */
     transition: right var(--neu-transition-slow) !important;
     box-shadow: none;
+    overflow: hidden !important;
   }
 
   .desktop-collapse-btn {
