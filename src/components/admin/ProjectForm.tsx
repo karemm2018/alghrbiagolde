@@ -94,6 +94,8 @@ export default function ProjectForm({ initialData, projectId }: ProjectFormProps
   // Upload States
   const [uploadingHero, setUploadingHero] = useState(false);
   const [uploadingGallery, setUploadingGallery] = useState(false);
+  const [uploadingVideo, setUploadingVideo] = useState(false);
+  const [videoProgress, setVideoProgress] = useState(0);
   const [typedVideoUrl, setTypedVideoUrl] = useState('');
 
   // Import State
@@ -103,6 +105,7 @@ export default function ProjectForm({ initialData, projectId }: ProjectFormProps
 
   const heroInputRef = useRef<HTMLInputElement>(null);
   const galleryInputRef = useRef<HTMLInputElement>(null);
+  const videoInputRef = useRef<HTMLInputElement>(null);
   const excelInputRef = useRef<HTMLInputElement>(null);
 
   // Auto populate address on city/district change
@@ -183,6 +186,60 @@ export default function ProjectForm({ initialData, projectId }: ProjectFormProps
   // Remove video URL
   const removeVideoUrl = (indexToRemove: number) => {
     setVideos((prev) => prev.filter((_, idx) => idx !== indexToRemove));
+  };
+
+  // Upload Video to Cloudinary
+  const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingVideo(true);
+    setVideoProgress(10);
+    setError('');
+
+    try {
+      const signData = await getCloudinarySignature();
+
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('api_key', signData.apiKey);
+      formData.append('timestamp', signData.timestamp.toString());
+      formData.append('signature', signData.signature);
+      formData.append('folder', signData.folder);
+      formData.append('transformation', signData.transformation);
+
+      await new Promise<void>((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', `https://api.cloudinary.com/v1_1/${signData.cloudName}/video/upload`, true);
+
+        xhr.upload.addEventListener('progress', (progressEvent) => {
+          if (progressEvent.lengthComputable) {
+            const pct = Math.round((progressEvent.loaded * 90) / progressEvent.total) + 10;
+            setVideoProgress(pct);
+          }
+        });
+
+        xhr.onload = () => {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            const res = JSON.parse(xhr.responseText);
+            setVideos((prev: string[]) => [...prev, res.secure_url]);
+            toast.success('تم رفع الفيديو بنجاح');
+            resolve();
+          } else {
+            reject(new Error(xhr.responseText || 'فشل الرفع إلى Cloudinary'));
+          }
+        };
+
+        xhr.onerror = () => reject(new Error('خطأ في الاتصال بالشبكة'));
+        xhr.send(formData);
+      });
+    } catch (err: any) {
+      setError(err.message || 'فشل رفع الفيديو الترويجي');
+      toast.error('حدث خطأ أثناء رفع الفيديو');
+    } finally {
+      setUploadingVideo(false);
+      setVideoProgress(0);
+    }
   };
 
   // Parse Excel File on client side
@@ -885,24 +942,52 @@ export default function ProjectForm({ initialData, projectId }: ProjectFormProps
 
             {/* Video Urls */}
             <div>
-              <label className="neu-label">روابط مقاطع الفيديو (YouTube / Cloudinary)</label>
-              <div className="flex gap-2 mt-2">
+              <label className="neu-label">مقاطع الفيديو الترويجية للمشروع</label>
+              <div className="flex flex-col sm:flex-row gap-2 mt-2">
                 <input
                   type="url"
-                  placeholder="أدخل رابط فيديو العرض هنا..."
+                  placeholder="أدخل رابط فيديو العرض (YouTube / Cloudinary)..."
                   title="رابط الفيديو"
                   value={typedVideoUrl}
                   onChange={(e) => setTypedVideoUrl(e.target.value)}
                   className="neu-input flex-1"
                 />
-                <button
-                  type="button"
-                  onClick={addVideoUrl}
-                  className="neu-btn neu-btn-gold px-4"
-                >
-                  إضافة
-                </button>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={addVideoUrl}
+                    className="neu-btn neu-btn-gold px-4 whitespace-nowrap"
+                  >
+                    إضافة رابط
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => videoInputRef.current?.click()}
+                    className="neu-btn neu-btn-secondary px-4 whitespace-nowrap"
+                    disabled={uploadingVideo}
+                  >
+                    {uploadingVideo ? (
+                      <div className="flex items-center gap-1.5">
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        <span>جاري الرفع ({videoProgress}%)</span>
+                      </div>
+                    ) : (
+                      <>
+                        <Upload className="w-3.5 h-3.5 inline ms-1" />
+                        <span>رفع مقطع فيديو</span>
+                      </>
+                    )}
+                  </button>
+                </div>
               </div>
+              <input
+                ref={videoInputRef}
+                type="file"
+                accept="video/*"
+                className="hidden"
+                onChange={handleVideoUpload}
+                title="رفع ملف فيديو للمشروع"
+              />
               
               {videos.length > 0 && (
                 <div className="space-y-2 mt-3">

@@ -177,7 +177,7 @@ export default function SettingsPage() {
                 </button>
               </div>
               <p className="text-sm text-[var(--neu-text-muted)]">
-                سيتم ربط هذا القسم بقاعدة بيانات Supabase لإدارة الشهادات ديناميكياً.
+                سيتم ربط هذا القسم بقاعدة البيانات لإدارة الشهادات ديناميكياً.
               </p>
             </div>
           )}
@@ -192,7 +192,7 @@ export default function SettingsPage() {
                 </button>
               </div>
               <p className="text-sm text-[var(--neu-text-muted)]">
-                سيتم ربط هذا القسم بقاعدة بيانات Supabase لإدارة الشركاء ديناميكياً.
+                سيتم ربط هذا القسم بقاعدة البيانات لإدارة الشركاء ديناميكياً.
               </p>
             </div>
           )}

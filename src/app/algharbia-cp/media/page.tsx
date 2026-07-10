@@ -516,7 +516,7 @@ export default function MediaPage() {
         });
 
         if (!uploadRes) {
-          throw new Error('فشل الرفع إلى Supabase Storage. تأكد من وجود Bucket باسم "media".');
+          throw new Error('فشل رفع الملف إلى مساحة التخزين. تأكد من تهيئة مجلد الرفع باسم "media".');
         }
 
         // Add to local state list
