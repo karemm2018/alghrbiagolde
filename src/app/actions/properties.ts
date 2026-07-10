@@ -584,3 +584,212 @@ export async function getPropertiesByProjectSlug(projectSlug: string) {
     return [];
   }
 }
+
+// Fetch single project details by ID
+export async function getProjectById(id: string) {
+  try {
+    const supabase = (await getSupabaseServerClient()) as any;
+    const { data, error } = await supabase
+      .from('projects')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) throw error;
+    return data;
+  } catch (err: any) {
+    console.error(`Error fetching project ${id}:`, err);
+    return null;
+  }
+}
+
+// Create new project with optional bulk unit insertion
+export async function createProject(formData: any, propertiesToInsert?: any[]) {
+  try {
+    const supabase = (await getSupabaseServerClient()) as any;
+    
+    // Generate unique slug
+    let baseSlug = generateSlug(formData.name);
+    if (!baseSlug) baseSlug = 'project';
+    const uniqueId = Math.random().toString(36).substring(2, 7);
+    const slug = `${baseSlug}-${uniqueId}`;
+
+    const insertData = {
+      slug,
+      name: formData.name,
+      tagline: formData.tagline || '',
+      status: formData.status || 'upcoming',
+      city: formData.city,
+      district: formData.district,
+      address: formData.address || '',
+      description: formData.description || '',
+      hero_image: formData.heroImage || '',
+      gallery: formData.gallery || [],
+      videos: formData.videos || [],
+      price_min: parseInt(formData.priceMin) || 0,
+      price_max: parseInt(formData.priceMax) || 0,
+      total_units: parseInt(formData.totalUnits) || 0,
+      available_units: parseInt(formData.availableUnits) || 0,
+      completion_date: formData.completionDate || '',
+      featured: formData.featured || false,
+      published: formData.published || false,
+    };
+
+    const { data: project, error } = await supabase
+      .from('projects')
+      .insert([insertData])
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    // Bulk insert properties if provided
+    if (propertiesToInsert && propertiesToInsert.length > 0) {
+      const formattedProps = propertiesToInsert.map((prop: any) => {
+        let propBaseSlug = generateSlug(prop.title || 'unit');
+        const propUniqueId = Math.random().toString(36).substring(2, 7);
+        const propSlug = `${propBaseSlug}-${propUniqueId}`;
+        
+        return {
+          slug: propSlug,
+          title: prop.title,
+          type: prop.type || 'apartment',
+          status: prop.status || 'available',
+          project_id: project.id,
+          city: formData.city,
+          district: formData.district,
+          address: `${formData.district}، ${formData.city}`,
+          area: parseInt(prop.area) || 0,
+          bedrooms: parseInt(prop.bedrooms) || 0,
+          bathrooms: parseInt(prop.bathrooms) || 0,
+          living_rooms: parseInt(prop.livingRooms) || 0,
+          parking: parseInt(prop.parking) || 0,
+          floor: prop.floor !== undefined && prop.floor !== '' && prop.floor !== null ? parseInt(prop.floor) : null,
+          total_floors: prop.totalFloors !== undefined && prop.totalFloors !== '' && prop.totalFloors !== null ? parseInt(prop.totalFloors) : null,
+          view: prop.view || '',
+          direction: prop.direction || 'north',
+          features: prop.features || [],
+          price: parseInt(prop.price) || 0,
+          price_per_meter: parseInt(prop.pricePerMeter) || 0,
+          is_negotiable: prop.isNegotiable || false,
+          description: prop.description || '',
+          thumbnail: prop.thumbnail || '',
+          images: prop.images || [],
+          videos: prop.videos || [],
+          published: formData.published || false,
+          published_at: formData.published ? new Date().toISOString() : null,
+        };
+      });
+
+      const { error: propError } = await supabase
+        .from('properties')
+        .insert(formattedProps);
+      
+      if (propError) throw propError;
+    }
+
+    revalidatePath('/algharbia-cp/projects');
+    revalidatePath('/algharbia-cp/properties');
+    revalidatePath('/projects');
+    revalidatePath('/');
+
+    return { success: true, data: project };
+  } catch (err: any) {
+    console.error('Error creating project:', err);
+    return { success: false, error: err.message || 'فشل إضافة المشروع' };
+  }
+}
+
+// Update existing project with optional bulk unit insertion
+export async function updateProject(id: string, formData: any, propertiesToInsert?: any[]) {
+  try {
+    const supabase = (await getSupabaseServerClient()) as any;
+
+    const updateData = {
+      name: formData.name,
+      tagline: formData.tagline || '',
+      status: formData.status || 'upcoming',
+      city: formData.city,
+      district: formData.district,
+      address: formData.address || '',
+      description: formData.description || '',
+      hero_image: formData.heroImage || '',
+      gallery: formData.gallery || [],
+      videos: formData.videos || [],
+      price_min: parseInt(formData.priceMin) || 0,
+      price_max: parseInt(formData.priceMax) || 0,
+      total_units: parseInt(formData.totalUnits) || 0,
+      available_units: parseInt(formData.availableUnits) || 0,
+      completion_date: formData.completionDate || '',
+      featured: formData.featured || false,
+      published: formData.published || false,
+    };
+
+    const { data: project, error } = await supabase
+      .from('projects')
+      .update(updateData)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    // Bulk insert properties if provided
+    if (propertiesToInsert && propertiesToInsert.length > 0) {
+      const formattedProps = propertiesToInsert.map((prop: any) => {
+        let propBaseSlug = generateSlug(prop.title || 'unit');
+        const propUniqueId = Math.random().toString(36).substring(2, 7);
+        const propSlug = `${propBaseSlug}-${propUniqueId}`;
+        
+        return {
+          slug: propSlug,
+          title: prop.title,
+          type: prop.type || 'apartment',
+          status: prop.status || 'available',
+          project_id: id,
+          city: formData.city,
+          district: formData.district,
+          address: `${formData.district}، ${formData.city}`,
+          area: parseInt(prop.area) || 0,
+          bedrooms: parseInt(prop.bedrooms) || 0,
+          bathrooms: parseInt(prop.bathrooms) || 0,
+          living_rooms: parseInt(prop.livingRooms) || 0,
+          parking: parseInt(prop.parking) || 0,
+          floor: prop.floor !== undefined && prop.floor !== '' && prop.floor !== null ? parseInt(prop.floor) : null,
+          total_floors: prop.totalFloors !== undefined && prop.totalFloors !== '' && prop.totalFloors !== null ? parseInt(prop.totalFloors) : null,
+          view: prop.view || '',
+          direction: prop.direction || 'north',
+          features: prop.features || [],
+          price: parseInt(prop.price) || 0,
+          price_per_meter: parseInt(prop.pricePerMeter) || 0,
+          is_negotiable: prop.isNegotiable || false,
+          description: prop.description || '',
+          thumbnail: prop.thumbnail || '',
+          images: prop.images || [],
+          videos: prop.videos || [],
+          published: formData.published || false,
+          published_at: formData.published ? new Date().toISOString() : null,
+        };
+      });
+
+      const { error: propError } = await supabase
+        .from('properties')
+        .insert(formattedProps);
+      
+      if (propError) throw propError;
+    }
+
+    revalidatePath('/algharbia-cp/projects');
+    revalidatePath('/algharbia-cp/properties');
+    if (project) {
+      revalidatePath(`/projects/${project.slug}`);
+    }
+    revalidatePath('/projects');
+    revalidatePath('/');
+
+    return { success: true, data: project };
+  } catch (err: any) {
+    console.error(`Error updating project ${id}:`, err);
+    return { success: false, error: err.message || 'فشل تحديث المشروع' };
+  }
+}

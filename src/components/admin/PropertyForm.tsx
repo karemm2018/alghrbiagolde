@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import {
   Save,
@@ -119,6 +119,8 @@ const FEATURE_ICONS: Record<string, React.ComponentType<any>> = {
 
 export default function PropertyForm({ initialData, propertyId }: PropertyFormProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const urlProjectId = searchParams.get('projectId') || '';
   const [loading, setLoading] = useState(false);
   const [projects, setProjects] = useState<any[]>([]);
   const [error, setError] = useState('');
@@ -128,7 +130,7 @@ export default function PropertyForm({ initialData, propertyId }: PropertyFormPr
   const [title, setTitle] = useState(initialData?.title || '');
   const [type, setType] = useState(initialData?.type || 'apartment');
   const [status, setStatus] = useState(initialData?.status || 'available');
-  const [projectId, setProjectId] = useState(initialData?.project_id || '');
+  const [projectId, setProjectId] = useState(initialData?.project_id || urlProjectId);
   const [description, setDescription] = useState(initialData?.description || '');
   const [featured, setFeatured] = useState(initialData?.featured || false);
   const [published, setPublished] = useState(initialData?.published || false);
