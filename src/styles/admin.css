@@ -19,6 +19,10 @@
   --neu-shadow-dark-strong: rgba(165, 180, 203, 0.75);
   --neu-shadow-light-strong: rgba(255, 255, 255, 1.0);
 
+  /* Borders */
+  --neu-border: rgba(165, 180, 203, 0.25);
+  --neu-border-gold: rgba(201, 169, 110, 0.12);
+
   /* Admin Gold Accents (from brand) */
   --neu-gold: #C9A96E;
   --neu-gold-light: #E8C98A;
@@ -66,22 +70,43 @@
 
 [data-theme="dark"] {
   /* Neumorphic Background Surfaces */
-  --neu-base: #060D1A;
-  --neu-raised: #0A1628;
-  --neu-depressed: #040912;
-  --neu-surface: #0E1F38;
+  --neu-base: #0D1527;
+  --neu-raised: #15223C;
+  --neu-depressed: #090F1C;
+  --neu-surface: #1A2B4C;
 
-  /* Neumorphic Shadows for dark surfaces */
-  --neu-shadow-dark: rgba(0, 0, 0, 0.65);
-  --neu-shadow-light: rgba(255, 255, 255, 0.02);
-  --neu-shadow-dark-strong: rgba(0, 0, 0, 0.85);
-  --neu-shadow-light-strong: rgba(255, 255, 255, 0.04);
+  /* Neumorphic Shadows for dark surfaces (higher contrast) */
+  --neu-shadow-dark: rgba(0, 0, 0, 0.45);
+  --neu-shadow-light: rgba(255, 255, 255, 0.08);
+  --neu-shadow-dark-strong: rgba(0, 0, 0, 0.6);
+  --neu-shadow-light-strong: rgba(255, 255, 255, 0.12);
 
   /* Typography for dark surfaces */
-  --neu-text-primary: #E2E8F0;
-  --neu-text-secondary: #94A3B8;
-  --neu-text-muted: #64748B;
-  --neu-text-heading: #F8FAFC;
+  --neu-text-primary: #F1F5F9;
+  --neu-text-secondary: #CBD5E1;
+  --neu-text-muted: #94A3B8;
+  --neu-text-heading: #FFFFFF;
+
+  /* Borders for dark mode (lighter and gold-tinted for high contrast) */
+  --neu-border: rgba(255, 255, 255, 0.12);
+  --neu-border-gold: rgba(201, 169, 110, 0.3);
+}
+
+/* Sharp, high-contrast borders for Neumorphic components in dark mode */
+[data-theme="dark"] .neu-raised {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+[data-theme="dark"] .neu-raised-sm {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+[data-theme="dark"] .neu-raised-lg {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+[data-theme="dark"] .neu-inset {
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+[data-theme="dark"] .neu-inset-sm {
+  border: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 /* ------------------------------------------------------------
@@ -195,7 +220,7 @@
   transition: width var(--neu-transition-slow);
   overflow: hidden;
   box-shadow: none; /* Seamless, no shadow */
-  border-left: 1px solid rgba(165, 180, 203, 0.25);
+  border-left: 1px solid var(--neu-border);
 }
 
 .admin-sidebar.collapsed {
@@ -227,7 +252,7 @@
   align-items: center;
   padding: 0 28px;
   box-shadow: none; /* Seamless, no shadow */
-  border-bottom: 1px solid rgba(165, 180, 203, 0.25); /* Light border */
+  border-bottom: 1px solid var(--neu-border); /* Light border */
 }
 
 .admin-content {
