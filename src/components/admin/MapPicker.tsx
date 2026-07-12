@@ -2,6 +2,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
+import 'leaflet/dist/leaflet.css';
 
 interface MapPickerProps {
   lat: string | number;
@@ -27,16 +28,6 @@ export default function MapPicker({ lat, lng, onChange, defaultCity = 'جدة' }
     // Dynamic import to prevent SSR rendering error in Next.js
     import('leaflet').then((L) => {
       if (!mapContainerRef.current) return;
-
-      // Inject Leaflet CSS
-      const linkId = 'leaflet-cdn-css';
-      if (!document.getElementById(linkId)) {
-        const link = document.createElement('link');
-        link.id = linkId;
-        link.rel = 'stylesheet';
-        link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
-        document.head.appendChild(link);
-      }
 
       // Fix default marker icon paths in Leaflet
       delete (L.Icon.Default.prototype as any)._getIconUrl;
