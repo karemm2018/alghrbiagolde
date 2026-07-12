@@ -64,6 +64,26 @@
   --neu-transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+[data-theme="dark"] {
+  /* Neumorphic Background Surfaces */
+  --neu-base: #060D1A;
+  --neu-raised: #0A1628;
+  --neu-depressed: #040912;
+  --neu-surface: #0E1F38;
+
+  /* Neumorphic Shadows for dark surfaces */
+  --neu-shadow-dark: rgba(0, 0, 0, 0.65);
+  --neu-shadow-light: rgba(255, 255, 255, 0.02);
+  --neu-shadow-dark-strong: rgba(0, 0, 0, 0.85);
+  --neu-shadow-light-strong: rgba(255, 255, 255, 0.04);
+
+  /* Typography for dark surfaces */
+  --neu-text-primary: #E2E8F0;
+  --neu-text-secondary: #94A3B8;
+  --neu-text-muted: #64748B;
+  --neu-text-heading: #F8FAFC;
+}
+
 /* ------------------------------------------------------------
    2. Neumorphic Utility Classes
    ------------------------------------------------------------ */

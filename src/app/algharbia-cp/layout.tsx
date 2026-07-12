@@ -16,6 +16,25 @@ export default function AdminLayout({
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+
+  // Load and apply initial theme
+  useEffect(() => {
+    const saved = localStorage.getItem('algharbia-admin-theme') as 'light' | 'dark';
+    if (saved) {
+      setTheme(saved);
+      document.documentElement.setAttribute('data-theme', saved);
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const next = theme === 'light' ? 'dark' : 'light';
+    setTheme(next);
+    localStorage.setItem('algharbia-admin-theme', next);
+    document.documentElement.setAttribute('data-theme', next);
+  };
 
   const isLoginPage = pathname === '/algharbia-cp/login';
 
@@ -55,6 +74,8 @@ export default function AdminLayout({
         <AdminTopbar
           onToggleMobile={() => setMobileOpen(!mobileOpen)}
           newSubmissionsCount={unreadCount}
+          theme={theme}
+          onToggleTheme={toggleTheme}
         />
         <main className="admin-content">
           {children}

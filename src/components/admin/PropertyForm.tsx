@@ -42,6 +42,7 @@ import { getCloudinarySignature } from '../../app/actions/cloudinary';
 import { uploadFile, deleteFile } from '../../lib/supabase/storage';
 import { compressImageToWebP } from '../../lib/image';
 import AdminSelect from './AdminSelect';
+import MapPicker from './MapPicker';
 
 interface PropertyFormProps {
   initialData?: any; // If editing
@@ -1047,6 +1048,19 @@ const getStoragePathFromUrl = (url: string) => {
                     />
                   </div>
                 </div>
+              </div>
+
+              {/* Map Picker */}
+              <div className="pt-2">
+                <MapPicker
+                  lat={lat}
+                  lng={lng}
+                  onChange={(newLat, newLng) => {
+                    setLat(newLat.toString());
+                    setLng(newLng.toString());
+                  }}
+                  defaultCity={city}
+                />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

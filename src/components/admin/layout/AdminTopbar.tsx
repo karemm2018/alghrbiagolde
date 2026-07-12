@@ -3,15 +3,23 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { Menu, Bell, ExternalLink, Search } from 'lucide-react';
+import { Menu, Bell, ExternalLink, Search, Sun, Moon } from 'lucide-react';
 
 interface AdminTopbarProps {
   onToggleMobile: () => void;
   pageTitle?: string;
   newSubmissionsCount?: number;
+  theme: 'light' | 'dark';
+  onToggleTheme: () => void;
 }
 
-export default function AdminTopbar({ onToggleMobile, pageTitle, newSubmissionsCount = 0 }: AdminTopbarProps) {
+export default function AdminTopbar({
+  onToggleMobile,
+  pageTitle,
+  newSubmissionsCount = 0,
+  theme,
+  onToggleTheme,
+}: AdminTopbarProps) {
   return (
     <header className="admin-topbar">
       {/* Mobile menu button */}
@@ -58,6 +66,20 @@ export default function AdminTopbar({ onToggleMobile, pageTitle, newSubmissionsC
           className="bg-transparent border-none outline-none text-sm text-[var(--neu-text-primary)] placeholder-[var(--neu-text-muted)] w-48 font-inherit"
         />
       </div>
+
+      {/* Theme Toggle */}
+      <button
+        onClick={onToggleTheme}
+        className="flex items-center justify-center neu-btn-icon neu-raised-sm me-2"
+        aria-label="تبديل المظهر"
+        title={theme === 'light' ? 'تفعيل الوضع الداكن' : 'تفعيل الوضع الفاتح'}
+      >
+        {theme === 'light' ? (
+          <Moon className="w-5 h-5 text-[var(--neu-text-secondary)]" />
+        ) : (
+          <Sun className="w-5 h-5 text-[var(--neu-text-secondary)]" />
+        )}
+      </button>
 
       {/* Notifications */}
       <button
