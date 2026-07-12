@@ -37,6 +37,10 @@ export const metadata: Metadata = {
     template: '%s | الغربية الذهبية' 
   },
   description: 'حرفية تشييد وتميّز عقاري — نعتمد أحدث التقنيات لربط عملائنا بأفضل الفرص السكنية والاستثمارية في جدة والرياض ومكة.',
+  icons: {
+    icon: '/icon.png',
+    apple: '/icon.png',
+  },
 };
 
 export default function RootLayout({

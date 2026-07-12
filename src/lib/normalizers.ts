@@ -90,6 +90,7 @@ export function normalizeProject(proj: any): Project {
       availableUnits: proj.available_units || 0,
       completionDate: proj.completion_date || ''
     },
-    featured: proj.featured || false
+    featured: proj.featured || false,
+    brochureUrl: proj.brochure_url || ''
   };
 }

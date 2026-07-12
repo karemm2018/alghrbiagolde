@@ -139,8 +139,10 @@ const DetailedProjectCard = ({ project, openInquiry }: { project: Project; openI
           </Link>
 
           <a
-            href={`/brochure-${project.slug}.pdf`}
-            download
+            href={project.brochureUrl || `/brochure-${project.slug}.pdf`}
+            target={project.brochureUrl ? "_blank" : undefined}
+            rel={project.brochureUrl ? "noopener noreferrer" : undefined}
+            download={!project.brochureUrl}
             className="w-full sm:w-auto py-2.5 px-6 text-xs font-bold bg-gold-primary/10 hover:bg-gold-primary/20 text-gold-primary border border-gold-primary/25 hover:border-gold-primary/50 rounded-xl flex items-center justify-center gap-1.5 transition-all text-center"
           >
             <Download className="w-3.5 h-3.5" />
@@ -257,8 +259,10 @@ const ProjectCard = ({ project, openInquiry }: { project: Project; openInquiry: 
             
             <div className="flex items-center gap-2">
               <a
-                href={`/brochure-${project.slug}.pdf`}
-                download
+                href={project.brochureUrl || `/brochure-${project.slug}.pdf`}
+                target={project.brochureUrl ? "_blank" : undefined}
+                rel={project.brochureUrl ? "noopener noreferrer" : undefined}
+                download={!project.brochureUrl}
                 title="تحميل البروفايل PDF"
                 className="p-2 rounded-xl bg-white/5 hover:bg-gold-primary/10 border border-white/10 hover:border-gold-primary/40 text-text-secondary hover:text-gold-primary transition-all cursor-pointer"
               >
@@ -935,8 +939,10 @@ export default function ProjectsPage() {
                             <td className="py-3 px-5 text-center border-x border-border-gold/10 first:border-s-0 last:border-e-0">
                               <div className="inline-flex items-center gap-2 justify-center">
                                 <a
-                                  href={`/brochure-${project.slug}.pdf`}
-                                  download
+                                  href={project.brochureUrl || `/brochure-${project.slug}.pdf`}
+                                  target={project.brochureUrl ? "_blank" : undefined}
+                                  rel={project.brochureUrl ? "noopener noreferrer" : undefined}
+                                  download={!project.brochureUrl}
                                   title="تحميل البروفايل PDF"
                                   className="p-1.5 rounded-lg bg-white/5 hover:bg-gold-primary/10 border border-white/10 text-text-secondary hover:text-gold-primary transition-all cursor-pointer"
                                 >

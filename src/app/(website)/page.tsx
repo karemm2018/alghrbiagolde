@@ -441,8 +441,10 @@ function FeaturedProjectCard({ project, onExplore }: { project: Project; onExplo
           {/* Action buttons */}
           <div className="flex flex-wrap gap-3 pt-2">
             <a
-              href={`/brochure-${project.slug}.pdf`}
-              download
+              href={project.brochureUrl || `/brochure-${project.slug}.pdf`}
+              target={project.brochureUrl ? "_blank" : undefined}
+              rel={project.brochureUrl ? "noopener noreferrer" : undefined}
+              download={!project.brochureUrl}
               className="py-3.5 px-6 text-[10px] sm:text-xs font-extrabold btn-premium-gold flex items-center gap-2 cursor-pointer font-el-messiri flex-1 justify-center"
             >
               <Download className="w-4 h-4" />
@@ -518,8 +520,10 @@ function SimplifiedProjectCard({ project, onExplore }: { project: Project; onExp
 
           <div className="flex items-center gap-1.5 shrink-0">
             <a
-              href={`/brochure-${project.slug}.pdf`}
-              download
+              href={project.brochureUrl || `/brochure-${project.slug}.pdf`}
+              target={project.brochureUrl ? "_blank" : undefined}
+              rel={project.brochureUrl ? "noopener noreferrer" : undefined}
+              download={!project.brochureUrl}
               title="تحميل البروفايل PDF"
               className="p-1.5 rounded-lg bg-white/5 hover:bg-gold-primary/10 border border-white/10 text-text-secondary hover:text-gold-primary transition-all cursor-pointer"
             >
@@ -1701,8 +1705,10 @@ export default function HomePage() {
                         <td className="py-3 px-5 text-center border-x border-border-gold/10 first:border-r-0 last:border-l-0">
                           <div className="flex items-center justify-center gap-2">
                             <a
-                              href={`/brochure-${project.slug}.pdf`}
-                              download
+                              href={project.brochureUrl || `/brochure-${project.slug}.pdf`}
+                              target={project.brochureUrl ? "_blank" : undefined}
+                              rel={project.brochureUrl ? "noopener noreferrer" : undefined}
+                              download={!project.brochureUrl}
                               title="تحميل البروفايل PDF"
                               className="p-1.5 rounded-lg bg-white/5 hover:bg-gold-primary/10 border border-white/10 text-text-secondary hover:text-gold-primary transition-all cursor-pointer"
                             >

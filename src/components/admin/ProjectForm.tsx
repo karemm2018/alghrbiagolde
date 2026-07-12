@@ -90,11 +90,13 @@ export default function ProjectForm({ initialData, projectId }: ProjectFormProps
   const [heroImage, setHeroImage] = useState(initialData?.hero_image || '');
   const [gallery, setGallery] = useState<string[]>(initialData?.gallery || []);
   const [videos, setVideos] = useState<string[]>(initialData?.videos || []);
+  const [brochureUrl, setBrochureUrl] = useState(initialData?.brochure_url || '');
 
   // Upload States
   const [uploadingHero, setUploadingHero] = useState(false);
   const [uploadingGallery, setUploadingGallery] = useState(false);
   const [uploadingVideo, setUploadingVideo] = useState(false);
+  const [uploadingBrochure, setUploadingBrochure] = useState(false);
   const [videoProgress, setVideoProgress] = useState(0);
   const [typedVideoUrl, setTypedVideoUrl] = useState('');
 
@@ -106,6 +108,7 @@ export default function ProjectForm({ initialData, projectId }: ProjectFormProps
   const heroInputRef = useRef<HTMLInputElement>(null);
   const galleryInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
+  const brochureInputRef = useRef<HTMLInputElement>(null);
   const excelInputRef = useRef<HTMLInputElement>(null);
 
 const getStoragePathFromUrl = (url: string) => {
@@ -153,6 +156,41 @@ const getStoragePathFromUrl = (url: string) => {
       toast.error('فشل رفع الصورة: ' + (err.message || 'خطأ غير معروف'));
     } finally {
       setUploadingHero(false);
+    }
+  };
+
+  // Handle Project Brochure PDF Upload
+  const handleBrochureUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.type !== 'application/pdf') {
+      toast.error('الرجاء اختيار ملف PDF فقط');
+      return;
+    }
+
+    setUploadingBrochure(true);
+    try {
+      if (brochureUrl) {
+        const oldPath = getStoragePathFromUrl(brochureUrl);
+        if (oldPath) {
+          await deleteFile('media', oldPath);
+        }
+      }
+      
+      const uploadPath = `projects/brochure-${Date.now()}.pdf`;
+      const result = await uploadFile('media', uploadPath, file, { contentType: 'application/pdf' });
+      if (result) {
+        setBrochureUrl(result.url);
+        toast.success('تم رفع بروفايل المشروع بنجاح');
+      } else {
+        toast.error('فشل رفع ملف البروفايل');
+      }
+    } catch (err: any) {
+      console.error('Brochure upload error:', err);
+      toast.error('فشل رفع الملف: ' + (err.message || 'خطأ غير معروف'));
+    } finally {
+      setUploadingBrochure(false);
     }
   };
 
@@ -488,6 +526,7 @@ const getStoragePathFromUrl = (url: string) => {
       completionDate,
       featured,
       published,
+      brochureUrl,
     };
 
     try {
@@ -1021,6 +1060,78 @@ const getStoragePathFromUrl = (url: string) => {
                 </div>
               )}
             </div>
+
+            {/* Project Brochure PDF */}
+            <div className="space-y-2 mt-6 pt-6 border-t border-white/5">
+              <label className="neu-label text-[var(--neu-text-heading)] font-bold">بروفايل المشروع (PDF Brochure)</label>
+              <p className="text-xs text-[var(--neu-text-muted)] leading-relaxed">
+                ارفع ملف بروفايل المشروع بصيغة PDF ليتمكن الزوار من تحميله وتصفحه مباشرة من صفحة تفاصيل المشروع.
+              </p>
+              {brochureUrl ? (
+                <div className="flex items-center justify-between p-3 rounded-xl bg-[var(--neu-depressed)] border border-white/5 text-xs mt-2">
+                  <div className="flex items-center gap-2 max-w-[80%]">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                    <span className="truncate text-[var(--neu-text-heading)] font-mono">{brochureUrl.split('/').pop() || 'brochure.pdf'}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <a
+                      href={brochureUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[var(--neu-gold)] hover:underline font-semibold"
+                    >
+                      عرض الملف
+                    </a>
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        if (brochureUrl) {
+                          const path = getStoragePathFromUrl(brochureUrl);
+                          if (path) {
+                            await deleteFile('media', path);
+                          }
+                          setBrochureUrl('');
+                          toast.success('تم إزالة الملف بنجاح');
+                        }
+                      }}
+                      className="text-red-500 hover:text-red-400 font-semibold"
+                    >
+                      إزالة
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex gap-2 mt-2">
+                  <button
+                    type="button"
+                    onClick={() => brochureInputRef.current?.click()}
+                    className="neu-btn neu-btn-secondary px-4 whitespace-nowrap text-xs"
+                    disabled={uploadingBrochure}
+                  >
+                    {uploadingBrochure ? (
+                      <div className="flex items-center gap-1.5">
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        <span>جاري الرفع...</span>
+                      </div>
+                    ) : (
+                      <>
+                        <Upload className="w-3.5 h-3.5 inline ms-1" />
+                        <span>رفع ملف PDF</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              )}
+              <input
+                ref={brochureInputRef}
+                type="file"
+                accept="application/pdf"
+                className="hidden"
+                onChange={handleBrochureUpload}
+                title="رفع ملف بروفايل المشروع (PDF)"
+              />
+            </div>
+
           </div>
         )}
 

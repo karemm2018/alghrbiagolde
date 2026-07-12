@@ -33,7 +33,7 @@ export async function getPropertyById(id: string) {
       .from('properties')
       .select('*, projects(id, name, slug)')
       .eq('id', id)
-      .single();
+      .maybeSingle();
 
     if (error) throw error;
     return data;
@@ -624,10 +624,10 @@ export async function getPropertyBySlug(slug: string) {
       .from('properties')
       .select('*, projects(id, name, slug)')
       .eq('slug', decodedSlug)
-      .single();
+      .maybeSingle();
 
     if (error) throw error;
-    return normalizeProperty(data);
+    return data ? normalizeProperty(data) : null;
   } catch (err: any) {
     console.error(`Error fetching property by slug ${slug}:`, err);
     return null;
@@ -643,10 +643,10 @@ export async function getProjectBySlug(slug: string) {
       .from('projects')
       .select('*')
       .eq('slug', decodedSlug)
-      .single();
+      .maybeSingle();
 
     if (error) throw error;
-    return normalizeProject(data);
+    return data ? normalizeProject(data) : null;
   } catch (err: any) {
     console.error(`Error fetching project by slug ${slug}:`, err);
     return null;
@@ -679,7 +679,7 @@ export async function getProjectById(id: string) {
       .from('projects')
       .select('*')
       .eq('id', id)
-      .single();
+      .maybeSingle();
 
     if (error) throw error;
     return data;
@@ -719,6 +719,7 @@ export async function createProject(formData: any, propertiesToInsert?: any[]) {
       completion_date: formData.completionDate || '',
       featured: formData.featured || false,
       published: formData.published || false,
+      brochure_url: formData.brochureUrl || '',
     };
 
     const { data: project, error } = await supabase
@@ -809,6 +810,7 @@ export async function updateProject(id: string, formData: any, propertiesToInser
       completion_date: formData.completionDate || '',
       featured: formData.featured || false,
       published: formData.published || false,
+      brochure_url: formData.brochureUrl || '',
     };
 
     const { data: project, error } = await supabase

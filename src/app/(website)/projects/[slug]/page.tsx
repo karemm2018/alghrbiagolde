@@ -1,10 +1,14 @@
 // src/app/projects/[slug]/page.tsx
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import { PROJECTS } from '@/lib/mockData';
+import { getSupabaseAdminClient } from '@/lib/supabase/admin';
 import { getProjectBySlug, getPropertiesByProjectSlug } from '@/app/actions/properties';
 import MediaGallery from '@/components/ui/MediaGallery';
 import { ProjectSidebarInquiry } from '@/components/property/ProjectActions';
@@ -136,8 +140,10 @@ export default async function ProjectDetailPage({ params }: PageProps) {
 
           <div className="flex items-center gap-3">
             <a
-              href={`/brochure-${project.slug}.pdf`}
-              download
+              href={project.brochureUrl || `/brochure-${project.slug}.pdf`}
+              target={project.brochureUrl ? "_blank" : undefined}
+              rel={project.brochureUrl ? "noopener noreferrer" : undefined}
+              download={!project.brochureUrl}
               className="py-3 px-6 text-xs font-extrabold btn-premium-gold flex items-center justify-center gap-2 cursor-pointer font-el-messiri"
             >
               <Download className="w-4 h-4" />
@@ -325,7 +331,14 @@ export default async function ProjectDetailPage({ params }: PageProps) {
 
 // Generate static params for prerendering dynamic project routes
 export async function generateStaticParams() {
-  return PROJECTS.map((p) => ({
-    slug: p.slug,
-  }));
+  try {
+    const supabase = getSupabaseAdminClient();
+    const { data } = await supabase.from('projects').select('slug');
+    return ((data || []) as any[]).map((p) => ({
+      slug: p.slug,
+    }));
+  } catch (e) {
+    console.error("Error generating static params for projects:", e);
+    return [];
+  }
 }

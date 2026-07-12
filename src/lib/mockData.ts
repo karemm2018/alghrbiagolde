@@ -70,6 +70,7 @@ export interface Project {
     completionDate: string;
   };
   featured: boolean;
+  brochureUrl?: string;
 }
 
 export const PROJECTS: Project[] = [

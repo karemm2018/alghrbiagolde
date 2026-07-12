@@ -1,10 +1,14 @@
 // src/app/property/[slug]/page.tsx
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import { PROPERTIES } from '@/lib/mockData';
+import { getSupabaseAdminClient } from '@/lib/supabase/admin';
 import { getPropertyBySlug } from '@/app/actions/properties';
 import MediaGallery from '@/components/ui/MediaGallery';
 import { PropertyFavoriteShare, PropertySidebarInquiry } from '@/components/property/PropertyActions';
@@ -446,7 +450,14 @@ export default async function PropertyDetailPage({ params }: PageProps) {
 
 // Generate static params for prerendering dynamic page routes
 export async function generateStaticParams() {
-  return PROPERTIES.map((p) => ({
-    slug: p.slug,
-  }));
+  try {
+    const supabase = getSupabaseAdminClient();
+    const { data } = await supabase.from('properties').select('slug');
+    return ((data || []) as any[]).map((p) => ({
+      slug: p.slug,
+    }));
+  } catch (e) {
+    console.error("Error generating static params for properties:", e);
+    return [];
+  }
 }
