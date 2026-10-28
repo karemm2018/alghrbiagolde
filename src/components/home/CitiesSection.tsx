@@ -58,7 +58,7 @@ export default function CitiesSection({ selectedCity, setSelectedCity, propertie
   ];
 
   return (
-    <div className="w-full bg-gradient-to-b from-bg-deep via-bg-navy to-bg-deep border-t border-border-gold/15 pt-28 sm:pt-36 lg:pt-40 pb-16">
+    <div className="w-full bg-gradient-to-b from-bg-deep via-bg-navy to-bg-deep border-t border-border-gold/15 pt-32 sm:pt-36 lg:pt-40 pb-16">
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial="hidden"
@@ -68,7 +68,7 @@ export default function CitiesSection({ selectedCity, setSelectedCity, propertie
             hidden: {},
             visible: { transition: { staggerChildren: 0.12 } }
           }}
-          className="text-center mb-10 sm:mb-14"
+          className="flex flex-col items-center text-center mb-10 sm:mb-14"
         >
           <motion.span variants={fadeUpVariants} className="inline-block py-1.5 px-4 text-xs sm:text-sm font-extrabold text-gold-primary bg-gold-primary/10 border border-gold-primary/30 rounded-full uppercase mb-3.5 tracking-wider">
             وجهاتنا الرئيسية
