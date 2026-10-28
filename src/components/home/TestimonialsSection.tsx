@@ -202,25 +202,29 @@ export default function TestimonialsSection() {
             </button>
           </div>
 
-          {/* Dot Indicators with 44x44px minimum hit targets */}
-          <div className="flex justify-center gap-2 mt-8">
-            {TESTIMONIALS.map((_, idx) => (
-              <button
-                key={idx}
-                type="button"
-                onClick={() => setCurrentTestimonialIndex(idx)}
-                className="p-2 cursor-pointer flex items-center justify-center min-w-[44px] min-h-[44px]"
-                aria-label={`الانتقال إلى التقييم ${idx + 1}`}
-              >
-                <span
-                  className={`h-2 rounded-full transition-all duration-300 ${
-                    idx === currentTestimonialIndex
-                      ? 'bg-gold-primary shadow-[0_0_8px_rgba(201,169,110,0.6)] w-7'
-                      : 'bg-gold-primary/20 hover:bg-gold-primary/40 w-2'
-                  }`}
-                />
-              </button>
-            ))}
+          {/* Compact slide indicators */}
+          <div className="flex justify-center mt-3 sm:mt-5">
+            <div role="group" aria-label="اختيار تقييم العميل" className="inline-flex items-center rounded-full border border-border-gold/20 bg-bg-royal/40 px-1">
+              {TESTIMONIALS.map((_, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => setCurrentTestimonialIndex(idx)}
+                  className="group flex h-11 w-7 items-center justify-center rounded-full cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-gold-primary"
+                  aria-label={`الانتقال إلى التقييم ${idx + 1}`}
+                  aria-current={idx === currentTestimonialIndex ? 'true' : undefined}
+                >
+                  <span
+                    aria-hidden="true"
+                    className={`h-2 rounded-full transition-all duration-300 ${
+                      idx === currentTestimonialIndex
+                        ? 'w-5 bg-gold-primary shadow-[0_0_8px_rgba(201,169,110,0.45)]'
+                        : 'w-2 bg-gold-primary/55 group-hover:bg-gold-primary/80'
+                    }`}
+                  />
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>
