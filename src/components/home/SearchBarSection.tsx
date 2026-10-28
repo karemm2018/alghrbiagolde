@@ -67,7 +67,7 @@ export default function SearchBarSection({
   const [isFiltersOpenComplete, setIsFiltersOpenComplete] = useState<boolean>(false);
 
   return (
-    <section id="search-filter-section" className="relative z-40 w-[94%] sm:w-[92%] max-w-5xl mx-auto px-2 sm:px-4 -mt-[18vh] sm:-mt-28 lg:-mt-32">
+    <section id="search-filter-section" className="relative z-40 w-[94%] sm:w-[92%] max-w-5xl mx-auto px-2 sm:px-4 -mt-24 sm:-mt-28 lg:-mt-32">
       <form onSubmit={handleSearch} className="relative w-full">
         {/* Fully rounded (pill) glassmorphic search bar container */}
         <div className="p-1.5 sm:p-2.5 bg-white/10 backdrop-blur-xl border border-border-gold/30 rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.65)] hover:border-border-gold/50 relative z-50 transition-all duration-300">

@@ -1,11 +1,10 @@
 'use client';
 
-import React, { useState, useMemo, useRef, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { MapPin, Building, DollarSign, Layers, Bed, Bath, Ruler, ArrowLeft, X } from 'lucide-react';
-import { Property } from '@/lib/mockData';
+import { MapPin, Building, DollarSign, Layers, Bed, Bath, Ruler, ArrowLeft } from 'lucide-react';
+import type { Property } from '@/lib/mockData';
 import CustomSelect from '@/components/ui/CustomSelect';
 
 const CITY_OPTIONS = [
@@ -180,7 +179,7 @@ function FeaturedPropertyCard({ property }: { property: Property }) {
 
 function SimplifiedPropertyCard({ property }: { property: Property }) {
   return (
-    <div className="group relative flex flex-col h-full bg-bg-navy/40 backdrop-blur-md rounded-2xl overflow-hidden border border-white/10 transition-all duration-500 hover:border-border-gold/30 hover:bg-bg-navy/60 hover:-translate-y-1 w-[280px] sm:w-[285px] md:w-[310px] shrink-0">
+    <div className="group relative flex flex-col h-full bg-bg-navy/40 backdrop-blur-md rounded-2xl overflow-hidden border border-white/10 transition-colors duration-300 hover:border-border-gold/30 hover:bg-bg-navy/60 md:hover:-translate-y-1 w-[min(82vw,310px)] sm:w-[285px] md:w-[310px] shrink-0">
       <div className="absolute top-0 start-0 w-full h-[2px] bg-gradient-to-r from-transparent via-gold-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20"></div>
 
       <div className="relative aspect-[16/10] overflow-hidden bg-bg-deep">
@@ -259,20 +258,8 @@ export default function PropertyListingsSection({
   maxPrice,
   setMaxPrice,
 }: PropertyListingsSectionProps) {
-  const shouldReduceMotion = useReducedMotion();
   const [showLocalFilters, setShowLocalFilters] = useState<boolean>(false);
-  const [isLocalFiltersOpenComplete, setIsLocalFiltersOpenComplete] = useState<boolean>(false);
   const [propertiesViewMode, setPropertiesViewMode] = useState<'grid' | 'table'>('grid');
-  const propertiesTableRef = useRef<HTMLDivElement>(null);
-
-  const fadeUpVariants = {
-    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: shouldReduceMotion ? 0.05 : 0.8, ease: [0.16, 1, 0.3, 1] }
-    }
-  };
 
   const featuredProperty = useMemo(() => {
     if (properties.length === 0) return null;
@@ -297,35 +284,26 @@ export default function PropertyListingsSection({
     return [...repeated, ...repeated];
   };
 
-  useEffect(() => {
-    if (propertiesViewMode === 'table' && propertiesTableRef.current) {
-      const el = propertiesTableRef.current;
-      el.scrollLeft = el.scrollWidth;
-      const timer = setTimeout(() => {
-        el.scrollLeft = el.scrollWidth;
-      }, 50);
-      return () => clearTimeout(timer);
-    }
-  }, [propertiesViewMode, properties]);
-
   return (
     <div className="w-full bg-gradient-to-b from-bg-deep via-bg-navy to-bg-deep border-b border-border-gold/15 pb-16">
       {/* Category Tabs */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 pt-8">
-        <div className="flex flex-wrap items-center justify-center gap-3">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-6 pt-4 sm:pb-10 sm:pt-8">
+        <div role="group" aria-label="تصفية حسب نوع العقار" className="grid w-full grid-cols-6 gap-2 rounded-2xl border border-border-gold/15 bg-bg-royal/20 p-2 sm:flex sm:flex-wrap sm:items-center sm:justify-center sm:gap-3 sm:rounded-none sm:border-0 sm:bg-transparent sm:p-0">
           {[
             { id: 'all', label: 'الكل' },
             { id: 'flat', label: 'شقق سكنية' },
             { id: 'villa', label: 'فلل فخمة' },
             { id: 'roof', label: 'أروف / بنتهاوس' },
             { id: 'investment', label: 'عروض الاستثمار' },
-          ].map((tab) => (
+          ].map((tab, index) => (
             <button
               key={tab.id}
               type="button"
-              className={`py-3 px-6 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 border cursor-pointer min-h-[44px] ${
+              aria-pressed={selectedType === tab.id}
+              aria-controls="property-results"
+              className={`${index < 3 ? 'col-span-2' : 'col-span-3'} min-w-0 py-3 px-2 sm:px-6 rounded-xl sm:rounded-full text-center text-xs sm:text-sm leading-relaxed font-bold transition-colors duration-200 border cursor-pointer min-h-[44px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-primary ${
                 selectedType === tab.id
-                  ? 'bg-gold-primary text-bg-midnight border-gold-primary font-extrabold shadow-lg shadow-gold-primary/10'
+                  ? 'bg-gold-primary text-bg-midnight border-gold-primary shadow-lg shadow-gold-primary/10'
                   : 'bg-bg-royal/40 hover:bg-bg-royal/70 text-text-secondary border-border-gold/20 hover:border-gold-primary hover:text-white'
               }`}
               onClick={() => setSelectedType(tab.id)}
@@ -338,165 +316,151 @@ export default function PropertyListingsSection({
 
       {/* Main Listings Section */}
       <section id="listings-section" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-28">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
-          variants={{
-            hidden: {},
-            visible: { transition: { staggerChildren: 0.1 } }
-          }}
-          className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12"
-        >
-          <div className="text-start mb-4 md:mb-0">
-            <motion.span variants={fadeUpVariants} className="block text-xs font-semibold text-gold-primary uppercase">قائمتنا المحدثة</motion.span>
-            <motion.h2 variants={fadeUpVariants} className="text-xl sm:text-3xl font-extrabold text-text-primary mt-1 liquid-gold-heading font-el-messiri">
+        <div className="flex flex-col md:flex-row justify-between items-center md:items-end gap-5 mb-6 sm:mb-10">
+          <div className="w-full md:w-auto text-center md:text-start">
+            <span className="block text-xs font-semibold text-gold-primary uppercase">قائمتنا المحدثة</span>
+            <h2 className="text-xl sm:text-3xl leading-relaxed font-extrabold text-text-primary mt-1 font-el-messiri">
               تصفح آخر العروض والفرص الحالية
-            </motion.h2>
+            </h2>
           </div>
-          <motion.div variants={fadeUpVariants} className="flex flex-wrap items-center gap-3 text-xs sm:text-sm text-text-muted mt-2 md:mt-0">
-            {/* View Switcher */}
-            <div className="flex items-center bg-bg-royal/40 border border-border-gold/15 rounded-lg p-1 shrink-0">
+          <div className="w-full md:w-auto text-xs sm:text-sm text-text-muted">
+            <div role="group" aria-label="أدوات عرض العقارات" className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-stretch gap-2 md:flex md:gap-3">
+              {/* View Switcher */}
+              <div className="grid min-w-0 grid-cols-2 items-stretch bg-bg-royal/40 border border-border-gold/15 rounded-xl p-1 md:flex">
+                <button
+                  type="button"
+                  aria-pressed={propertiesViewMode === 'grid'}
+                  aria-controls="property-results"
+                  onClick={() => setPropertiesViewMode('grid')}
+                  className={`min-w-0 px-2 md:px-3.5 py-2 rounded-lg transition-colors duration-200 cursor-pointer whitespace-nowrap text-xs sm:text-sm font-semibold font-el-messiri min-h-[44px] flex items-center justify-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-primary ${
+                    propertiesViewMode === 'grid'
+                      ? 'bg-gold-primary text-bg-midnight font-bold shadow-md shadow-gold-primary/10'
+                      : 'text-text-muted hover:text-white'
+                  }`}
+                >
+                  كروت العرض
+                </button>
+                <button
+                  type="button"
+                  aria-pressed={propertiesViewMode === 'table'}
+                  aria-controls="property-results"
+                  onClick={() => setPropertiesViewMode('table')}
+                  className={`min-w-0 px-2 md:px-3.5 py-2 rounded-lg transition-colors duration-200 cursor-pointer whitespace-nowrap text-xs sm:text-sm font-semibold font-el-messiri min-h-[44px] flex items-center justify-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-primary ${
+                    propertiesViewMode === 'table'
+                      ? 'bg-gold-primary text-bg-midnight font-bold shadow-md shadow-gold-primary/10'
+                      : 'text-text-muted hover:text-white'
+                  }`}
+                >
+                  جدول التفاصيل
+                </button>
+              </div>
+
+              {/* Local Filter Toggle */}
               <button
                 type="button"
-                onClick={() => setPropertiesViewMode('grid')}
-                className={`px-3.5 py-2 rounded-md transition-all duration-300 cursor-pointer text-xs sm:text-sm font-semibold font-el-messiri min-h-[44px] flex items-center ${
-                  propertiesViewMode === 'grid'
-                    ? 'bg-gold-primary text-bg-midnight font-bold shadow-md shadow-gold-primary/10'
-                    : 'text-text-muted hover:text-white'
+                aria-label="تصفية العقارات"
+                aria-expanded={showLocalFilters}
+                aria-controls="property-local-filters"
+                onClick={() => setShowLocalFilters(open => !open)}
+                className={`flex items-center justify-center gap-2 px-3 rounded-xl border transition-colors duration-200 cursor-pointer min-h-[44px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-primary ${
+                  showLocalFilters
+                    ? 'bg-gold-primary text-bg-midnight border-gold-primary shadow-lg shadow-gold-primary/20'
+                    : 'bg-bg-royal/30 text-gold-primary border border-border-gold/15 hover:border-gold-primary hover:bg-gold-primary/10'
                 }`}
+                title="تصفية العقارات"
               >
-                كروت العرض
-              </button>
-              <button
-                type="button"
-                onClick={() => setPropertiesViewMode('table')}
-                className={`px-3.5 py-2 rounded-md transition-all duration-300 cursor-pointer text-xs sm:text-sm font-semibold font-el-messiri min-h-[44px] flex items-center ${
-                  propertiesViewMode === 'table'
-                    ? 'bg-gold-primary text-bg-midnight font-bold shadow-md shadow-gold-primary/10'
-                    : 'text-text-muted hover:text-white'
-                }`}
-              >
-                جدول التفاصيل
+                <svg aria-hidden="true" className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
+                </svg>
+                <span className="font-bold">الفلاتر</span>
               </button>
             </div>
-
-            {/* Local Filter Toggle */}
-            <button
-              type="button"
-              onClick={() => setShowLocalFilters(!showLocalFilters)}
-              className={`flex items-center justify-center p-2.5 rounded-lg border transition-all duration-300 cursor-pointer shrink-0 min-w-[44px] min-h-[44px] ${
-                showLocalFilters
-                  ? 'bg-gold-primary text-bg-midnight border-gold-primary shadow-lg shadow-gold-primary/20 scale-95'
-                  : 'bg-bg-royal/30 text-gold-primary border border-border-gold/15 hover:border-gold-primary hover:bg-gold-primary/10'
-              }`}
-              title="تصفية العقارات"
-            >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
-              </svg>
-            </button>
-
-            <span>
+            <p role="status" className="mt-3 text-center md:text-start">
               تم العثور على <strong className="text-gold-primary font-mono">{properties.length}</strong> وحدة مطروحة
-            </span>
-          </motion.div>
-        </motion.div>
+            </p>
+          </div>
+        </div>
 
         {/* Local Filter Card */}
-        <AnimatePresence>
-          {showLocalFilters && (
-            <motion.div
-              initial={{ opacity: 0, height: 0, y: -10 }}
-              animate={{ opacity: 1, height: 'auto', y: 0 }}
-              exit={{ opacity: 0, height: 0, y: -10 }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-              onAnimationStart={() => setIsLocalFiltersOpenComplete(false)}
-              onAnimationComplete={() => {
-                if (showLocalFilters) setIsLocalFiltersOpenComplete(true);
-              }}
-              className={`w-full mb-8 relative z-30 ${isLocalFiltersOpenComplete ? 'overflow-visible' : 'overflow-hidden'}`}
-            >
-              <div className="p-5 sm:p-7 bg-white/10 backdrop-blur-xl border border-border-gold/30 rounded-3xl shadow-2xl flex flex-col gap-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
-                  <div className="space-y-1.5 text-start">
-                    <label htmlFor="local-filter-city" className="block text-xs font-bold text-text-muted mb-2 flex items-center gap-1 font-el-messiri">
-                      <MapPin className="w-3.5 h-3.5 text-gold-primary" /> المدينة
-                    </label>
-                    <CustomSelect
-                      id="local-filter-city"
-                      title="تصفية بالمدينة"
-                      options={CITY_OPTIONS}
-                      value={selectedCity}
-                      onChange={setSelectedCity}
-                    />
-                  </div>
-
-                  <div className="space-y-1.5 text-start">
-                    <label htmlFor="local-filter-type" className="block text-xs font-bold text-text-muted mb-2 flex items-center gap-1 font-el-messiri">
-                      <Building className="w-3.5 h-3.5 text-gold-primary" /> نوع العقار
-                    </label>
-                    <CustomSelect
-                      id="local-filter-type"
-                      title="تصفية بنوع العقار"
-                      options={TYPE_OPTIONS}
-                      value={selectedType}
-                      onChange={setSelectedType}
-                    />
-                  </div>
-
-                  <div className="space-y-1.5 text-start">
-                    <label htmlFor="local-filter-rooms" className="block text-xs font-bold text-text-muted mb-2 flex items-center gap-1 font-el-messiri">
-                      <Layers className="w-3.5 h-3.5 text-gold-primary" /> عدد الغرف
-                    </label>
-                    <CustomSelect
-                      id="local-filter-rooms"
-                      title="تصفية بعدد الغرف"
-                      options={ROOMS_OPTIONS}
-                      value={selectedRooms}
-                      onChange={setSelectedRooms}
-                    />
-                  </div>
-
-                  <div className="space-y-1.5 text-start">
-                    <label htmlFor="local-filter-price" className="block text-xs font-bold text-text-muted mb-2 flex items-center gap-1 font-el-messiri">
-                      <DollarSign className="w-3.5 h-3.5 text-gold-primary" /> السعر الأقصى
-                    </label>
-                    <CustomSelect
-                      id="local-filter-price"
-                      title="تصفية بالحد الأقصى للسعر"
-                      options={PRICE_OPTIONS}
-                      value={maxPrice}
-                      onChange={setMaxPrice}
-                    />
-                  </div>
-                </div>
-
-                {(selectedCity !== 'all' || selectedType !== 'all' || selectedRooms !== 'all' || maxPrice !== 'all') && (
-                  <div className="flex justify-end pt-1">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setSelectedCity('all');
-                        setSelectedType('all');
-                        setSelectedRooms('all');
-                        setMaxPrice('all');
-                      }}
-                      className="text-xs text-text-muted hover:text-white transition-colors duration-200 underline cursor-pointer font-el-messiri min-h-[44px] px-2 flex items-center"
-                    >
-                      إعادة تعيين الفلاتر
-                    </button>
-                  </div>
-                )}
+        <div id="property-local-filters" hidden={!showLocalFilters} className="w-full mb-8 relative z-30">
+          <div className="p-5 sm:p-7 bg-white/10 backdrop-blur-xl border border-border-gold/30 rounded-3xl shadow-2xl flex flex-col gap-4">
+            <div className="grid grid-cols-1 min-[360px]:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+              <div className="space-y-1.5 text-start">
+                <label htmlFor="local-filter-city" className="block text-xs font-bold text-text-muted mb-2 flex items-center gap-1 font-el-messiri">
+                  <MapPin className="w-3.5 h-3.5 text-gold-primary" /> المدينة
+                </label>
+                <CustomSelect
+                  id="local-filter-city"
+                  title="تصفية بالمدينة"
+                  options={CITY_OPTIONS}
+                  value={selectedCity}
+                  onChange={setSelectedCity}
+                />
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+
+              <div className="space-y-1.5 text-start">
+                <label htmlFor="local-filter-type" className="block text-xs font-bold text-text-muted mb-2 flex items-center gap-1 font-el-messiri">
+                  <Building className="w-3.5 h-3.5 text-gold-primary" /> نوع العقار
+                </label>
+                <CustomSelect
+                  id="local-filter-type"
+                  title="تصفية بنوع العقار"
+                  options={TYPE_OPTIONS}
+                  value={selectedType}
+                  onChange={setSelectedType}
+                />
+              </div>
+
+              <div className="space-y-1.5 text-start">
+                <label htmlFor="local-filter-rooms" className="block text-xs font-bold text-text-muted mb-2 flex items-center gap-1 font-el-messiri">
+                  <Layers className="w-3.5 h-3.5 text-gold-primary" /> عدد الغرف
+                </label>
+                <CustomSelect
+                  id="local-filter-rooms"
+                  title="تصفية بعدد الغرف"
+                  options={ROOMS_OPTIONS}
+                  value={selectedRooms}
+                  onChange={setSelectedRooms}
+                />
+              </div>
+
+              <div className="space-y-1.5 text-start">
+                <label htmlFor="local-filter-price" className="block text-xs font-bold text-text-muted mb-2 flex items-center gap-1 font-el-messiri">
+                  <DollarSign className="w-3.5 h-3.5 text-gold-primary" /> السعر الأقصى
+                </label>
+                <CustomSelect
+                  id="local-filter-price"
+                  title="تصفية بالحد الأقصى للسعر"
+                  options={PRICE_OPTIONS}
+                  value={maxPrice}
+                  onChange={setMaxPrice}
+                />
+              </div>
+            </div>
+
+            {(selectedCity !== 'all' || selectedType !== 'all' || selectedRooms !== 'all' || maxPrice !== 'all') && (
+              <div className="flex justify-end pt-1">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedCity('all');
+                    setSelectedType('all');
+                    setSelectedRooms('all');
+                    setMaxPrice('all');
+                  }}
+                  className="text-xs text-text-muted hover:text-white transition-colors duration-200 underline cursor-pointer font-el-messiri min-h-[44px] px-2 flex items-center"
+                >
+                  إعادة تعيين الفلاتر
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
 
         {properties.length > 0 ? (
-          <div className="space-y-12">
+          <div id="property-results" className="space-y-8 sm:space-y-12">
             {propertiesViewMode === 'table' ? (
-              <div ref={propertiesTableRef} className="custom-table-wrapper w-full max-h-[60vh] overflow-auto rounded-2xl border-2 border-gold-primary/50 bg-[#0F2342]/90 backdrop-blur-xl shadow-2xl scrollbar-thin scrollbar-thumb-gold-primary scrollbar-track-transparent" dir="rtl">
+              <div className="custom-table-wrapper w-full max-h-[60vh] overflow-auto rounded-2xl border-2 border-gold-primary/50 bg-[#0F2342]/90 backdrop-blur-xl shadow-2xl scrollbar-thin scrollbar-thumb-gold-primary scrollbar-track-transparent" dir="rtl">
                 <table className="w-full min-w-[950px] text-start text-xs sm:text-sm table-auto border-collapse" dir="rtl">
                   <thead className="sticky top-0 z-20 shadow-md">
                     <tr className="border-b border-border-gold/30 text-gold-primary font-el-messiri bg-[#18325C]">
@@ -558,7 +522,18 @@ export default function PropertyListingsSection({
               <>
                 {featuredProperty && <FeaturedPropertyCard property={featuredProperty} />}
                 {carouselProperties.length > 0 && (
-                  <div className="w-full relative overflow-hidden py-4 select-none" dir="ltr">
+                  <div className="mobile-property-carousel w-full overflow-x-auto overscroll-x-contain snap-x snap-mandatory py-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:hidden" aria-label="المزيد من الوحدات العقارية">
+                    <div className="flex w-max gap-4">
+                      {carouselProperties.map(property => (
+                        <div key={property.id} className="shrink-0 snap-start">
+                          <SimplifiedPropertyCard property={property} />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {carouselProperties.length > 0 && (
+                  <div className="hidden md:block w-full relative overflow-hidden py-4 select-none" dir="ltr">
                     <div className="flex flex-row flex-nowrap gap-4 sm:gap-6 w-max animate-marquee-ltr hover:[animation-play-state:paused] cursor-pointer">
                       {getMarqueeItems(carouselProperties).map((property, idx) => (
                         <div key={`${property.id}-marquee-${idx}`} dir="rtl">
@@ -582,7 +557,7 @@ export default function PropertyListingsSection({
             </div>
           </div>
         ) : (
-          <div className="text-center py-16 bg-bg-royal/20 border border-border-gold/20 rounded-2xl max-w-md mx-auto shadow-xl p-6">
+          <div id="property-results" className="text-center py-16 bg-bg-royal/20 border border-border-gold/20 rounded-2xl max-w-md mx-auto shadow-xl p-6">
             <Building className="w-12 h-12 text-text-muted mx-auto mb-3" />
             <p className="text-sm font-semibold text-text-secondary">عذراً، لم نجد أي عروض تطابق فلاتر البحث الحالية.</p>
             <button

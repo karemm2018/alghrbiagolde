@@ -40,7 +40,7 @@ export default function HeroSection() {
   };
 
   return (
-    <section className="relative min-h-[100dvh] w-full flex items-center justify-center bg-bg-deep overflow-hidden">
+    <section className="relative min-h-[100svh] lg:min-h-[100dvh] w-full flex items-center justify-center bg-bg-deep overflow-hidden">
       {/* Dark luxury fallback background & radial overlay */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-brand-deep/15 via-bg-midnight/70 to-bg-midnight/90 z-0"></div>
 
