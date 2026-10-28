@@ -4,14 +4,16 @@ import React, { useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { z } from 'zod';
 import { createSubmission } from '@/app/actions/submissions';
-import { CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import {
+  AlertCircle, BadgeCheck, Bath, BedDouble, Building2, CheckCircle, Loader2,
+  MapPin, MapPinned, Phone, Send, UserRound, Wallet,
+  type LucideIcon,
+} from 'lucide-react';
 
 const contactSchema = z.object({
   title: z.string().min(1, 'الرجاء اختيار اللقب'),
-  firstName: z.string().min(2, 'الاسم الأول يجب أن يكون حرفين على الأقل'),
-  lastName: z.string().min(2, 'اسم العائلة يجب أن يكون حرفين على الأقل'),
-  email: z.string().email('عنوان البريد الإلكتروني غير صحيح'),
-  phone: z.string().min(8, 'رقم التليفون يجب أن يكون 8 أرقام على الأقل'),
+  fullName: z.string().trim().min(2, 'الرجاء إدخال الاسم'),
+  phone: z.string().trim().min(8, 'رقم التليفون يجب أن يكون 8 أرقام على الأقل'),
   propertyType: z.string().min(1, 'الرجاء اختيار نوع العقار أو المشروع'),
   zipCode: z.string().optional(),
   city: z.string().optional(),
@@ -22,21 +24,39 @@ const contactSchema = z.object({
 
 type ContactFormData = z.infer<typeof contactSchema>;
 
+const initialFormData: ContactFormData = {
+  title: 'السيد',
+  fullName: '',
+  phone: '',
+  propertyType: 'شقة',
+  zipCode: '',
+  city: 'جدة',
+  bedrooms: '4',
+  bathrooms: '3',
+  budget: '',
+};
+
+const fieldClassName = 'w-full min-w-0 min-h-[48px] bg-[#102344]/80 border border-white/20 focus:border-gold-primary/80 focus:bg-[#152a4c] rounded-xl px-3 py-2.5 text-base sm:text-sm text-white placeholder:text-text-muted/75 focus:outline-none focus:ring-2 focus:ring-gold-primary/35 transition-colors';
+const selectFieldClassName = `${fieldClassName} [&>option]:bg-[#102344] [&>option]:text-white`;
+
+function FieldLabel({ htmlFor, icon: Icon, children, required = false, tone = 'text-gold-primary' }: {
+  htmlFor: string;
+  icon: LucideIcon;
+  children: React.ReactNode;
+  required?: boolean;
+  tone?: string;
+}) {
+  return (
+    <label htmlFor={htmlFor} className="flex items-center gap-1.5 text-xs font-semibold text-[#d5dfed] mb-1.5">
+      <Icon aria-hidden="true" className={`w-4 h-4 shrink-0 ${tone}`} />
+      <span>{children}{required && <span className="text-gold-primary"> *</span>}</span>
+    </label>
+  );
+}
+
 export default function ContactFormSection() {
   const shouldReduceMotion = useReducedMotion();
-  const [formData, setFormData] = useState<ContactFormData>({
-    title: 'السيد',
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    propertyType: 'شقة',
-    zipCode: '',
-    city: 'جدة',
-    bedrooms: '4',
-    bathrooms: '3',
-    budget: '',
-  });
+  const [formData, setFormData] = useState<ContactFormData>(initialFormData);
 
   const [errors, setErrors] = useState<Partial<Record<keyof ContactFormData, string>>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -73,13 +93,12 @@ export default function ContactFormSection() {
 
     try {
       const data = validation.data;
-      const fullName = `${data.title} ${data.firstName} ${data.lastName}`.trim();
+      const fullName = `${data.title} ${data.fullName}`.trim();
       const messageNotes = `نوع العقار: ${data.propertyType} | المدينة: ${data.city || 'غير محدد'} | الرمز البريدي: ${data.zipCode || 'لا يوجد'} | الغرف: ${data.bedrooms || 'غير محدد'} | الحمامات: ${data.bathrooms || 'غير محدد'} | الميزانية: ${data.budget || 'غير محدد'}`;
 
       const res = await createSubmission({
         name: fullName,
         phone: data.phone,
-        email: data.email,
         subject: `طلب تواصل جديد: ${data.propertyType}`,
         message: messageNotes,
         type: 'contact',
@@ -89,19 +108,7 @@ export default function ContactFormSection() {
 
       if (res.success) {
         setSubmitSuccess(true);
-        setFormData({
-          title: 'السيد',
-          firstName: '',
-          lastName: '',
-          email: '',
-          phone: '',
-          propertyType: 'شقة',
-          zipCode: '',
-          city: 'جدة',
-          bedrooms: '4',
-          bathrooms: '3',
-          budget: '',
-        });
+        setFormData(initialFormData);
       } else {
         setSubmitError(res.error || 'حدث خطأ أثناء تقديم الطلب. الرجاء المحاولة مرة أخرى.');
       }
@@ -136,7 +143,7 @@ export default function ContactFormSection() {
           transition={{ duration: 0.8 }}
           className="w-full max-w-4xl mx-auto mt-10 sm:mt-12 z-10"
         >
-          <div className="relative bg-bg-navy/70 backdrop-blur-xl border border-gold-primary/45 p-6 sm:p-10 rounded-3xl shadow-[0_30px_70px_rgba(0,0,0,0.6)]">
+          <div className="relative bg-bg-navy/70 backdrop-blur-xl border border-gold-primary/45 p-4 sm:p-8 rounded-3xl shadow-[0_30px_70px_rgba(0,0,0,0.6)]">
             <div className="absolute top-0 start-10 end-10 h-[2px] bg-gradient-to-r from-transparent via-gold-primary to-transparent"></div>
 
             {submitSuccess ? (
@@ -155,7 +162,7 @@ export default function ContactFormSection() {
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-6 text-start" noValidate>
+              <form onSubmit={handleSubmit} className="space-y-5 text-start" noValidate>
                 {submitError && (
                   <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-300 text-xs sm:text-sm flex items-center gap-2">
                     <AlertCircle className="w-5 h-5 shrink-0" />
@@ -163,102 +170,67 @@ export default function ContactFormSection() {
                   </div>
                 )}
 
-                {/* Group 1: Personal Info */}
-                <div className="space-y-4">
+                {/* Personal information */}
+                <div className="space-y-3.5">
                   <h3 className="text-xs sm:text-sm font-bold text-gold-primary border-s-2 border-gold-primary ps-2.5">معلومات شخصية</h3>
-
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="space-y-1">
-                      <label htmlFor="contact-title" className="block text-xs font-semibold text-text-muted">اللقب</label>
-                      <select
-                        id="contact-title"
-                        name="title"
-                        value={formData.title}
-                        onChange={handleChange}
-                        className="w-full bg-[#0F2040]/70 border border-white/20 focus:border-gold-primary/70 focus:bg-[#152A54]/80 rounded-xl px-4 py-3 text-xs sm:text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-gold-primary/50 transition-all min-h-[44px]"
-                      >
+                  <div className="grid grid-cols-[minmax(120px,0.9fr)_minmax(0,2fr)] sm:grid-cols-[minmax(125px,1fr)_minmax(0,2fr)_minmax(0,2fr)] gap-3">
+                    <div className="min-w-0">
+                      <FieldLabel htmlFor="contact-title" icon={BadgeCheck}>اللقب</FieldLabel>
+                      <select id="contact-title" name="title" value={formData.title} onChange={handleChange} className={selectFieldClassName}>
                         <option value="السيد">السيد</option>
                         <option value="السيدة">السيدة</option>
                         <option value="شركة">شركة / جهة</option>
                       </select>
                       {errors.title && <p className="text-xs text-red-400 mt-1">{errors.title}</p>}
                     </div>
-
-                    <div className="space-y-1">
-                      <label htmlFor="contact-first-name" className="block text-xs font-semibold text-text-muted">الاسم الأول *</label>
+                    <div className="min-w-0">
+                      <FieldLabel htmlFor="contact-full-name" icon={UserRound} required>
+                        {formData.title === 'شركة' ? 'اسم الجهة' : 'الاسم الثلاثي'}
+                      </FieldLabel>
                       <input
-                        id="contact-first-name"
-                        name="firstName"
+                        id="contact-full-name"
+                        name="fullName"
                         type="text"
-                        placeholder="أدخل الاسم الأول"
-                        value={formData.firstName}
+                        autoComplete="name"
+                        placeholder={formData.title === 'شركة' ? 'اسم الجهة' : 'الاسم الثلاثي'}
+                        value={formData.fullName}
                         onChange={handleChange}
-                        className="w-full bg-bg-royal/40 border border-white/20 focus:border-gold-primary/70 focus:bg-bg-royal/60 rounded-xl px-4 py-3 text-xs sm:text-sm text-text-primary placeholder:text-text-muted/65 focus:outline-none focus:ring-2 focus:ring-gold-primary/50 transition-all min-h-[44px]"
+                        aria-required="true"
+                        aria-invalid={!!errors.fullName}
+                        aria-describedby={errors.fullName ? 'contact-name-error' : undefined}
+                        className={fieldClassName}
                       />
-                      {errors.firstName && <p className="text-xs text-red-400 mt-1">{errors.firstName}</p>}
+                      {errors.fullName && <p id="contact-name-error" className="text-xs text-red-400 mt-1">{errors.fullName}</p>}
                     </div>
-
-                    <div className="space-y-1">
-                      <label htmlFor="contact-last-name" className="block text-xs font-semibold text-text-muted">اسم العائلة *</label>
-                      <input
-                        id="contact-last-name"
-                        name="lastName"
-                        type="text"
-                        placeholder="أدخل اسم العائلة"
-                        value={formData.lastName}
-                        onChange={handleChange}
-                        className="w-full bg-bg-royal/40 border border-white/20 focus:border-gold-primary/70 focus:bg-bg-royal/60 rounded-xl px-4 py-3 text-xs sm:text-sm text-text-primary placeholder:text-text-muted/65 focus:outline-none focus:ring-2 focus:ring-gold-primary/50 transition-all min-h-[44px]"
-                      />
-                      {errors.lastName && <p className="text-xs text-red-400 mt-1">{errors.lastName}</p>}
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-1">
-                      <label htmlFor="contact-email" className="block text-xs font-semibold text-text-muted">البريد الإلكتروني *</label>
-                      <input
-                        id="contact-email"
-                        name="email"
-                        type="email"
-                        placeholder="name@example.com"
-                        value={formData.email}
-                        onChange={handleChange}
-                        className="w-full bg-bg-royal/40 border border-white/20 focus:border-gold-primary/70 focus:bg-bg-royal/60 rounded-xl px-4 py-3 text-xs sm:text-sm text-text-primary placeholder:text-text-muted/65 focus:outline-none focus:ring-2 focus:ring-gold-primary/50 transition-all min-h-[44px]"
-                      />
-                      {errors.email && <p className="text-xs text-red-400 mt-1">{errors.email}</p>}
-                    </div>
-
-                    <div className="space-y-1">
-                      <label htmlFor="contact-phone" className="block text-xs font-semibold text-text-muted">رقم التليفون *</label>
+                    <div className="min-w-0 col-span-2 sm:col-span-1">
+                      <FieldLabel htmlFor="contact-phone" icon={Phone} tone="text-[#91c9ad]" required>رقم التليفون</FieldLabel>
                       <input
                         id="contact-phone"
                         name="phone"
                         type="tel"
+                        inputMode="tel"
+                        autoComplete="tel"
                         placeholder="05xxxxxxxx"
                         dir="ltr"
                         value={formData.phone}
                         onChange={handleChange}
-                        className="w-full bg-bg-royal/40 border border-white/20 focus:border-gold-primary/70 focus:bg-bg-royal/60 rounded-xl px-4 py-3 text-xs sm:text-sm text-text-primary placeholder:text-text-muted/65 focus:outline-none focus:ring-2 focus:ring-gold-primary/50 transition-all text-start font-mono min-h-[44px]"
+                        aria-required="true"
+                        aria-invalid={!!errors.phone}
+                        aria-describedby={errors.phone ? 'contact-phone-error' : undefined}
+                        className={`${fieldClassName} text-left font-mono`}
                       />
-                      {errors.phone && <p className="text-xs text-red-400 mt-1">{errors.phone}</p>}
+                      {errors.phone && <p id="contact-phone-error" className="text-xs text-red-400 mt-1">{errors.phone}</p>}
                     </div>
                   </div>
                 </div>
 
-                {/* Group 2: Property Preferences */}
-                <div className="space-y-4 pt-2">
+                {/* Property preferences */}
+                <div className="space-y-3.5 pt-1">
                   <h3 className="text-xs sm:text-sm font-bold text-gold-primary border-s-2 border-gold-primary ps-2.5">معلومات العقار المطلوب</h3>
-
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="space-y-1">
-                      <label htmlFor="contact-property-type" className="block text-xs font-semibold text-text-muted">نوع العقار</label>
-                      <select
-                        id="contact-property-type"
-                        name="propertyType"
-                        value={formData.propertyType}
-                        onChange={handleChange}
-                        className="w-full bg-[#0F2040]/70 border border-white/20 focus:border-gold-primary/70 focus:bg-[#152A54]/80 rounded-xl px-4 py-3 text-xs sm:text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-gold-primary/50 transition-all min-h-[44px]"
-                      >
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    <div className="min-w-0 col-span-2 sm:col-span-1">
+                      <FieldLabel htmlFor="contact-property-type" icon={Building2}>نوع العقار</FieldLabel>
+                      <select id="contact-property-type" name="propertyType" value={formData.propertyType} onChange={handleChange} className={selectFieldClassName}>
                         <option value="شقة">شقة سكنية</option>
                         <option value="فيلا">فيلا مستقلة</option>
                         <option value="ملحق">ملحق روف / بنتهاوس</option>
@@ -268,44 +240,17 @@ export default function ContactFormSection() {
                         <option value="مشروع هتان التيسير">مشروع هتان التيسير</option>
                       </select>
                     </div>
-
-                    <div className="space-y-1">
-                      <label htmlFor="contact-city" className="block text-xs font-semibold text-text-muted">المدينة المفضلة</label>
-                      <input
-                        id="contact-city"
-                        name="city"
-                        type="text"
-                        placeholder="جدة، الرياض، مكة"
-                        value={formData.city}
-                        onChange={handleChange}
-                        className="w-full bg-bg-royal/40 border border-white/20 focus:border-gold-primary/70 focus:bg-bg-royal/60 rounded-xl px-4 py-3 text-xs sm:text-sm text-text-primary placeholder:text-text-muted/65 focus:outline-none focus:ring-2 focus:ring-gold-primary/50 transition-all min-h-[44px]"
-                      />
+                    <div className="min-w-0">
+                      <FieldLabel htmlFor="contact-city" icon={MapPin} tone="text-[#9ebdd6]">المدينة المفضلة</FieldLabel>
+                      <input id="contact-city" name="city" type="text" placeholder="جدة، الرياض، مكة" value={formData.city} onChange={handleChange} className={fieldClassName} />
                     </div>
-
-                    <div className="space-y-1">
-                      <label htmlFor="contact-zip" className="block text-xs font-semibold text-text-muted">الرمز البريدي</label>
-                      <input
-                        id="contact-zip"
-                        name="zipCode"
-                        type="text"
-                        placeholder="الرمز البريدي"
-                        value={formData.zipCode}
-                        onChange={handleChange}
-                        className="w-full bg-bg-royal/40 border border-white/20 focus:border-gold-primary/70 focus:bg-bg-royal/60 rounded-xl px-4 py-3 text-xs sm:text-sm text-text-primary placeholder:text-text-muted/65 focus:outline-none focus:ring-2 focus:ring-gold-primary/50 transition-all font-mono min-h-[44px]"
-                      />
+                    <div className="min-w-0">
+                      <FieldLabel htmlFor="contact-zip" icon={MapPinned} tone="text-[#9ebdd6]">الرمز البريدي</FieldLabel>
+                      <input id="contact-zip" name="zipCode" type="text" inputMode="numeric" placeholder="الرمز البريدي" value={formData.zipCode} onChange={handleChange} className={fieldClassName} />
                     </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="space-y-1">
-                      <label htmlFor="contact-bedrooms" className="block text-xs font-semibold text-text-muted">عدد الغرف</label>
-                      <select
-                        id="contact-bedrooms"
-                        name="bedrooms"
-                        value={formData.bedrooms}
-                        onChange={handleChange}
-                        className="w-full bg-[#0F2040]/70 border border-white/20 focus:border-gold-primary/70 focus:bg-[#152A54]/80 rounded-xl px-4 py-3 text-xs sm:text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-gold-primary/50 transition-all min-h-[44px]"
-                      >
+                    <div className="min-w-0">
+                      <FieldLabel htmlFor="contact-bedrooms" icon={BedDouble}>عدد الغرف</FieldLabel>
+                      <select id="contact-bedrooms" name="bedrooms" value={formData.bedrooms} onChange={handleChange} className={selectFieldClassName}>
                         <option value="1">1 غرفة</option>
                         <option value="2">2 غرف</option>
                         <option value="3">3 غرف</option>
@@ -314,40 +259,22 @@ export default function ContactFormSection() {
                         <option value="6+">6+ غرف</option>
                       </select>
                     </div>
-
-                    <div className="space-y-1">
-                      <label htmlFor="contact-bathrooms" className="block text-xs font-semibold text-text-muted">عدد الحمامات</label>
-                      <input
-                        id="contact-bathrooms"
-                        name="bathrooms"
-                        type="number"
-                        placeholder="مثال: 3"
-                        value={formData.bathrooms}
-                        onChange={handleChange}
-                        className="w-full bg-bg-royal/40 border border-white/20 focus:border-gold-primary/70 focus:bg-bg-royal/60 rounded-xl px-4 py-3 text-xs sm:text-sm text-text-primary placeholder:text-text-muted/65 focus:outline-none focus:ring-2 focus:ring-gold-primary/50 transition-all min-h-[44px]"
-                      />
+                    <div className="min-w-0">
+                      <FieldLabel htmlFor="contact-bathrooms" icon={Bath} tone="text-[#9ebdd6]">عدد الحمامات</FieldLabel>
+                      <input id="contact-bathrooms" name="bathrooms" type="number" inputMode="numeric" placeholder="مثال: 3" value={formData.bathrooms} onChange={handleChange} className={fieldClassName} />
                     </div>
-
-                    <div className="space-y-1">
-                      <label htmlFor="contact-budget" className="block text-xs font-semibold text-text-muted">الميزانية المتوقعة (ر.س)</label>
-                      <input
-                        id="contact-budget"
-                        name="budget"
-                        type="text"
-                        placeholder="مثال: 800,000"
-                        value={formData.budget}
-                        onChange={handleChange}
-                        className="w-full bg-bg-royal/40 border border-white/20 focus:border-gold-primary/70 focus:bg-bg-royal/60 rounded-xl px-4 py-3 text-xs sm:text-sm text-text-primary placeholder:text-text-muted/65 focus:outline-none focus:ring-2 focus:ring-gold-primary/50 transition-all min-h-[44px]"
-                      />
+                    <div className="min-w-0 col-span-2 sm:col-span-1">
+                      <FieldLabel htmlFor="contact-budget" icon={Wallet}>الميزانية المتوقعة (ر.س)</FieldLabel>
+                      <input id="contact-budget" name="budget" type="text" inputMode="decimal" placeholder="مثال: 800,000" value={formData.budget} onChange={handleChange} className={fieldClassName} />
                     </div>
                   </div>
                 </div>
 
-                <div className="pt-4">
+                <div className="pt-1">
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-4 px-6 text-xs sm:text-sm font-bold text-bg-midnight bg-gold-primary hover:bg-gold-warm rounded-xl transition-all duration-300 shadow-md hover:scale-[1.01] active:scale-[0.99] cursor-pointer flex items-center justify-center gap-2 min-h-[44px]"
+                    className="w-full py-3 px-6 text-xs sm:text-sm font-bold text-bg-midnight bg-gold-primary hover:bg-gold-warm rounded-xl transition-all duration-300 shadow-md hover:scale-[1.01] active:scale-[0.99] cursor-pointer flex items-center justify-center gap-2 min-h-[44px]"
                   >
                     {isSubmitting ? (
                       <>
@@ -355,7 +282,10 @@ export default function ContactFormSection() {
                         <span>جاري إرسال الطلب...</span>
                       </>
                     ) : (
-                      <span>إرسال الطلب</span>
+                      <>
+                        <Send aria-hidden="true" className="w-4 h-4" />
+                        <span>إرسال الطلب</span>
+                      </>
                     )}
                   </button>
                 </div>

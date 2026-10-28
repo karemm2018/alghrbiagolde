@@ -57,10 +57,10 @@ export async function getSubmissionsList(): Promise<Submission[]> {
 }
 
 // Create a new submission from the frontend forms
-export async function createSubmission(payload: Omit<Submission, 'id' | 'created_at' | 'status'>): Promise<{ success: boolean; data?: any; error?: string }> {
+export async function createSubmission(payload: Omit<Submission, 'id' | 'created_at' | 'status' | 'email'> & { email?: string }): Promise<{ success: boolean; data?: any; error?: string }> {
   try {
     const supabase = (await getSupabaseServerClient()) as any;
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('submissions')
       .insert([
         {
@@ -75,14 +75,13 @@ export async function createSubmission(payload: Omit<Submission, 'id' | 'created
           project_id: payload.project_id || null,
           status: 'new'
         }
-      ])
-      .select();
+      ]);
 
     if (error) throw error;
     
     revalidatePath('/algharbia-cp');
     revalidatePath('/algharbia-cp/submissions');
-    return { success: true, data };
+    return { success: true };
   } catch (err: any) {
     console.error('Error creating submission:', err);
     return { success: false, error: err.message || 'حدث خطأ أثناء إرسال طلبك' };
