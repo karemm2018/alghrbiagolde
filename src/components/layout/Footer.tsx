@@ -126,9 +126,9 @@ export default function Footer() {
             </p>
 
             <div className="space-y-3 text-xs text-slate-300">
-              <a href="tel:920016581" className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10 hover:border-gold-primary/40 hover:bg-white/10 transition-all duration-300 shadow-sm">
+              <a href="tel:+966550085811" className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10 hover:border-gold-primary/40 hover:bg-white/10 transition-all duration-300 shadow-sm">
                 <Phone className="w-4 h-4 text-gold-primary animate-pulse" />
-                <span className="font-bold text-white font-mono" dir="ltr">الرقم الموحد: 920016581</span>
+                <span className="font-bold text-white font-mono">الرقم الموحد: <bdi dir="ltr">+966 55 008 5811</bdi></span>
               </a>
 
               <a href="tel:0558837846" className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10 hover:border-gold-primary/40 hover:bg-white/10 transition-all duration-300 shadow-sm">
@@ -194,7 +194,7 @@ export default function Footer() {
 
           {/* Corporate Registration Info */}
           <div className="text-right text-[10px] text-slate-400 leading-relaxed font-el-messiri">
-            <p className="font-semibold text-slate-300">شركة الغربية الذهبية للتطوير العقاري | سجل تجاري: 4030489953 | الرقم الموحد: 920016581</p>
+            <p className="font-semibold text-slate-300">شركة الغربية الذهبية للتطوير العقاري | سجل تجاري: 4030489953 | الرقم الموحد: <bdi dir="ltr">+966 55 008 5811</bdi></p>
             <p>جدة، حي السلامة، طريق الأمير سلطان | البريد الإلكتروني: info@alghrbia.sa | Golden Western Real Estate Development</p>
           </div>
         </div>
