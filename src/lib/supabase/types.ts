@@ -60,6 +60,7 @@ export interface DbProject {
   hero_image: string;
   gallery: string[];
   videos: string[];
+  floor_plans: string[];
   price_min: number;
   price_max: number;
   total_units: number;

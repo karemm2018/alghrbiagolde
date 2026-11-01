@@ -30,6 +30,7 @@ import { getCloudinarySignature } from '../../app/actions/cloudinary';
 import { uploadFile, deleteFile } from '../../lib/supabase/storage';
 import { compressImageToWebP } from '../../lib/image';
 import AdminSelect from './AdminSelect';
+import ProjectFloorPlansEditor from './ProjectFloorPlansEditor';
 import { toast } from 'sonner';
 import * as XLSX from 'xlsx';
 
@@ -90,6 +91,8 @@ export default function ProjectForm({ initialData, projectId }: ProjectFormProps
   const [heroImage, setHeroImage] = useState(initialData?.hero_image || '');
   const [gallery, setGallery] = useState<string[]>(initialData?.gallery || []);
   const [videos, setVideos] = useState<string[]>(initialData?.videos || []);
+  const [floorPlans, setFloorPlans] = useState<string[]>(initialData?.floor_plans || []);
+  const [uploadingFloorPlans, setUploadingFloorPlans] = useState(false);
   const [brochureUrl, setBrochureUrl] = useState(initialData?.brochure_url || '');
 
   // Upload States
@@ -499,6 +502,10 @@ const getStoragePathFromUrl = (url: string) => {
   // Submit form (Save changes or Create)
   const handleSubmit = async (e: React.FormEvent, redirectAfterSave?: string) => {
     e.preventDefault();
+    if (uploadingFloorPlans) {
+      toast.error('انتظر انتهاء رفع المخططات قبل حفظ المشروع');
+      return;
+    }
     if (!name) {
       toast.error('الرجاء إدخال اسم المشروع');
       return;
@@ -519,6 +526,7 @@ const getStoragePathFromUrl = (url: string) => {
       heroImage,
       gallery,
       videos,
+      floorPlans,
       priceMin: priceMin || 0,
       priceMax: priceMax || 0,
       totalUnits: totalUnits || 0,
@@ -582,7 +590,7 @@ const getStoragePathFromUrl = (url: string) => {
                 handleSubmit(e, '/algharbia-cp/properties/new');
               }
             }}
-            disabled={loading}
+            disabled={loading || uploadingFloorPlans}
             className="neu-btn neu-btn-ghost text-xs text-[var(--neu-gold)] border-[var(--neu-gold)]/20 hover:bg-[var(--neu-gold)]/10"
           >
             <PlusCircle className="w-4 h-4" />
@@ -591,7 +599,7 @@ const getStoragePathFromUrl = (url: string) => {
           
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || uploadingFloorPlans}
             className="neu-btn neu-btn-primary py-2.5 px-5 text-sm"
           >
             {loading ? (
@@ -993,6 +1001,13 @@ const getStoragePathFromUrl = (url: string) => {
                 title="رفع صور المعرض"
               />
             </div>
+
+            <ProjectFloorPlansEditor
+              value={floorPlans}
+              onChange={setFloorPlans}
+              uploading={uploadingFloorPlans}
+              onUploadingChange={setUploadingFloorPlans}
+            />
 
             {/* Video Urls */}
             <div>

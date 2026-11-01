@@ -357,12 +357,7 @@ const getStoragePathFromUrl = (url: string) => {
     setError('');
 
     try {
-      if (floorPlan) {
-        const oldPath = getStoragePathFromUrl(floorPlan);
-        if (oldPath) {
-          await deleteFile('media', oldPath);
-        }
-      }
+      // A saved plan can also belong to the project; replacing it must not delete the shared file.
       const webpFile = await compressImageToWebP(file);
       const uniqueName = `floorplan-${Date.now()}.webp`;
       const filePath = `properties/plans/${uniqueName}`;

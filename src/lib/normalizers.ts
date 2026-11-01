@@ -78,7 +78,8 @@ export function normalizeProject(proj: any): Project {
     media: {
       hero: proj.hero_image || '',
       gallery: proj.gallery || [],
-      videos: proj.videos || []
+      videos: proj.videos || [],
+      floorPlans: proj.floor_plans || []
     },
     priceRange: {
       min: proj.price_min || 0,

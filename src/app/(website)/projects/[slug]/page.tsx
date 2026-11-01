@@ -13,6 +13,7 @@ import { getProjectBySlug, getPropertiesByProjectSlug } from '@/app/actions/prop
 import MediaGallery from '@/components/ui/MediaGallery';
 import { ProjectSidebarInquiry } from '@/components/property/ProjectActions';
 import UnitsCarousel from '@/components/property/UnitsCarousel';
+import FloorPlansSection from '@/components/property/FloorPlansSection';
 import {
   Building2,
   MapPin,
@@ -156,6 +157,8 @@ export default async function ProjectDetailPage({ params }: PageProps) {
         <div className="w-full">
           <MediaGallery images={galleryImages} videos={project.media.videos} title={project.name} />
         </div>
+
+        <FloorPlansSection plans={project.media.floorPlans || []} title="مخططات المشروع" name={project.name} />
 
         {/* 4. Split Layout Section: Pricing & Inquiry (Right) vs Map (Left) - Equal Height */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">

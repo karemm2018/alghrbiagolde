@@ -8,6 +8,20 @@ import { PROPERTIES, PROJECTS } from '../../lib/mockData';
 import { normalizeProperty, normalizeProject } from '../../lib/normalizers';
 import { deleteCloudinaryVideo } from './cloudinary';
 
+function validateProjectFloorPlans(value: unknown): string[] {
+  if (value === undefined) return [];
+  if (!Array.isArray(value)) throw new Error('قائمة مخططات المشروع غير صالحة');
+  const plans = value.map(url => {
+    if (typeof url !== 'string') throw new Error('رابط المخطط غير صالح');
+    const parsed = new URL(url);
+    if (parsed.protocol !== 'https:' || !['zrbwtxufgtwtrkjvlwwi.supabase.co', 'res.cloudinary.com'].includes(parsed.hostname)) {
+      throw new Error('استخدم صور المخططات المرفوعة على تخزين الموقع');
+    }
+    return url;
+  });
+  return [...new Set(plans)];
+}
+
 // Load projects list for dynamic dropdowns
 export async function getProjectsList() {
   try {
@@ -293,10 +307,7 @@ export async function deleteProperty(id: string) {
         const path = getStoragePathFromUrl(property.thumbnail);
         if (path) storagePaths.push(path);
       }
-      if (property.floor_plan) {
-        const path = getStoragePathFromUrl(property.floor_plan);
-        if (path) storagePaths.push(path);
-      }
+      // Keep floor plan files: they may also be referenced by their project or other units.
       if (Array.isArray(property.images)) {
         property.images.forEach((img: string) => {
           const path = getStoragePathFromUrl(img);
@@ -712,6 +723,7 @@ export async function createProject(formData: any, propertiesToInsert?: any[]) {
       hero_image: formData.heroImage || '',
       gallery: formData.gallery || [],
       videos: formData.videos || [],
+      floor_plans: validateProjectFloorPlans(formData.floorPlans),
       price_min: parseInt(formData.priceMin) || 0,
       price_max: parseInt(formData.priceMax) || 0,
       total_units: parseInt(formData.totalUnits) || 0,
@@ -803,6 +815,7 @@ export async function updateProject(id: string, formData: any, propertiesToInser
       hero_image: formData.heroImage || '',
       gallery: formData.gallery || [],
       videos: formData.videos || [],
+      ...(formData.floorPlans !== undefined ? { floor_plans: validateProjectFloorPlans(formData.floorPlans) } : {}),
       price_min: parseInt(formData.priceMin) || 0,
       price_max: parseInt(formData.priceMax) || 0,
       total_units: parseInt(formData.totalUnits) || 0,

@@ -62,6 +62,7 @@ export interface Project {
     hero: string;
     gallery: string[];
     videos?: string[];
+    floorPlans?: string[];
   };
   priceRange: { min: number; max: number; currency: 'SAR' };
   specs: {
