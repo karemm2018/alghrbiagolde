@@ -1249,3 +1249,182 @@
     display: inline !important;
   }
 }
+
+/* ------------------------------------------------------------
+   19. Light Theme — Cream Canvas & Defined Surfaces
+   Keep the dark theme's existing palette and soft depth intact.
+   ------------------------------------------------------------ */
+:root:not([data-theme="dark"]) {
+  --neu-base: #F7F5F0;
+  --neu-raised: #FFFDF9;
+  --neu-depressed: #F0EFEA;
+  --neu-surface: #ECECE5;
+  --neu-shell: #E6E6DF;
+  --neu-border: #D8D6CD;
+  --neu-border-gold: rgba(138, 104, 46, 0.22);
+
+  /* No white highlights: even less common controls remain free of halos. */
+  --neu-shadow-dark: rgba(25, 31, 40, 0.07);
+  --neu-shadow-dark-strong: rgba(25, 31, 40, 0.11);
+  --neu-shadow-light: transparent;
+  --neu-shadow-light-strong: transparent;
+  --neu-elevation-sm: 0 2px 5px rgba(25, 31, 40, 0.06);
+  --neu-elevation-card: 0 3px 12px rgba(25, 31, 40, 0.07);
+  --neu-elevation-hover: 0 5px 16px rgba(25, 31, 40, 0.10);
+  --neu-elevation-overlay: 0 10px 28px rgba(25, 31, 40, 0.14);
+
+  /* Deeper gold stays readable on ivory; primary buttons use a lighter fill. */
+  --neu-gold: #8A682E;
+  --neu-gold-light: #D9BD80;
+  --neu-gold-warm: #B58C4A;
+  --neu-gold-deep: #805B23;
+  --neu-gold-glow: rgba(138, 104, 46, 0.08);
+  --neu-gold-glow-strong: rgba(138, 104, 46, 0.16);
+  --neu-text-primary: #192C43;
+  --neu-text-secondary: #405168;
+  --neu-text-muted: #5C6776;
+  --neu-text-heading: #102139;
+
+  --neu-success: #1B7A4A;
+  --neu-success-bg: #E5F4EB;
+  --neu-success-border: #A4D3B7;
+  --neu-warning: #95520C;
+  --neu-warning-bg: #FBF0DF;
+  --neu-warning-border: #E7CDA9;
+  --neu-danger: #AB352D;
+  --neu-danger-bg: #FBEDEB;
+  --neu-danger-border: #E4B4AE;
+  --neu-info: #21658C;
+  --neu-info-bg: #E9F3F8;
+  --neu-info-border: #B5D4E4;
+}
+
+:root:not([data-theme="dark"]) .admin-layout {
+  background: var(--neu-base);
+}
+
+:root:not([data-theme="dark"]) :is(.admin-topbar, .admin-sidebar) {
+  background: var(--neu-shell);
+  border-color: var(--neu-border);
+}
+
+:root:not([data-theme="dark"]) :is(.neu-raised, .neu-card, .neu-table-wrapper, .neu-chart-container) {
+  border: 1px solid var(--neu-border);
+  box-shadow: var(--neu-elevation-card);
+}
+
+:root:not([data-theme="dark"]) .neu-raised-sm {
+  border: 1px solid var(--neu-border);
+  box-shadow: var(--neu-elevation-sm);
+}
+
+:root:not([data-theme="dark"]) :is(.neu-raised-lg, .neu-modal, .admin-select-menu) {
+  border: 1px solid var(--neu-border);
+  box-shadow: var(--neu-elevation-overlay);
+}
+
+:root:not([data-theme="dark"]) :is(.neu-card-gold, .neu-gold-glow) {
+  border: 1px solid var(--neu-border-gold);
+  box-shadow: var(--neu-elevation-card);
+}
+
+:root:not([data-theme="dark"]) :is(.neu-pressable:hover, .neu-card-interactive:hover, .neu-gold-glow:hover) {
+  box-shadow: var(--neu-elevation-hover);
+}
+
+:root:not([data-theme="dark"]) :is(.neu-inset, .neu-inset-sm, .neu-input, .admin-select-trigger) {
+  border: 1px solid var(--neu-border);
+  box-shadow: inset 0 1px 2px rgba(25, 31, 40, 0.04);
+}
+
+:root:not([data-theme="dark"]) :is(.neu-input:focus, .neu-inset:focus-within, .neu-inset-sm:focus-within, .admin-select-trigger:focus-visible) {
+  border-color: var(--neu-gold);
+  box-shadow: 0 0 0 3px var(--neu-gold-glow-strong);
+}
+
+:root:not([data-theme="dark"]) .sidebar-nav-item.active {
+  color: var(--neu-text-heading);
+  background: #EAE0C9;
+  box-shadow: inset 0 0 0 1px rgba(138, 104, 46, 0.16);
+}
+
+:root:not([data-theme="dark"]) .sidebar-nav-item.active .sidebar-nav-icon {
+  color: var(--neu-gold);
+}
+
+:root:not([data-theme="dark"]) .neu-btn-primary {
+  background: linear-gradient(135deg, #B8945A, #D8BC80);
+  color: #102139;
+  border: 1px solid rgba(138, 104, 46, 0.22);
+  box-shadow: var(--neu-elevation-sm);
+}
+
+:root:not([data-theme="dark"]) :is(.neu-btn-secondary, .neu-btn-danger, .sidebar-logout-btn) {
+  border: 1px solid var(--neu-border);
+  box-shadow: var(--neu-elevation-sm);
+}
+
+:root:not([data-theme="dark"]) :is(.neu-btn-primary:hover, .neu-btn-secondary:hover, .neu-btn-danger:hover, .sidebar-logout-btn:hover) {
+  box-shadow: var(--neu-elevation-hover);
+}
+
+:root:not([data-theme="dark"]) :is(.neu-btn-primary:active, .neu-pressable:active) {
+  box-shadow: inset 0 1px 3px rgba(25, 31, 40, 0.14);
+}
+
+:root:not([data-theme="dark"]) :is(.neu-btn, .neu-btn-icon, .sidebar-nav-item, .sidebar-logout-btn):focus-visible {
+  outline: 2px solid var(--neu-gold);
+  outline-offset: 3px;
+}
+
+:root:not([data-theme="dark"]) .neu-table th {
+  background: var(--neu-surface);
+  color: var(--neu-text-secondary);
+  border-bottom-color: var(--neu-border);
+}
+
+:root:not([data-theme="dark"]) .neu-table td {
+  border-bottom-color: #E7E4DB;
+}
+
+:root:not([data-theme="dark"]) .neu-table tbody tr:hover {
+  background: #F5F1E8;
+}
+
+:root:not([data-theme="dark"]) .neu-badge-gold {
+  background: #F5EFDF;
+  border-color: #DECFAC;
+}
+
+:root:not([data-theme="dark"]) :is(.neu-dropzone, .neu-dropzone.drag-active, .neu-toggle, .neu-step.pending .neu-step-circle) {
+  box-shadow: inset 0 1px 3px rgba(25, 31, 40, 0.06);
+}
+
+:root:not([data-theme="dark"]) :is(.neu-toggle-knob, .neu-toggle.active .neu-toggle-knob) {
+  box-shadow: 0 1px 4px rgba(25, 31, 40, 0.16);
+}
+
+:root:not([data-theme="dark"]) .neu-step.active .neu-step-circle {
+  background: #D8BC80;
+  box-shadow: var(--neu-elevation-sm);
+}
+
+/* Existing forms use these subtle dividers; make them visible on ivory too. */
+:root:not([data-theme="dark"]) .admin-layout :is([class~="border-white/5"], [class~="border-white/10"], [class~="border-white/15"]) {
+  border-color: var(--neu-border);
+}
+
+:root:not([data-theme="dark"]) .neu-chart-container :is(.recharts-cartesian-grid-horizontal, .recharts-cartesian-grid-vertical) line {
+  stroke: var(--neu-border);
+}
+
+@media (max-width: 1024px) {
+  :root:not([data-theme="dark"]) .admin-sidebar.collapsed .sidebar-logout-btn {
+    border-color: var(--neu-border) !important;
+    box-shadow: var(--neu-elevation-sm) !important;
+  }
+
+  :root:not([data-theme="dark"]) .admin-sidebar.collapsed .sidebar-logout-btn:hover {
+    box-shadow: var(--neu-elevation-hover) !important;
+  }
+}

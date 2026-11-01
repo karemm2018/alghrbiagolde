@@ -53,7 +53,7 @@ export default function AdminSelect({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full flex items-center justify-between gap-2 px-4 py-2.5 rounded-xl border border-transparent bg-[var(--neu-depressed)] text-sm text-[var(--neu-text-primary)] hover:border-[var(--neu-gold)]/40 transition-all text-right duration-200 focus:outline-none focus:ring-1 focus:ring-[var(--neu-gold)] ${
+        className={`admin-select-trigger w-full flex items-center justify-between gap-2 px-4 py-2.5 rounded-xl border border-transparent bg-[var(--neu-depressed)] text-sm text-[var(--neu-text-primary)] hover:border-[var(--neu-gold)]/40 transition-all text-right duration-200 focus:outline-none focus:ring-1 focus:ring-[var(--neu-gold)] ${
           isOpen ? 'border-[var(--neu-gold)]/60 text-[var(--neu-text-primary)]' : ''
         }`}
       >
@@ -67,7 +67,7 @@ export default function AdminSelect({
 
       {/* Dropdown Options */}
       {isOpen && (
-        <div className="absolute z-50 w-full mt-2 rounded-xl border border-[var(--neu-text-muted)]/20 bg-[var(--neu-raised)] shadow-[0_10px_25px_-5px_rgba(165,180,203,0.35),0_8px_16px_-6px_rgba(165,180,203,0.35)] overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150">
+        <div className="admin-select-menu absolute z-50 w-full mt-2 rounded-xl border border-[var(--neu-text-muted)]/20 bg-[var(--neu-raised)] shadow-[0_10px_25px_-5px_rgba(165,180,203,0.35),0_8px_16px_-6px_rgba(165,180,203,0.35)] overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150">
           <div className="max-h-60 overflow-y-auto py-1.5 [scrollbar-width:thin] no-scrollbar-track">
             {options.map((opt) => {
               const isSelected = opt.value === value;
