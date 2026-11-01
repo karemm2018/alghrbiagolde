@@ -1251,16 +1251,16 @@
 }
 
 /* ------------------------------------------------------------
-   19. Light Theme — Cream Canvas & Defined Surfaces
+   19. Light Theme — Bright Canvas & Neutral Gray Chrome
    Keep the dark theme's existing palette and soft depth intact.
    ------------------------------------------------------------ */
 :root:not([data-theme="dark"]) {
-  --neu-base: #F7F5F0;
-  --neu-raised: #FFFDF9;
-  --neu-depressed: #F0EFEA;
-  --neu-surface: #ECECE5;
-  --neu-shell: #E6E6DF;
-  --neu-border: #D8D6CD;
+  --neu-base: #FAFBFC;
+  --neu-raised: #FFFFFF;
+  --neu-depressed: #F3F5F7;
+  --neu-surface: #EEF1F4;
+  --neu-shell: #E5E7EB;
+  --neu-border: #D4DAE2;
   --neu-border-gold: rgba(138, 104, 46, 0.22);
 
   /* No white highlights: even less common controls remain free of halos. */
@@ -1273,7 +1273,7 @@
   --neu-elevation-hover: 0 5px 16px rgba(25, 31, 40, 0.10);
   --neu-elevation-overlay: 0 10px 28px rgba(25, 31, 40, 0.14);
 
-  /* Deeper gold stays readable on ivory; primary buttons use a lighter fill. */
+  /* Deeper gold stays readable on white; primary buttons use a lighter fill. */
   --neu-gold: #8A682E;
   --neu-gold-light: #D9BD80;
   --neu-gold-warm: #B58C4A;
@@ -1344,8 +1344,8 @@
 
 :root:not([data-theme="dark"]) .sidebar-nav-item.active {
   color: var(--neu-text-heading);
-  background: #EAE0C9;
-  box-shadow: inset 0 0 0 1px rgba(138, 104, 46, 0.16);
+  background: #F6F7F9;
+  box-shadow: inset 0 0 0 1px rgba(25, 44, 67, 0.14);
 }
 
 :root:not([data-theme="dark"]) .sidebar-nav-item.active .sidebar-nav-icon {
@@ -1384,11 +1384,11 @@
 }
 
 :root:not([data-theme="dark"]) .neu-table td {
-  border-bottom-color: #E7E4DB;
+  border-bottom-color: #E5E9EE;
 }
 
 :root:not([data-theme="dark"]) .neu-table tbody tr:hover {
-  background: #F5F1E8;
+  background: #F4F6F8;
 }
 
 :root:not([data-theme="dark"]) .neu-badge-gold {
@@ -1409,7 +1409,7 @@
   box-shadow: var(--neu-elevation-sm);
 }
 
-/* Existing forms use these subtle dividers; make them visible on ivory too. */
+/* Existing forms use these subtle dividers; keep them visible on white too. */
 :root:not([data-theme="dark"]) .admin-layout :is([class~="border-white/5"], [class~="border-white/10"], [class~="border-white/15"]) {
   border-color: var(--neu-border);
 }
