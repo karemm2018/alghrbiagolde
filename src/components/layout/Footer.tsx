@@ -14,12 +14,12 @@ export default function Footer() {
       {/* Premium gradient top divider */}
       <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-[#C9A96E]/50 to-transparent z-20" />
       {/* Glow overlay */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[200px] bg-gradient-to-r from-brand-primary/10 via-gold-primary/10 to-brand-primary/10 rounded-full blur-3xl -z-10"></div>
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[43.75rem] h-[12.5rem] bg-gradient-to-r from-brand-primary/10 via-gold-primary/10 to-brand-primary/10 rounded-full blur-3xl -z-10"></div>
 
       {/* Skyline Background - Parallax */}
       <div className="absolute inset-0 select-none pointer-events-none z-0 footer-parallax-bg" />
 
-      <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
+      <div className="relative w-[min(calc(100%-2rem),78rem)] lg:w-[min(73vw,78rem)] mx-auto px-4 sm:px-6 lg:px-8 z-10">
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16 text-right">
 
@@ -161,49 +161,49 @@ export default function Footer() {
         {/* Social Row & Corporate details */}
         <div className="pt-8 flex flex-col md:flex-row justify-between items-center gap-6 mb-16 border-t border-white/5 relative z-10">
           {/* Social circle buttons */}
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 sm:gap-4">
             {/* WhatsApp */}
-            <a href="https://api.whatsapp.com/send?phone=966558837846" target="_blank" rel="noopener noreferrer" className="w-11 h-11 rounded-full bg-bg-royal/60 border border-gold-primary/35 flex items-center justify-center hover:bg-bg-royal hover:border-gold-primary text-gold-primary hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-[0_0_15px_rgba(201,169,110,0.4)] shadow-md" aria-label="WhatsApp">
+            <a href="https://api.whatsapp.com/send?phone=966558837846" target="_blank" rel="noopener noreferrer" className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-bg-royal/60 border border-gold-primary/35 flex items-center justify-center hover:bg-bg-royal hover:border-gold-primary text-gold-primary hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-[0_0_15px_rgba(201,169,110,0.4)] shadow-md" aria-label="WhatsApp">
               <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.454 5.709 1.455h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
               </svg>
             </a>
             {/* Instagram */}
-            <a href="https://instagram.com/alghrbiagolden" target="_blank" rel="noopener noreferrer" className="w-11 h-11 rounded-full bg-bg-royal/60 border border-gold-primary/35 flex items-center justify-center hover:bg-bg-royal hover:border-gold-primary text-gold-primary hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-[0_0_15px_rgba(201,169,110,0.4)] shadow-md" aria-label="Instagram">
+            <a href="https://instagram.com/alghrbiagolden" target="_blank" rel="noopener noreferrer" className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-bg-royal/60 border border-gold-primary/35 flex items-center justify-center hover:bg-bg-royal hover:border-gold-primary text-gold-primary hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-[0_0_15px_rgba(201,169,110,0.4)] shadow-md" aria-label="Instagram">
               <Instagram className="w-5 h-5" />
             </a>
             {/* X / Twitter */}
-            <a href="https://x.com/alghrbiagolden" target="_blank" rel="noopener noreferrer" className="w-11 h-11 rounded-full bg-bg-royal/60 border border-gold-primary/35 flex items-center justify-center hover:bg-bg-royal hover:border-gold-primary text-gold-primary hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-[0_0_15px_rgba(201,169,110,0.4)] shadow-md" aria-label="X (Twitter)">
+            <a href="https://x.com/alghrbiagolden" target="_blank" rel="noopener noreferrer" className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-bg-royal/60 border border-gold-primary/35 flex items-center justify-center hover:bg-bg-royal hover:border-gold-primary text-gold-primary hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-[0_0_15px_rgba(201,169,110,0.4)] shadow-md" aria-label="X (Twitter)">
               <svg className="w-4.5 h-4.5 fill-current" viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
               </svg>
             </a>
             {/* LinkedIn */}
-            <a href="https://linkedin.com/company/alghrbiagolden" target="_blank" rel="noopener noreferrer" className="w-11 h-11 rounded-full bg-bg-royal/60 border border-gold-primary/35 flex items-center justify-center hover:bg-bg-royal hover:border-gold-primary text-gold-primary hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-[0_0_15px_rgba(201,169,110,0.4)] shadow-md" aria-label="LinkedIn">
+            <a href="https://linkedin.com/company/alghrbiagolden" target="_blank" rel="noopener noreferrer" className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-bg-royal/60 border border-gold-primary/35 flex items-center justify-center hover:bg-bg-royal hover:border-gold-primary text-gold-primary hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-[0_0_15px_rgba(201,169,110,0.4)] shadow-md" aria-label="LinkedIn">
               <Linkedin className="w-5 h-5" />
             </a>
             {/* Facebook */}
-            <a href="#" className="w-11 h-11 rounded-full bg-bg-royal/60 border border-gold-primary/35 flex items-center justify-center hover:bg-bg-royal hover:border-gold-primary text-gold-primary hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-[0_0_15px_rgba(201,169,110,0.4)] shadow-md" aria-label="Facebook">
+            <a href="#" className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-bg-royal/60 border border-gold-primary/35 flex items-center justify-center hover:bg-bg-royal hover:border-gold-primary text-gold-primary hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-[0_0_15px_rgba(201,169,110,0.4)] shadow-md" aria-label="Facebook">
               <Facebook className="w-5 h-5" />
             </a>
             {/* YouTube */}
-            <a href="https://youtube.com/@alghrbiagolden" target="_blank" rel="noopener noreferrer" className="w-11 h-11 rounded-full bg-bg-royal/60 border border-gold-primary/35 flex items-center justify-center hover:bg-bg-royal hover:border-gold-primary text-gold-primary hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-[0_0_15px_rgba(201,169,110,0.4)] shadow-md" aria-label="YouTube">
+            <a href="https://youtube.com/@alghrbiagolden" target="_blank" rel="noopener noreferrer" className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-bg-royal/60 border border-gold-primary/35 flex items-center justify-center hover:bg-bg-royal hover:border-gold-primary text-gold-primary hover:text-white transition-all duration-300 hover:scale-110 hover:shadow-[0_0_15px_rgba(201,169,110,0.4)] shadow-md" aria-label="YouTube">
               <Youtube className="w-5 h-5" />
             </a>
           </div>
 
           {/* Corporate Registration Info */}
-          <div className="text-right text-[10px] text-slate-400 leading-relaxed font-el-messiri">
+          <div className="text-center sm:text-right text-[10px] text-slate-400 leading-relaxed font-el-messiri break-words max-w-full">
             <p className="font-semibold text-slate-300">شركة الغربية الذهبية للتطوير العقاري | سجل تجاري: 4030489953 | الرقم الموحد: <bdi dir="ltr">920016581</bdi></p>
-            <p>جدة، حي السلامة، طريق الأمير سلطان | البريد الإلكتروني: info@alghrbia.sa | Golden Western Real Estate Development</p>
+            <p className="break-all sm:break-normal">جدة، حي السلامة، طريق الأمير سلطان | البريد الإلكتروني: info@alghrbia.sa | Golden Western Real Estate Development</p>
           </div>
         </div>
 
       </div>
 
       {/* Skyline Footer Bottom Panel */}
-      <div className="w-full relative z-10 border-t border-white/5 bg-[#060D1A]/90 backdrop-blur-md pt-8 pb-10">
-        <div className="max-w-7xl mx-auto px-4 text-center text-slate-400 text-[10px] sm:text-xs">
+      <div className="w-full relative z-10 border-t border-white/5 bg-[#060D1A]/90 backdrop-blur-md pt-8 pb-[clamp(4.5rem,8dvh,6rem)]">
+        <div className="w-[min(calc(100%-2rem),78rem)] lg:w-[min(73vw,78rem)] mx-auto px-4 text-center text-slate-400 text-[10px] sm:text-xs">
           <p className="font-mono">&copy; {new Date().getFullYear()} GOLDEN WESTERN. All Rights Reserved.</p>
           <p className="opacity-75 font-el-messiri mt-1">
             صُمم بالفخامة الرقمية لتلبية تطلعات الكود السعودي للبناء.

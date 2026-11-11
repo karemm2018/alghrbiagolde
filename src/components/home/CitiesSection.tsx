@@ -58,8 +58,8 @@ export default function CitiesSection({ selectedCity, setSelectedCity, propertie
   ];
 
   return (
-    <div className="w-full bg-gradient-to-b from-bg-deep via-bg-navy to-bg-deep border-t border-border-gold/15 pt-32 sm:pt-36 lg:pt-40 pb-16">
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="w-full bg-gradient-to-b from-bg-deep via-bg-navy to-bg-deep border-t border-border-gold/15 pt-32 sm:pt-36 lg:pt-40 pb-16" data-pf-full-bleed>
+      <section className="w-[min(calc(100%-2rem),78rem)] lg:w-[min(73vw,78rem)] mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -111,10 +111,10 @@ export default function CitiesSection({ selectedCity, setSelectedCity, propertie
                 )}
 
                 {/* Golden luxury overlay */}
-                <div className={`absolute inset-0 bg-gold-primary/5 transition-opacity duration-500 z-15 ${isSelected ? 'opacity-100' : 'opacity-0'}`}></div>
+                <div className={`absolute inset-0 bg-gold-primary/5 transition-opacity duration-500 z-15 pointer-events-none ${isSelected ? 'opacity-100' : 'opacity-0'}`}></div>
 
-                <div className="absolute inset-0 bg-gradient-to-t from-bg-deep/95 via-bg-deep/30 to-transparent z-10"></div>
-                <div className="absolute inset-0 transition-transform duration-700 group-hover:scale-105">
+                <div className="absolute inset-0 bg-gradient-to-t from-bg-deep/95 via-bg-deep/30 to-transparent z-10 pointer-events-none"></div>
+                <div className="absolute inset-0 transition-transform duration-700 group-hover:scale-105 pointer-events-none">
                   <Image
                     src={city.image}
                     alt={city.alt}
@@ -122,7 +122,7 @@ export default function CitiesSection({ selectedCity, setSelectedCity, propertie
                     sizes="(max-width: 640px) 100vw, 33vw"
                     className="object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-br from-brand-deep/20 to-bg-deep/40"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-brand-deep/20 to-bg-deep/40 pointer-events-none"></div>
                 </div>
 
                 <div className="absolute bottom-4 start-4 sm:bottom-6 sm:start-6 z-20 text-start">

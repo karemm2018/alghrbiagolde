@@ -115,7 +115,7 @@ export default function AdminSidebar({
         aria-label="القائمة الجانبية"
       >
         {/* Sidebar Header with collapse/close controls */}
-        <div className="flex items-center justify-between p-4 h-[70px] shrink-0">
+        <div className="flex items-center justify-between p-4 h-[4.375rem] shrink-0">
           {/* Desktop collapse button */}
           <button
             onClick={onToggleCollapse}

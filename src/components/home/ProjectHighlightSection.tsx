@@ -17,8 +17,8 @@ function FeaturedProjectCard({ project }: { project: Project }) {
       <div className="absolute top-0 start-0 w-full h-[3px] bg-gradient-to-r from-transparent via-gold-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20"></div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
-        <div className="order-1 lg:order-2 lg:col-span-7 relative h-64 sm:h-80 md:h-[400px] lg:h-auto min-h-[260px] lg:min-h-[440px] overflow-hidden bg-bg-deep">
-          <div className="absolute inset-0 bg-gradient-to-t from-bg-deep/75 via-transparent to-transparent z-10"></div>
+        <div className="order-1 lg:order-2 lg:col-span-7 relative h-64 sm:h-80 md:h-[25rem] lg:h-auto min-h-[16.25rem] lg:min-h-[27.5rem] overflow-hidden bg-bg-deep">
+          <div className="absolute inset-0 bg-gradient-to-t from-bg-deep/75 via-transparent to-transparent z-10 pointer-events-none"></div>
 
           <div className="absolute top-6 end-6 z-20 flex flex-wrap gap-2">
             <span className="px-4 py-1.5 text-xs font-extrabold text-bg-midnight bg-gold-primary border border-gold-primary rounded-full shadow-lg shadow-gold-primary/25 uppercase">
@@ -61,40 +61,40 @@ function FeaturedProjectCard({ project }: { project: Project }) {
               {project.description}
             </p>
 
-            <div className="grid grid-cols-2 gap-4 p-4 rounded-xl bg-white/[0.02] border border-white/5 mb-6 text-xs text-text-secondary">
-              <div>
-                <span className="block text-text-muted mb-1.5 text-xs uppercase tracking-wider">تاريخ التسليم</span>
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl bg-white/[0.02] border border-white/5 mb-6 text-xs text-text-secondary">
+              <div className="min-w-0">
+                <span className="block text-text-muted mb-1 text-[10px] sm:text-xs uppercase tracking-wider">تاريخ التسليم</span>
                 <span className="font-bold text-text-primary text-xs sm:text-sm">{project.specs.completionDate}</span>
               </div>
-              <div>
-                <span className="block text-text-muted mb-1.5 text-xs uppercase tracking-wider">إجمالي الوحدات</span>
+              <div className="min-w-0">
+                <span className="block text-text-muted mb-1 text-[10px] sm:text-xs uppercase tracking-wider">إجمالي الوحدات</span>
                 <span className="font-bold text-text-primary font-mono text-xs sm:text-sm">{project.specs.totalUnits} وحدة</span>
               </div>
-              <div>
-                <span className="block text-text-muted mb-1.5 text-xs uppercase tracking-wider">نطاق الأسعار</span>
-                <span className="font-bold text-gold-primary font-mono text-xs sm:text-sm">تبدأ من {formatPrice(project.priceRange.min)}</span>
+              <div className="min-w-0">
+                <span className="block text-text-muted mb-1 text-[10px] sm:text-xs uppercase tracking-wider">نطاق الأسعار</span>
+                <span className="font-bold text-gold-primary font-mono text-xs sm:text-sm truncate block">تبدأ من {formatPrice(project.priceRange.min)}</span>
               </div>
-              <div>
-                <span className="block text-text-muted mb-1.5 text-xs uppercase tracking-wider">الوحدات المتاحة</span>
+              <div className="min-w-0">
+                <span className="block text-text-muted mb-1 text-[10px] sm:text-xs uppercase tracking-wider">الوحدات المتاحة</span>
                 <span className="font-bold text-status-available font-mono text-xs sm:text-sm">{project.specs.availableUnits} وحدة</span>
               </div>
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3 pt-2 w-full">
+          <div className="flex flex-col 2xl:flex-row gap-3 pt-2 w-full">
             <a
               href={project.brochureUrl || `/brochure-${project.slug}.pdf`}
               target={project.brochureUrl ? "_blank" : undefined}
               rel={project.brochureUrl ? "noopener noreferrer" : undefined}
               download={!project.brochureUrl}
-              className="w-full sm:flex-1 py-3.5 px-6 text-xs sm:text-sm font-extrabold btn-premium-gold flex items-center justify-center gap-2 cursor-pointer font-el-messiri whitespace-nowrap min-h-[44px] rounded-full"
+              className="w-full 2xl:flex-1 py-3.5 px-4 sm:px-6 text-xs sm:text-sm font-extrabold btn-premium-gold flex items-center justify-center text-center gap-2 cursor-pointer font-el-messiri min-h-[2.75rem] rounded-full"
             >
               <Download className="w-4 h-4 shrink-0" />
               <span>تحميل البروفايل (PDF)</span>
             </a>
             <Link
               href={`/projects/${project.slug}`}
-              className="w-full sm:flex-1 py-3.5 px-6 text-xs sm:text-sm font-extrabold btn-premium-glass flex items-center justify-center text-center gap-2 cursor-pointer font-el-messiri whitespace-nowrap min-h-[44px] rounded-full"
+              className="w-full 2xl:flex-1 py-3.5 px-4 sm:px-6 text-xs sm:text-sm font-extrabold btn-premium-glass flex items-center justify-center text-center gap-2 cursor-pointer font-el-messiri min-h-[2.75rem] rounded-full"
             >
               <span>استعرض المشروع</span>
             </Link>
@@ -107,11 +107,11 @@ function FeaturedProjectCard({ project }: { project: Project }) {
 
 function SimplifiedProjectCard({ project }: { project: Project }) {
   return (
-    <div className="group relative flex flex-col h-full bg-bg-navy/40 backdrop-blur-md rounded-2xl overflow-hidden border border-white/10 transition-all duration-500 hover:border-border-gold/30 hover:bg-bg-navy/60 hover:-translate-y-1 w-[280px] sm:w-[285px] md:w-[310px] shrink-0">
+    <div className="group relative flex flex-col h-full bg-bg-navy/40 backdrop-blur-md rounded-2xl overflow-hidden border border-white/10 transition-all duration-500 hover:border-border-gold/30 hover:bg-bg-navy/60 hover:-translate-y-1 w-[17.5rem] sm:w-[17.8125rem] md:w-[19.375rem] shrink-0">
       <div className="absolute top-0 start-0 w-full h-[2px] bg-gradient-to-r from-transparent via-gold-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20"></div>
 
       <div className="relative aspect-[16/10] overflow-hidden bg-bg-deep">
-        <div className="absolute inset-0 bg-gradient-to-t from-bg-deep/50 to-transparent z-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-bg-deep/50 to-transparent z-10 pointer-events-none"></div>
         <Image
           src={project.media.hero || "/projects/amal-stars-showcase.webp"}
           alt={project.name}
@@ -160,13 +160,13 @@ function SimplifiedProjectCard({ project }: { project: Project }) {
               download={!project.brochureUrl}
               title="تحميل البروفايل PDF"
               aria-label="تحميل البروفايل PDF"
-              className="p-2.5 rounded-lg bg-white/5 hover:bg-gold-primary/10 border border-white/10 text-text-secondary hover:text-gold-primary transition-all cursor-pointer min-w-[44px] min-h-[44px] flex items-center justify-center"
+              className="p-2.5 rounded-lg bg-white/5 hover:bg-gold-primary/10 border border-white/10 text-text-secondary hover:text-gold-primary transition-all cursor-pointer min-w-[2.75rem] min-h-[2.75rem] flex items-center justify-center"
             >
               <Download className="w-4 h-4" />
             </a>
             <Link
               href={`/projects/${project.slug}`}
-              className="py-2 px-4 text-xs font-extrabold btn-premium-gold flex items-center gap-1 cursor-pointer font-el-messiri text-center min-h-[44px]"
+              className="py-2 px-4 text-xs font-extrabold btn-premium-gold flex items-center gap-1 cursor-pointer font-el-messiri text-center min-h-[2.75rem]"
             >
               <span>استعرض</span>
               <ArrowLeft className="w-3.5 h-3.5" />
@@ -227,7 +227,7 @@ export default function ProjectHighlightSection({ projects }: ProjectHighlightSe
 
   return (
     <section id="projects-section" className="bg-gradient-to-b from-bg-deep via-bg-navy to-bg-deep border-y border-border-gold/15 py-20 sm:py-24">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-[min(calc(100%-2rem),78rem)] lg:w-[min(73vw,78rem)] mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -246,7 +246,7 @@ export default function ProjectHighlightSection({ projects }: ProjectHighlightSe
               <button
                 type="button"
                 onClick={() => setProjectsViewMode('grid')}
-                className={`px-4 py-2 rounded-md transition-all duration-300 cursor-pointer text-xs sm:text-sm font-semibold font-el-messiri min-h-[44px] flex items-center ${
+                className={`px-4 py-2 rounded-md transition-all duration-300 cursor-pointer text-xs sm:text-sm font-semibold font-el-messiri min-h-[2.75rem] flex items-center ${
                   projectsViewMode === 'grid'
                     ? 'bg-gold-primary text-bg-midnight font-bold shadow-md shadow-gold-primary/10'
                     : 'text-text-muted hover:text-white'
@@ -257,7 +257,7 @@ export default function ProjectHighlightSection({ projects }: ProjectHighlightSe
               <button
                 type="button"
                 onClick={() => setProjectsViewMode('table')}
-                className={`px-4 py-2 rounded-md transition-all duration-300 cursor-pointer text-xs sm:text-sm font-semibold font-el-messiri min-h-[44px] flex items-center ${
+                className={`px-4 py-2 rounded-md transition-all duration-300 cursor-pointer text-xs sm:text-sm font-semibold font-el-messiri min-h-[2.75rem] flex items-center ${
                   projectsViewMode === 'table'
                     ? 'bg-gold-primary text-bg-midnight font-bold shadow-md shadow-gold-primary/10'
                     : 'text-text-muted hover:text-white'
@@ -271,7 +271,7 @@ export default function ProjectHighlightSection({ projects }: ProjectHighlightSe
 
         {projectsViewMode === 'table' ? (
           <div ref={projectsTableRef} className="custom-table-wrapper w-full max-h-[60vh] overflow-auto rounded-2xl border-2 border-gold-primary/50 bg-[#0F2342]/90 backdrop-blur-xl shadow-2xl scrollbar-thin scrollbar-thumb-gold-primary scrollbar-track-transparent mb-12" dir="rtl">
-            <table className="w-full min-w-[950px] text-start text-xs sm:text-sm table-auto border-collapse" dir="rtl">
+            <table className="w-full min-w-[59.375rem] text-start text-xs sm:text-sm table-auto border-collapse" dir="rtl">
               <thead className="sticky top-0 z-20 shadow-md">
                 <tr className="border-b border-border-gold/30 text-gold-primary font-el-messiri bg-[#18325C]">
                   <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 text-start bg-[#18325C]">الصورة</th>
@@ -318,13 +318,13 @@ export default function ProjectHighlightSection({ projects }: ProjectHighlightSe
                           download={!project.brochureUrl}
                           title="تحميل البروفايل PDF"
                           aria-label="تحميل البروفايل PDF"
-                          className="p-2.5 rounded-lg bg-white/5 hover:bg-gold-primary/10 border border-white/10 text-text-secondary hover:text-gold-primary transition-all cursor-pointer min-w-[44px] min-h-[44px] flex items-center justify-center"
+                          className="p-2.5 rounded-lg bg-white/5 hover:bg-gold-primary/10 border border-white/10 text-text-secondary hover:text-gold-primary transition-all cursor-pointer min-w-[2.75rem] min-h-[2.75rem] flex items-center justify-center"
                         >
                           <Download className="w-4 h-4" />
                         </a>
                         <Link
                           href={`/projects/${project.slug}`}
-                          className="py-2 px-5 text-xs font-bold btn-premium-gold rounded-md inline-block font-el-messiri whitespace-nowrap min-w-[125px] min-h-[44px] flex items-center justify-center"
+                          className="py-2 px-5 text-xs font-bold btn-premium-gold rounded-md inline-block font-el-messiri whitespace-nowrap min-w-[7.8125rem] min-h-[2.75rem] flex items-center justify-center"
                         >
                           عرض كامل التفاصيل
                         </Link>
@@ -339,7 +339,7 @@ export default function ProjectHighlightSection({ projects }: ProjectHighlightSe
           <>
             {featuredProject && <FeaturedProjectCard project={featuredProject} />}
             {carouselProjects.length > 0 && (
-              <div className="w-full relative overflow-hidden py-4 select-none" dir="ltr">
+              <div data-pf-carousel className="w-full relative overflow-hidden py-4 select-none" dir="ltr">
                 <div className="flex flex-row flex-nowrap gap-4 sm:gap-6 w-max animate-marquee-ltr hover:[animation-play-state:paused] cursor-pointer">
                   {getProjectMarqueeItems(carouselProjects).map((project, idx) => (
                     <div key={`${project.id}-marquee-${idx}`} dir="rtl">
@@ -355,7 +355,7 @@ export default function ProjectHighlightSection({ projects }: ProjectHighlightSe
         <div className="text-center mt-6">
           <Link
             href="/projects"
-            className="py-3.5 px-10 text-xs sm:text-sm font-extrabold btn-premium-gold inline-flex items-center gap-2 cursor-pointer font-el-messiri min-h-[44px]"
+            className="py-3.5 px-10 text-xs sm:text-sm font-extrabold btn-premium-gold inline-flex items-center gap-2 cursor-pointer font-el-messiri min-h-[2.75rem]"
           >
             <span>عرض جميع المشاريع العقارية</span>
             <ArrowLeft className="w-4 h-4 transition-transform duration-300 -translate-x-0.5 group-hover:-translate-x-1.5" />

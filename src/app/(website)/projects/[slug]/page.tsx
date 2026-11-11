@@ -100,7 +100,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
       <div className="absolute top-[20%] end-[-10%] w-[45vw] h-[45vw] bg-gradient-to-tl from-gold-primary/12 via-[#102A4E]/25 to-transparent rounded-full blur-[130px] pointer-events-none -z-10 opacity-80" />
       <div className="absolute bottom-[10%] start-[10%] w-[40vw] h-[40vw] bg-gradient-to-tr from-[#0F2342]/40 via-gold-primary/5 to-transparent rounded-full blur-[150px] pointer-events-none -z-10 opacity-70" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+      <div className="w-[min(calc(100%-2rem),78rem)] lg:w-[min(73vw,78rem)] mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         
         {/* 1. Breadcrumbs */}
         <nav aria-label="Breadcrumb">
@@ -113,7 +113,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
               <Link href="/projects" className="hover:text-gold-primary transition-colors">مشاريعنا</Link>
             </li>
             <ChevronLeft className="w-3.5 h-3.5 text-text-subtle" />
-            <li className="text-text-secondary truncate max-w-[200px] sm:max-w-none" aria-current="page">
+            <li className="text-text-secondary truncate max-w-[12.5rem] sm:max-w-none" aria-current="page">
               {project.name}
             </li>
           </ol>
@@ -130,7 +130,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                 {projectStatusLabel}
               </span>
             </div>
-            <h1 className="text-xl sm:text-2xl lg:text-3xl font-black text-white font-el-messiri leading-tight">
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white font-el-messiri leading-tight">
               {project.name}
             </h1>
             <div className="flex items-center gap-1.5 mt-2 text-xs sm:text-sm text-text-muted">
@@ -171,18 +171,18 @@ export default async function ProjectDetailPage({ params }: PageProps) {
               <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-gold-deep via-gold-primary to-gold-deep"></div>
               
               <span className="text-[10px] text-text-muted block mb-1">نطاق أسعار وحدات المشروع السكنية</span>
-              <h2 className="text-xl sm:text-2xl font-black text-gold-primary font-el-messiri leading-tight">
+              <h2 className="text-xl sm:text-2xl font-bold text-gold-primary font-el-messiri leading-tight">
                 <span className="font-sans text-xs block text-text-secondary font-normal mb-1">تبدأ من:</span>
-                <span className="font-sans text-3xl font-black">{formatPrice(project.priceRange.min)}</span>
+                <span className="font-sans text-3xl font-bold">{formatPrice(project.priceRange.min)}</span>
                 {project.priceRange.max > project.priceRange.min && (
                   <>
                     <span className="mx-2 text-text-muted text-sm font-normal">إلى</span>
-                    <span className="font-sans text-3xl font-black block mt-1">{formatPrice(project.priceRange.max)}</span>
+                    <span className="font-sans text-3xl font-bold block mt-1">{formatPrice(project.priceRange.max)}</span>
                   </>
                 )}
               </h2>
 
-              <div className="grid grid-cols-2 gap-3 border-t border-white/10 pt-5 mt-4 text-xs text-text-secondary">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 border-t border-white/10 pt-5 mt-4 text-xs text-text-secondary">
                 <div>
                   <span className="text-[9px] text-text-muted block mb-0.5">نوع الاستثمار</span>
                   <span className="font-extrabold text-white">تملك سكني فاخر</span>
@@ -203,7 +203,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
           </div>
 
           {/* Left side: Map stretching to equal height of cards */}
-          <section className="bg-[#0E203D]/50 backdrop-blur-xl border border-gold-primary/35 rounded-3xl p-6 sm:p-8 shadow-2xl flex flex-col justify-between h-full min-h-[350px]">
+          <section className="bg-[#0E203D]/50 backdrop-blur-xl border border-gold-primary/35 rounded-3xl p-6 sm:p-8 shadow-2xl flex flex-col justify-between h-full min-h-[21.875rem]">
             <div className="flex items-center justify-between gap-4 mb-4">
               <div>
                 <h2 className="text-base sm:text-lg font-extrabold text-white font-el-messiri flex items-center gap-2">
@@ -215,7 +215,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
             </div>
 
             {/* Real Google Maps Container */}
-            <div className="relative w-full flex-1 rounded-2xl overflow-hidden border border-gold-primary/30 shadow-lg bg-[#0B1A30] group/map min-h-[220px]">
+            <div className="relative w-full flex-1 rounded-2xl overflow-hidden border border-gold-primary/30 shadow-lg bg-[#0B1A30] group/map min-h-[13.75rem]">
               <iframe
                 src={`https://maps.google.com/maps?q=${encodeURIComponent(`${project.name}، حي ${project.location.district}، ${project.location.city}`)}&z=15&output=embed`}
                 className="w-full h-full border-0 grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all duration-700"
@@ -241,7 +241,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
             <span>مميزات ومواصفات المجمع السكني</span>
           </h2>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-4 gap-4 text-center">
             <div className="p-4 rounded-xl bg-white/[0.02] border border-white/5 flex flex-col items-center">
               <Building2 className="w-6 h-6 text-gold-primary mb-2" />
               <span className="text-[10px] text-text-muted mb-0.5">إجمالي الوحدات</span>
@@ -302,7 +302,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
         <section className="border-t border-white/10 pt-16 animate-fade-in-up">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10">
             <div>
-              <h2 className="text-lg sm:text-2xl font-black text-white font-el-messiri">
+              <h2 className="text-lg sm:text-2xl font-bold text-white font-el-messiri">
                 وحدات سكنية متاحة في <span className="text-gold-primary">{project.name}</span>
               </h2>
               <p className="text-xs sm:text-sm text-text-muted mt-1">تصفح الشقق والملحقات المتوفرة للبيع الفوري في هذا المجمع</p>

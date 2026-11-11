@@ -12,7 +12,7 @@ interface PanoramaViewerProps {
 
 export default function PanoramaViewer({
   imageSrc,
-  heightClass = 'h-[450px]',
+  heightClass = 'h-[28.125rem]',
   autoplay = true,
 }: PanoramaViewerProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);

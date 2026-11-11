@@ -189,7 +189,7 @@ export default function MortgageCalculator({ selectedProperty, onClose }: Mortga
           </div>
 
           {/* Calculations Breakdown */}
-          <div className="grid grid-cols-2 gap-4 pt-4 border-t border-border-white/10 text-right">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 pt-4 border-t border-border-white/10 text-right">
             <div>
               <p className="text-[10px] text-text-muted mb-1">قيمة القرض الإجمالية</p>
               <p className="text-sm font-bold text-text-primary">{formatCurrency(loanAmount)}</p>

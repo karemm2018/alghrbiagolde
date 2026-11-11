@@ -189,7 +189,7 @@ export default function PropertiesPage() {
                               />
                             </div>
                             <div className="min-w-0">
-                              <p className="font-semibold text-[var(--neu-text-heading)] truncate max-w-[200px]">
+                              <p className="font-semibold text-[var(--neu-text-heading)] truncate max-w-[12.5rem]">
                                 {prop.title}
                               </p>
                               <p className="text-xs text-[var(--neu-text-muted)] mt-0.5">
@@ -309,7 +309,7 @@ export default function PropertiesPage() {
                     </div>
 
                     {/* Details Info List */}
-                    <div className="grid grid-cols-2 gap-x-4 gap-y-2 py-3 border-y border-white/5 text-xs">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 py-3 border-y border-white/5 text-xs">
                       <div>
                         <span className="text-[10px] text-[var(--neu-text-muted)] block">المدينة والحي</span>
                         <span className="font-semibold text-[var(--neu-text-secondary)]">

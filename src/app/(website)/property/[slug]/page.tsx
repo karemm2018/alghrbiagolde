@@ -123,26 +123,26 @@ export default async function PropertyDetailPage({ params }: PageProps) {
   )}`;
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#0A1628] via-[#0E203D] to-[#0A1628] pt-44 lg:pt-[18vh] pb-20 relative overflow-x-hidden text-right animate-fade-in" dir="rtl">
+    <main className="min-h-screen bg-gradient-to-b from-[#0A1628] via-[#0E203D] to-[#0A1628] pt-28 sm:pt-36 lg:pt-40 pb-20 relative overflow-x-hidden text-right animate-fade-in" dir="rtl" data-pf-full-bleed>
       {/* Background Ambience */}
       <div className="absolute top-[-5%] start-[-10%] w-[50vw] h-[50vw] bg-gradient-to-br from-gold-primary/20 via-[#102A4E]/30 to-transparent rounded-full blur-[140px] pointer-events-none -z-10 opacity-90 animate-pulse-slow" />
       <div className="absolute top-[20%] end-[-10%] w-[45vw] h-[45vw] bg-gradient-to-tl from-gold-primary/12 via-[#102A4E]/25 to-transparent rounded-full blur-[130px] pointer-events-none -z-10 opacity-80" />
       <div className="absolute bottom-[10%] start-[10%] w-[40vw] h-[40vw] bg-gradient-to-tr from-[#0F2342]/40 via-gold-primary/5 to-transparent rounded-full blur-[150px] pointer-events-none -z-10 opacity-70" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+      <div className="w-[min(calc(100%-2rem),78rem)] lg:w-[min(73vw,78rem)] mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         
         {/* 1. Breadcrumbs */}
-        <nav aria-label="Breadcrumb">
-          <ol className="flex items-center gap-2 text-xs sm:text-sm text-text-muted justify-start">
-            <li>
+        <nav aria-label="Breadcrumb" className="min-w-0">
+          <ol className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-text-muted justify-start">
+            <li className="shrink-0">
               <Link href="/" className="hover:text-gold-primary transition-colors">الرئيسية</Link>
             </li>
-            <ChevronLeft className="w-3.5 h-3.5 text-text-subtle" />
-            <li>
+            <ChevronLeft className="w-3.5 h-3.5 text-text-subtle rtl:rotate-180 shrink-0" />
+            <li className="shrink-0">
               <Link href="/properties" className="hover:text-gold-primary transition-colors">الوحدات السكنية</Link>
             </li>
-            <ChevronLeft className="w-3.5 h-3.5 text-text-subtle" />
-            <li className="text-text-secondary truncate max-w-[200px] sm:max-w-none" aria-current="page">
+            <ChevronLeft className="w-3.5 h-3.5 text-text-subtle rtl:rotate-180 shrink-0" />
+            <li className="text-text-secondary truncate max-w-[min(12.5rem,42vw)] sm:max-w-none" aria-current="page">
               {property.title}
             </li>
           </ol>
@@ -167,7 +167,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                 </Link>
               )}
             </div>
-            <h1 className="text-xl sm:text-2xl lg:text-3xl font-black text-white font-el-messiri leading-tight">
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white font-el-messiri leading-tight">
               {property.title}
             </h1>
             <div className="flex items-center gap-1.5 mt-2 text-xs sm:text-sm text-text-muted">
@@ -196,18 +196,18 @@ export default async function PropertyDetailPage({ params }: PageProps) {
               <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-gold-deep via-gold-primary to-gold-deep"></div>
               
               <span className="text-[10px] text-text-muted block mb-1">قيمة العقار الإجمالية</span>
-              <h2 className="text-3xl sm:text-4xl font-black text-gold-primary font-el-messiri leading-none mb-6">
+              <h2 className="text-3xl sm:text-4xl font-bold text-gold-primary font-el-messiri leading-none mb-6">
                 {formatPrice(property.pricing.price)}
               </h2>
 
-              <div className="grid grid-cols-2 gap-4 border-t border-white/10 pt-5 text-xs text-text-secondary">
-                <div>
+              <div className="grid grid-cols-2 gap-3 sm:gap-4 border-t border-white/10 pt-5 text-xs text-text-secondary">
+                <div className="min-w-0">
                   <span className="text-[9px] text-text-muted block mb-1">سعر المتر المربع</span>
-                  <span className="font-extrabold text-white font-sans text-sm">{formatPrice(property.pricing.pricePerMeter)} / م²</span>
+                  <span className="font-extrabold text-white font-sans text-xs sm:text-sm">{formatPrice(property.pricing.pricePerMeter)} / م²</span>
                 </div>
-                <div>
+                <div className="min-w-0 border-s border-white/5 ps-3">
                   <span className="text-[9px] text-text-muted block mb-1">قابلية التفاوض</span>
-                  <span className={`font-extrabold text-sm ${property.pricing.isNegotiable ? 'text-status-available' : 'text-text-muted'}`}>
+                  <span className={`font-extrabold text-xs sm:text-sm ${property.pricing.isNegotiable ? 'text-status-available' : 'text-text-muted'}`}>
                     {property.pricing.isNegotiable ? 'قابل للتفاوض' : 'السعر نهائي'}
                   </span>
                 </div>
@@ -223,7 +223,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
           </div>
 
           {/* Left side: Map Stretching to match height of stacked cards */}
-          <section className="bg-[#0E203D]/50 backdrop-blur-xl border border-gold-primary/35 rounded-3xl p-6 sm:p-8 shadow-2xl flex flex-col justify-between h-full min-h-[350px]">
+          <section className="bg-[#0E203D]/50 backdrop-blur-xl border border-gold-primary/35 rounded-3xl p-6 sm:p-8 shadow-2xl flex flex-col justify-between h-full min-h-[21.875rem]">
             <div className="flex items-center justify-between gap-4 mb-4">
               <div>
                 <h2 className="text-base sm:text-lg font-extrabold text-white font-el-messiri flex items-center gap-2">
@@ -235,7 +235,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
             </div>
 
             {/* Real Google Maps Container */}
-            <div className="relative w-full flex-1 rounded-2xl overflow-hidden border border-gold-primary/30 shadow-lg bg-[#0B1A30] group/map min-h-[220px]">
+            <div className="relative w-full flex-1 rounded-2xl overflow-hidden border border-gold-primary/30 shadow-lg bg-[#0B1A30] group/map min-h-[13.75rem]">
               <iframe
                 src={`https://maps.google.com/maps?q=${property.location.coordinates.lat},${property.location.coordinates.lng}&z=15&output=embed`}
                 className="w-full h-full border-0 grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all duration-700"
@@ -261,7 +261,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
             <span>مواصفات وتفاصيل الوحدة</span>
           </h2>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
             
             {/* Spec item 1: Area */}
             <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 flex flex-col items-center justify-center text-center group hover:border-gold-primary/30 transition-all duration-300">
@@ -330,7 +330,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
                   <Eye className="w-5 h-5" />
                 </div>
                 <span className="text-[10px] text-text-muted mb-0.5">الإطلالة</span>
-                <span className="text-sm font-extrabold text-white truncate max-w-[110px]">{property.specs.view}</span>
+                <span className="text-sm font-extrabold text-white truncate max-w-[6.875rem]">{property.specs.view}</span>
               </div>
             )}
 

@@ -718,7 +718,7 @@ export default function MediaPage() {
           </div>
 
           {/* Stats Skeleton */}
-          <div className="grid grid-cols-3 gap-3 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
             {[1, 2, 3].map((i) => (
               <div key={i} className="neu-card p-4 text-center space-y-3 flex flex-col items-center">
                 <div className="w-6 h-6 bg-[var(--neu-depressed)] rounded-full animate-pulse"></div>
@@ -729,7 +729,7 @@ export default function MediaPage() {
           </div>
 
           {/* Grid Skeleton */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
             {Array.from({ length: 8 }).map((_, i) => (
               <div key={i} className="neu-card p-0 overflow-hidden space-y-3 border border-white/5">
                 <div className="p-2.5">
@@ -806,7 +806,7 @@ export default function MediaPage() {
       </div>
 
       {/* Stats Summary */}
-      <div className="grid grid-cols-3 gap-3 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
         <div className="neu-card p-3 sm:p-4 text-center">
           <FileImage className="w-5 h-5 mx-auto mb-1 text-[var(--neu-gold)]" />
           <p className="text-xl sm:text-2xl font-bold text-[var(--neu-text-heading)]">
@@ -831,7 +831,7 @@ export default function MediaPage() {
       </div>
 
       {/* Media Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
         {filtered.map((item) => (
           <div key={item.id} className="neu-card p-0 overflow-hidden group">
             {/* Preview Thumbnail */}

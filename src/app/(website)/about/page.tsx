@@ -152,9 +152,9 @@ export default function AboutPage() {
     <div className="bg-[#060D1A] text-white min-h-screen relative overflow-x-hidden font-tajawal select-none dir-rtl">
       
       {/* ----------------------------------------------------
-         1. Luxury Cinematic Hero Section (FullScreen / 90vh) - Dark Theme
+         1. Luxury Cinematic Hero Section (FullScreen / 100vh) - Dark Theme
          ---------------------------------------------------- */}
-      <section className="relative w-full h-[90vh] flex items-center justify-center overflow-hidden bg-bg-deep">
+      <section className="relative w-full min-h-[100dvh] h-[100dvh] flex items-center justify-center overflow-hidden bg-bg-deep">
         {/* Ken Burns background */}
         <div className="absolute inset-0 z-0">
           <motion.div
@@ -180,8 +180,8 @@ export default function AboutPage() {
         {/* Glowing Ambient Light Leaks */}
         <div className="absolute top-[8%] right-[8%] w-[600px] h-[600px] bg-gradient-to-br from-gold-primary/15 via-transparent to-transparent rounded-full blur-[140px] pointer-events-none -z-10 animate-pulse duration-[10000ms]" />
 
-        {/* Hero Content Area */}
-        <div className="relative z-20 text-center px-6 max-w-5xl mx-auto mt-12 flex flex-col items-center">
+        {/* Hero Content Area - Centered Vertically and Horizontally */}
+        <div className="relative z-20 text-center px-4 sm:px-6 max-w-5xl mx-auto flex flex-col items-center justify-center pt-16 pb-8">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}

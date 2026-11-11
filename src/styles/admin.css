@@ -52,9 +52,9 @@
   --neu-info-border: rgba(41, 128, 185, 0.3);
 
   /* Admin Layout */
-  --sidebar-width: 280px;
-  --sidebar-collapsed-width: 80px;
-  --topbar-height: 72px;
+  --sidebar-width: 17.5rem;
+  --sidebar-collapsed-width: 5rem;
+  --topbar-height: 4.5rem;
 
   /* Border Radius */
   --neu-radius-sm: 10px;
@@ -256,8 +256,8 @@
 }
 
 .admin-content {
-  padding: 28px;
-  max-width: 1440px;
+  padding: 1.75rem;
+  max-width: 90rem;
   margin-left: auto;
   margin-right: auto; /* Perfectly centered inside the remaining viewport space */
   transition: margin-right var(--neu-transition-slow);
@@ -270,7 +270,7 @@
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 24px 22px;
+  padding: 1.5rem 22px;
   border-bottom: 1px solid rgba(201, 169, 110, 0.1);
 }
 
@@ -327,8 +327,8 @@
 .sidebar-nav-item .badge {
   margin-right: auto;
   margin-left: 0;
-  min-width: 22px;
-  height: 22px;
+  min-width: 1.375rem;
+  height: 1.375rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -345,7 +345,7 @@
   text-transform: uppercase;
   letter-spacing: 0.12em;
   color: var(--neu-text-muted);
-  padding: 16px 16px 6px;
+  padding: 1rem 16px 6px;
   font-weight: 600;
 }
 
@@ -378,11 +378,11 @@
 }
 
 .neu-input-icon-right {
-  padding-right: 44px !important;
+  padding-right: 2.75rem !important;
 }
 
 .neu-input-icon-left {
-  padding-left: 44px !important;
+  padding-left: 2.75rem !important;
 }
 
 .neu-input::placeholder {
@@ -413,7 +413,7 @@
 /* Textarea */
 .neu-textarea {
   resize: vertical;
-  min-height: 100px;
+  min-height: 6.25rem;
 }
 
 /* Select */
@@ -423,7 +423,7 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%237A8FA8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: left 14px center;
-  padding-left: 40px;
+  padding-left: 2.5rem;
 }
 
 /* ------------------------------------------------------------
@@ -519,14 +519,14 @@
 }
 
 .neu-btn-lg {
-  padding: 16px 32px;
+  padding: 1rem 32px;
   font-size: 16px;
   border-radius: var(--neu-radius-lg);
 }
 
 .neu-btn-icon {
-  width: 44px;
-  height: 44px;
+  width: 2.75rem;
+  height: 2.75rem;
   padding: 0;
   border-radius: var(--neu-radius-md);
   display: flex;
@@ -546,7 +546,7 @@
 .neu-card {
   background: var(--neu-raised);
   border-radius: var(--neu-radius-lg);
-  padding: 24px;
+  padding: 1.5rem;
   box-shadow:
     6px 6px 14px var(--neu-shadow-dark),
     -6px -6px 14px var(--neu-shadow-light);
@@ -622,7 +622,7 @@
 
 .neu-table th {
   text-align: right;
-  padding: 16px 20px;
+  padding: 1rem 20px;
   background: var(--neu-depressed);
   color: var(--neu-text-secondary);
   font-weight: 600;
@@ -715,14 +715,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 1.25rem;
 }
 
 .neu-modal {
   background: var(--neu-raised);
   border-radius: var(--neu-radius-xl);
-  padding: 32px;
-  max-width: 520px;
+  padding: 2rem;
+  max-width: 32.5rem;
   width: 100%;
   box-shadow:
     12px 12px 28px var(--neu-shadow-dark-strong),
@@ -737,7 +737,7 @@
   display: flex;
   align-items: center;
   gap: 0;
-  margin-bottom: 32px;
+  margin-bottom: 2rem;
 }
 
 .neu-step {
@@ -748,8 +748,8 @@
 }
 
 .neu-step-circle {
-  width: 36px;
-  height: 36px;
+  width: 2.25rem;
+  height: 2.25rem;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -812,8 +812,8 @@
    ------------------------------------------------------------ */
 .neu-toggle {
   position: relative;
-  width: 52px;
-  height: 28px;
+  width: 3.25rem;
+  height: 1.75rem;
   border-radius: var(--neu-radius-full);
   background: var(--neu-depressed);
   box-shadow:
@@ -831,8 +831,8 @@
   position: absolute;
   top: 3px;
   right: 3px;
-  width: 22px;
-  height: 22px;
+  width: 1.375rem;
+  height: 1.375rem;
   border-radius: 50%;
   background: var(--neu-text-muted);
   box-shadow:
@@ -868,14 +868,14 @@
   background-size: cover;
   background-position: 35% center;
   background-repeat: no-repeat;
-  padding: 20px;
+  padding: 1.25rem;
 }
 
 .login-card {
   width: 100%;
-  max-width: 550px;
-  min-width: 420px;
-  padding: 54px 44px;
+  max-width: 34.375rem;
+  min-width: 26.25rem;
+  padding: 3.375rem 44px;
   border-radius: var(--neu-radius-xl);
   background: var(--neu-raised);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
@@ -885,7 +885,7 @@
    14. Charts Container
    ------------------------------------------------------------ */
 .neu-chart-container {
-  padding: 20px;
+  padding: 1.25rem;
   border-radius: var(--neu-radius-lg);
   background: var(--neu-raised);
   box-shadow:
@@ -932,7 +932,7 @@
   .admin-sidebar {
     top: var(--topbar-height) !important; /* Start below topbar on mobile */
     right: -280px !important; /* Hide off-screen right */
-    width: 280px !important; /* Force full width mobile drawer */
+    width: 17.5rem !important; /* Force full width mobile drawer */
     height: calc(100dvh - var(--topbar-height)) !important; /* Height offset by topbar using dynamic viewport */
     height: calc(100vh - var(--topbar-height)) !important; /* Fallback height */
     z-index: 100 !important;
@@ -959,7 +959,7 @@
   }
 
   .admin-content {
-    padding: 16px !important;
+    padding: 1rem !important;
     margin-right: auto !important;
     margin-left: auto !important;
     width: 100% !important;
@@ -973,12 +973,12 @@
 
 @media (max-width: 640px) {
   .neu-card {
-    padding: 16px;
+    padding: 1rem;
     border-radius: var(--neu-radius-md);
   }
 
   .login-card {
-    padding: 32px 24px;
+    padding: 2rem 24px;
   }
 
   .neu-stepper {
@@ -1012,7 +1012,7 @@
 .neu-dropzone {
   border: 2px dashed rgba(201, 169, 110, 0.2);
   border-radius: var(--neu-radius-lg);
-  padding: 40px 24px;
+  padding: 2.5rem 24px;
   text-align: center;
   background: var(--neu-depressed);
   box-shadow:
@@ -1097,8 +1097,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 16px;
-  height: 16px;
+  min-width: 1rem;
+  height: 1rem;
   background: var(--neu-danger);
   color: #fff;
   font-size: 9px;
@@ -1112,8 +1112,8 @@
 }
 
 .sidebar-nav-icon {
-  width: 20px;
-  height: 20px;
+  width: 1.25rem;
+  height: 1.25rem;
   flex-shrink: 0;
 }
 
@@ -1158,15 +1158,15 @@
 }
 
 .sidebar-logout-icon {
-  width: 20px;
-  height: 20px;
+  width: 1.25rem;
+  height: 1.25rem;
   flex-shrink: 0;
 }
 
 /* Collapsed state for desktop */
 .admin-sidebar.collapsed .sidebar-logout-btn {
-  width: 48px;
-  height: 48px;
+  width: 3rem;
+  height: 3rem;
   padding: 0;
   border-radius: var(--neu-radius-md);
   background: var(--neu-raised);
@@ -1189,8 +1189,8 @@
 }
 
 .admin-sidebar.collapsed .sidebar-logout-icon {
-  width: 24px;
-  height: 24px;
+  width: 1.5rem;
+  height: 1.5rem;
 }
 
 .admin-sidebar.collapsed .sidebar-logout-text {
@@ -1241,8 +1241,8 @@
   }
 
   .admin-sidebar.collapsed .sidebar-logout-icon {
-    width: 20px !important;
-    height: 20px !important;
+    width: 1.25rem !important;
+    height: 1.25rem !important;
   }
 
   .admin-sidebar.collapsed .sidebar-logout-text {

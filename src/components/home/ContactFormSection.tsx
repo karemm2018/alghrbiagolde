@@ -36,7 +36,7 @@ const initialFormData: ContactFormData = {
   budget: '',
 };
 
-const fieldClassName = 'w-full min-w-0 min-h-[48px] bg-[#102344]/80 border border-white/20 focus:border-gold-primary/80 focus:bg-[#152a4c] rounded-xl px-3 py-2.5 text-base sm:text-sm text-white placeholder:text-text-muted/75 focus:outline-none focus:ring-2 focus:ring-gold-primary/35 transition-colors';
+const fieldClassName = 'w-full min-w-0 min-h-[3rem] bg-[#102344]/80 border border-white/20 focus:border-gold-primary/80 focus:bg-[#152a4c] rounded-xl px-3 py-2.5 text-base sm:text-sm text-white placeholder:text-text-muted/75 focus:outline-none focus:ring-2 focus:ring-gold-primary/35 transition-colors';
 const selectFieldClassName = `${fieldClassName} [&>option]:bg-[#102344] [&>option]:text-white`;
 
 function FieldLabel({ htmlFor, icon: Icon, children, required = false, tone = 'text-gold-primary' }: {
@@ -120,17 +120,17 @@ export default function ContactFormSection() {
   };
 
   return (
-    <section id="contact-section" className="relative w-full overflow-hidden py-20 sm:py-24 bg-gradient-to-b from-bg-deep via-bg-navy to-bg-deep border-y border-border-gold/15 z-10">
-      <div className="absolute top-1/2 start-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-gold-primary/10 via-brand-primary/10 to-gold-primary/10 rounded-full blur-3xl z-0 pointer-events-none opacity-80 animate-pulse duration-[8000ms]"></div>
+    <section id="contact-section" className="relative w-full overflow-hidden py-20 sm:py-24 bg-gradient-to-b from-bg-deep via-bg-navy to-bg-deep border-y border-border-gold/15 z-10" data-pf-full-bleed>
+      <div className="absolute top-1/2 start-1/2 -translate-x-1/2 -translate-y-1/2 w-[37.5rem] h-[37.5rem] bg-gradient-to-r from-gold-primary/10 via-brand-primary/10 to-gold-primary/10 rounded-full blur-3xl z-0 pointer-events-none opacity-80 animate-pulse duration-[8000ms]"></div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10 text-center">
+      <div className="relative w-[min(calc(100%-2rem),78rem)] lg:w-[min(73vw,78rem)] mx-auto px-4 sm:px-6 lg:px-8 z-10 text-center">
         <div className="space-y-4 max-w-3xl mx-auto">
           <div className="flex items-center justify-center gap-3">
             <div className="h-[2px] w-12 bg-gold-primary"></div>
             <span className="text-xs sm:text-sm font-extrabold text-gold-primary font-el-messiri uppercase tracking-wider">اتصل بنا</span>
             <div className="h-[2px] w-12 bg-gold-primary"></div>
           </div>
-          <h2 className="text-2xl sm:text-4xl font-black text-white leading-tight font-el-messiri">أبق على اتصال</h2>
+          <h2 className="text-2xl sm:text-4xl font-bold text-white leading-tight font-el-messiri">أبق على اتصال</h2>
           <p className="text-xs sm:text-sm text-text-secondary leading-relaxed max-w-xl mx-auto font-el-messiri">
             تمتلك شركتنا العقارية عدداً من القوائم الفاخرة والحصرية المثالية للعملاء الراغبين في التملك أو الاستثمار.
           </p>
@@ -156,7 +156,7 @@ export default function ContactFormSection() {
                 <button
                   type="button"
                   onClick={() => setSubmitSuccess(false)}
-                  className="mt-4 py-3 px-8 text-xs sm:text-sm font-extrabold btn-premium-gold rounded-full min-h-[44px]"
+                  className="mt-4 py-3 px-8 text-xs sm:text-sm font-extrabold btn-premium-gold rounded-full min-h-[2.75rem]"
                 >
                   إرسال طلب آخر
                 </button>
@@ -173,7 +173,7 @@ export default function ContactFormSection() {
                 {/* Personal information */}
                 <div className="space-y-3.5">
                   <h3 className="text-xs sm:text-sm font-bold text-gold-primary border-s-2 border-gold-primary ps-2.5">معلومات شخصية</h3>
-                  <div className="grid grid-cols-[minmax(120px,0.9fr)_minmax(0,2fr)] sm:grid-cols-[minmax(125px,1fr)_minmax(0,2fr)_minmax(0,2fr)] gap-3">
+                  <div className="grid grid-cols-1 min-[440px]:grid-cols-[minmax(120px,0.9fr)_minmax(0,2fr)] sm:grid-cols-[minmax(125px,1fr)_minmax(0,2fr)_minmax(0,2fr)] gap-3">
                     <div className="min-w-0">
                       <FieldLabel htmlFor="contact-title" icon={BadgeCheck}>اللقب</FieldLabel>
                       <select id="contact-title" name="title" value={formData.title} onChange={handleChange} className={selectFieldClassName}>
@@ -202,7 +202,7 @@ export default function ContactFormSection() {
                       />
                       {errors.fullName && <p id="contact-name-error" className="text-xs text-red-400 mt-1">{errors.fullName}</p>}
                     </div>
-                    <div className="min-w-0 col-span-2 sm:col-span-1">
+                    <div className="min-w-0 min-[440px]:col-span-2 sm:col-span-1">
                       <FieldLabel htmlFor="contact-phone" icon={Phone} tone="text-[#91c9ad]" required>رقم التليفون</FieldLabel>
                       <input
                         id="contact-phone"
@@ -227,8 +227,8 @@ export default function ContactFormSection() {
                 {/* Property preferences */}
                 <div className="space-y-3.5 pt-1">
                   <h3 className="text-xs sm:text-sm font-bold text-gold-primary border-s-2 border-gold-primary ps-2.5">معلومات العقار المطلوب</h3>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                    <div className="min-w-0 col-span-2 sm:col-span-1">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    <div className="min-w-0">
                       <FieldLabel htmlFor="contact-property-type" icon={Building2}>نوع العقار</FieldLabel>
                       <select id="contact-property-type" name="propertyType" value={formData.propertyType} onChange={handleChange} className={selectFieldClassName}>
                         <option value="شقة">شقة سكنية</option>
@@ -263,7 +263,7 @@ export default function ContactFormSection() {
                       <FieldLabel htmlFor="contact-bathrooms" icon={Bath} tone="text-[#9ebdd6]">عدد الحمامات</FieldLabel>
                       <input id="contact-bathrooms" name="bathrooms" type="number" inputMode="numeric" placeholder="مثال: 3" value={formData.bathrooms} onChange={handleChange} className={fieldClassName} />
                     </div>
-                    <div className="min-w-0 col-span-2 sm:col-span-1">
+                    <div className="min-w-0">
                       <FieldLabel htmlFor="contact-budget" icon={Wallet}>الميزانية المتوقعة (ر.س)</FieldLabel>
                       <input id="contact-budget" name="budget" type="text" inputMode="decimal" placeholder="مثال: 800,000" value={formData.budget} onChange={handleChange} className={fieldClassName} />
                     </div>
@@ -274,7 +274,7 @@ export default function ContactFormSection() {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-3 px-6 text-xs sm:text-sm font-bold text-bg-midnight bg-gold-primary hover:bg-gold-warm rounded-xl transition-all duration-300 shadow-md hover:scale-[1.01] active:scale-[0.99] cursor-pointer flex items-center justify-center gap-2 min-h-[44px]"
+                    className="w-full py-3 px-6 text-xs sm:text-sm font-bold text-bg-midnight bg-gold-primary hover:bg-gold-warm rounded-xl transition-all duration-300 shadow-md hover:scale-[1.01] active:scale-[0.99] cursor-pointer flex items-center justify-center gap-2 min-h-[2.75rem]"
                   >
                     {isSubmitting ? (
                       <>

@@ -7,7 +7,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 const PanoramaViewer = dynamic(() => import('@/components/ui/PanoramaViewer'), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-[400px] sm:h-[450px] bg-bg-midnight/20 animate-pulse rounded-2xl flex items-center justify-center text-text-muted text-xs">
+    <div className="w-full h-[25rem] sm:h-[28.125rem] bg-bg-midnight/20 animate-pulse rounded-2xl flex items-center justify-center text-text-muted text-xs">
       جاري تحميل العرض البانورامي...
     </div>
   )
@@ -30,10 +30,10 @@ export default function VirtualTourSection({ onOpenInquiry }: VirtualTourSection
   };
 
   return (
-    <section className="relative w-full overflow-hidden py-20 sm:py-24 bg-bg-deep">
+    <section className="relative w-full overflow-hidden py-20 sm:py-24 bg-bg-deep" data-pf-full-bleed>
       <div className="absolute inset-0 bg-gradient-to-br from-[#FAF8F5] via-[#FFFFFF] to-[#F5EFE4] border-y border-slate-200/50 z-0 shadow-inner"></div>
 
-      <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      <div className="relative w-[min(calc(100%-2rem),78rem)] lg:w-[min(73vw,78rem)] mx-auto px-4 sm:px-6 lg:px-8 z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
         {/* Info Details */}
         <motion.div
           initial="hidden"
@@ -57,7 +57,7 @@ export default function VirtualTourSection({ onOpenInquiry }: VirtualTourSection
           <div className="flex flex-wrap gap-4 pt-2">
             <button
               type="button"
-              className="py-3 px-6 text-xs sm:text-sm font-extrabold btn-premium-gold min-w-[200px] min-h-[44px]"
+              className="py-3 px-6 text-xs sm:text-sm font-extrabold btn-premium-gold min-w-[12.5rem] min-h-[2.75rem]"
               onClick={onOpenInquiry}
             >
               احجز جولة حضورية خاصة
@@ -69,7 +69,7 @@ export default function VirtualTourSection({ onOpenInquiry }: VirtualTourSection
         <div className="lg:col-span-8 w-full z-10 rounded-3xl overflow-hidden border border-gold-primary/30 shadow-[0_25px_60px_rgba(0,0,0,0.5)] bg-bg-royal/20 p-1 hover:border-gold-primary/50 transition-all duration-500">
           <PanoramaViewer
             imageSrc="/projects/panorama-penthouse.webp"
-            heightClass="h-[400px] sm:h-[450px]"
+            heightClass="h-[25rem] sm:h-[28.125rem]"
           />
         </div>
       </div>

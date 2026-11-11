@@ -175,7 +175,7 @@ export default function DashboardPage() {
       )}
 
       {/* Stats Cards Grid */}
-      <div className="grid grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-5 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-5 mb-8">
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (
@@ -378,7 +378,7 @@ export default function DashboardPage() {
                   {/* Card Body */}
                   <div className="mb-4">
                     <p className="font-semibold text-xs text-[var(--neu-text-secondary)] mb-1 truncate">{sub.subject}</p>
-                    <p className="text-xs text-[var(--neu-text-muted)] line-clamp-2 leading-relaxed bg-black/15 p-2 rounded-lg min-h-[40px]">
+                    <p className="text-xs text-[var(--neu-text-muted)] line-clamp-2 leading-relaxed bg-black/15 p-2 rounded-lg min-h-[2.5rem]">
                       {sub.message}
                     </p>
                   </div>

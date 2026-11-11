@@ -61,25 +61,35 @@ const getPropertyImage = (type: Property['type']) => {
 
 function FeaturedPropertyCard({ property }: { property: Property }) {
   return (
-    <div className="group relative w-full bg-bg-navy/40 backdrop-blur-xl rounded-3xl overflow-hidden border border-gold-primary/40 shadow-[0_16px_48px_rgba(0,0,0,0.4)] hover:border-gold-primary/75 transition-all duration-500 mb-12">
+    <div className="group relative w-full bg-bg-navy/40 backdrop-blur-xl rounded-3xl overflow-hidden border border-gold-primary/40 shadow-[0_16px_48px_rgba(0,0,0,0.4)] hover:border-gold-primary/75 transition-all duration-500 mb-8 sm:mb-12">
       <div className="absolute top-0 start-0 w-full h-[3px] bg-gradient-to-r from-transparent via-gold-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20"></div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
         {/* Left side: Image */}
-        <div className="order-1 lg:order-2 lg:col-span-7 relative h-64 sm:h-80 md:h-[400px] lg:h-auto min-h-[260px] lg:min-h-[440px] overflow-hidden bg-bg-deep">
-          <div className="absolute inset-0 bg-gradient-to-t from-bg-deep/75 via-transparent to-transparent z-10"></div>
+        <div className="order-1 lg:order-2 lg:col-span-7 relative h-56 sm:h-72 md:h-80 lg:h-auto min-h-[14rem] lg:min-h-[21rem] overflow-hidden bg-bg-deep">
+          <div className="absolute inset-0 bg-gradient-to-t from-bg-deep/75 via-transparent to-transparent z-10 pointer-events-none"></div>
 
-          <div className="absolute top-6 end-6 z-20 flex flex-wrap gap-2">
-            <span className="px-4 py-1.5 text-xs font-extrabold text-bg-midnight bg-gold-primary border border-gold-primary rounded-full shadow-lg shadow-gold-primary/25 uppercase">
+          {/* Location badge on top right (start in RTL) */}
+          <div className="absolute top-3.5 start-3.5 sm:top-5 sm:start-5 z-20">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-white bg-slate-900/85 backdrop-blur-md border border-white/15 rounded-full shadow-lg">
+              <MapPin className="w-3.5 h-3.5 text-gold-primary shrink-0" />
+              <span>{property.location.district}، {property.location.city}</span>
+            </span>
+          </div>
+
+          {/* Status badges on top left (end in RTL) */}
+          <div className="absolute top-3.5 end-3.5 sm:top-5 sm:end-5 z-20 flex flex-wrap gap-1.5 sm:gap-2">
+            <span className="px-3 sm:px-4 py-1 sm:py-1.5 text-[11px] sm:text-xs font-extrabold text-bg-midnight bg-gold-primary border border-gold-primary rounded-full shadow-lg shadow-gold-primary/25 uppercase">
               عقار مميز جداً
             </span>
-            <span className="px-4 py-1.5 text-xs font-extrabold text-white bg-slate-900/80 backdrop-blur-md border border-white/10 rounded-full">
+            <span className="px-3 sm:px-4 py-1 sm:py-1.5 text-[11px] sm:text-xs font-extrabold text-white bg-slate-900/80 backdrop-blur-md border border-white/10 rounded-full">
               {property.status === 'available' ? 'متاح للبيع' : property.status === 'reserved' ? 'محجوز' : 'مباع'}
             </span>
           </div>
 
-          <div className="absolute bottom-6 end-6 z-20">
-            <span className="px-3.5 py-1.5 text-xs font-extrabold text-gold-light bg-bg-deep/80 backdrop-blur-md border border-border-gold/20 rounded-md">
+          {/* Property type badge on bottom left (end in RTL) */}
+          <div className="absolute bottom-3.5 end-3.5 sm:bottom-5 sm:end-5 z-20">
+            <span className="px-3 py-1 sm:px-3.5 sm:py-1.5 text-[11px] sm:text-xs font-extrabold text-gold-light bg-bg-deep/80 backdrop-blur-md border border-border-gold/20 rounded-md">
               {property.type === 'annex' ? 'ملحق روف' : property.type === 'villa' ? 'فيلا مستقلة' : property.type === 'penthouse' ? 'بنتهاوس' : 'شقة سكنية'}
             </span>
           </div>
@@ -95,80 +105,76 @@ function FeaturedPropertyCard({ property }: { property: Property }) {
         </div>
 
         {/* Right side: Content */}
-        <div className="order-2 lg:order-1 lg:col-span-5 p-6 sm:p-8 md:p-10 flex flex-col justify-between text-start">
+        <div className="order-2 lg:order-1 lg:col-span-5 p-4 sm:p-6 lg:p-7 flex flex-col justify-between text-start">
           <div>
-            <div className="flex items-center gap-1.5 mb-3 text-xs font-semibold text-text-muted font-el-messiri">
+            <div className="flex items-center gap-1.5 mb-1.5 text-xs font-semibold text-text-muted font-el-messiri">
               <span className="w-2 h-2 rounded-full bg-gold-primary"></span>
               <span>{property.project.name}</span>
             </div>
 
-            <h3 className="text-xl sm:text-2xl font-extrabold text-text-primary mb-4 leading-snug font-el-messiri group-hover:text-gold-primary transition-colors duration-300">
+            <h3 className="text-lg sm:text-xl lg:text-2xl font-extrabold text-text-primary mb-2 sm:mb-2.5 leading-snug font-el-messiri group-hover:text-gold-primary transition-colors duration-300">
               {property.title}
             </h3>
 
-            <div className="flex items-center gap-1.5 text-xs sm:text-sm text-text-secondary mb-5">
-              <MapPin className="w-4 h-4 text-gold-primary shrink-0" />
-              <span>{property.location.district}، {property.location.city}</span>
-            </div>
-
-            <p className="text-xs sm:text-sm text-text-secondary leading-relaxed mb-6 line-clamp-4">
+            <p className="text-xs sm:text-sm text-text-secondary leading-relaxed mb-3 sm:mb-3.5 line-clamp-2 sm:line-clamp-3">
               {property.description}
             </p>
 
             {property.specs.features && property.specs.features.length > 0 && (
-              <div className="flex flex-wrap gap-2 mb-6">
+              <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-3 sm:mb-3.5">
                 {property.specs.features.slice(0, 4).map((feat, i) => (
-                  <span key={i} className="py-1 px-3 text-xs font-bold bg-white/[0.03] border border-white/10 text-text-muted rounded-md font-el-messiri">
+                  <span key={i} className="py-0.5 px-2.5 text-[11px] sm:text-xs font-bold bg-white/[0.03] border border-white/10 text-text-muted rounded-md font-el-messiri">
                     {feat}
                   </span>
                 ))}
               </div>
             )}
 
-            <div className="grid grid-cols-3 gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/5 mb-6 text-xs text-text-secondary">
-              <div className="flex flex-col items-center justify-center gap-1">
-                <span className="text-xs text-text-muted font-el-messiri">الغرف</span>
+            <div className="grid grid-cols-3 gap-1 sm:gap-2.5 p-2 sm:p-2.5 rounded-xl bg-white/[0.02] border border-white/5 mb-3 sm:mb-4 text-[11px] sm:text-xs text-text-secondary">
+              <div className="flex flex-col items-center justify-center gap-0.5 sm:gap-1 text-center min-w-0">
+                <span className="text-[10px] sm:text-xs text-text-muted font-el-messiri">الغرف</span>
                 <div className="flex items-center gap-1">
-                  <Bed className="w-4 h-4 text-gold-primary" />
-                  <span className="font-bold text-text-primary font-mono text-sm">{property.specs.bedrooms}</span>
+                  <Bed className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gold-primary shrink-0" />
+                  <span className="font-bold text-text-primary font-mono text-xs sm:text-sm">{property.specs.bedrooms}</span>
                 </div>
               </div>
-              <div className="flex flex-col items-center justify-center gap-1 border-x border-white/10">
-                <span className="text-xs text-text-muted font-el-messiri">الحمامات</span>
+              <div className="flex flex-col items-center justify-center gap-0.5 sm:gap-1 text-center border-x border-white/10 min-w-0">
+                <span className="text-[10px] sm:text-xs text-text-muted font-el-messiri">الحمامات</span>
                 <div className="flex items-center gap-1">
-                  <Bath className="w-4 h-4 text-gold-primary" />
-                  <span className="font-bold text-text-primary font-mono text-sm">{property.specs.bathrooms}</span>
+                  <Bath className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gold-primary shrink-0" />
+                  <span className="font-bold text-text-primary font-mono text-xs sm:text-sm">{property.specs.bathrooms}</span>
                 </div>
               </div>
-              <div className="flex flex-col items-center justify-center gap-1">
-                <span className="text-xs text-text-muted font-el-messiri">المساحة</span>
+              <div className="flex flex-col items-center justify-center gap-0.5 sm:gap-1 text-center min-w-0">
+                <span className="text-[10px] sm:text-xs text-text-muted font-el-messiri">المساحة</span>
                 <div className="flex items-center gap-1">
-                  <Ruler className="w-4 h-4 text-gold-primary" />
-                  <span className="font-bold text-text-primary font-mono text-sm">{formatArea(property.specs.area)}</span>
+                  <Ruler className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gold-primary shrink-0" />
+                  <span className="font-bold text-text-primary font-mono text-xs sm:text-sm">{formatArea(property.specs.area)}</span>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="pt-5 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
-            <div>
-              <p className="text-xs text-text-muted uppercase mb-1 font-el-messiri">السعر الإجمالي</p>
-              <p className="text-xl sm:text-2xl font-extrabold text-gold-primary font-el-messiri">
+          {/* Price & Action Button (ALWAYS single horizontal row on all screens) */}
+          <div className="pt-3 sm:pt-4 border-t border-white/10 flex items-center justify-between gap-2 sm:gap-4 min-w-0">
+            <div className="min-w-0">
+              <p className="text-[10px] sm:text-xs text-text-muted uppercase mb-0.5 font-el-messiri">السعر الإجمالي</p>
+              <p className="text-sm sm:text-lg lg:text-xl font-extrabold text-gold-primary font-el-messiri whitespace-nowrap">
                 {formatPrice(property.pricing.price)}
               </p>
               {property.pricing.monthlyInstallment && (
-                <p className="text-xs text-text-muted mt-1 font-el-messiri">
-                  قسط شهري متوقع: <strong className="text-white font-mono">{new Intl.NumberFormat('en-US').format(property.pricing.monthlyInstallment)} ر.س</strong>
+                <p className="text-[10px] sm:text-xs text-text-muted mt-0.5 font-el-messiri whitespace-nowrap">
+                  قسط: <strong className="text-white font-mono">{new Intl.NumberFormat('en-US').format(property.pricing.monthlyInstallment)} ر.س</strong>
                 </p>
               )}
             </div>
 
             <Link
               href={`/property/${property.slug}`}
-              className="py-3 px-8 text-xs sm:text-sm font-extrabold btn-premium-gold flex items-center gap-2 group/btn cursor-pointer font-el-messiri min-h-[44px]"
+              className="py-2.5 px-3.5 sm:py-3 sm:px-6 text-[11px] sm:text-xs md:text-sm font-extrabold btn-premium-gold flex items-center gap-1.5 sm:gap-2 group/btn cursor-pointer font-el-messiri shrink-0 whitespace-nowrap rounded-xl shadow-md min-h-[2.5rem]"
             >
               <span>عرض كامل التفاصيل</span>
-              <ArrowLeft className="w-4 h-4 transition-transform duration-300 group-hover/btn:-translate-x-1" />
+              <ArrowLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-300 group-hover/btn:-translate-x-1 shrink-0" />
             </Link>
           </div>
         </div>
@@ -179,11 +185,11 @@ function FeaturedPropertyCard({ property }: { property: Property }) {
 
 function SimplifiedPropertyCard({ property }: { property: Property }) {
   return (
-    <div className="group relative flex flex-col h-full bg-bg-navy/40 backdrop-blur-md rounded-2xl overflow-hidden border border-white/10 transition-colors duration-300 hover:border-border-gold/30 hover:bg-bg-navy/60 md:hover:-translate-y-1 w-[min(82vw,310px)] sm:w-[285px] md:w-[310px] shrink-0">
+    <div className="group relative flex flex-col h-full bg-bg-navy/40 backdrop-blur-md rounded-2xl overflow-hidden border border-white/10 transition-colors duration-300 hover:border-border-gold/30 hover:bg-bg-navy/60 md:hover:-translate-y-1 w-[min(82vw,310px)] sm:w-[17.8125rem] md:w-[19.375rem] shrink-0">
       <div className="absolute top-0 start-0 w-full h-[2px] bg-gradient-to-r from-transparent via-gold-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20"></div>
 
       <div className="relative aspect-[16/10] overflow-hidden bg-bg-deep">
-        <div className="absolute inset-0 bg-gradient-to-t from-bg-deep/50 to-transparent z-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-bg-deep/50 to-transparent z-10 pointer-events-none"></div>
         <Image
           src={getPropertyImage(property.type)}
           alt={property.title}
@@ -224,7 +230,7 @@ function SimplifiedPropertyCard({ property }: { property: Property }) {
 
           <Link
             href={`/property/${property.slug}`}
-            className="py-2 px-4 text-xs font-extrabold btn-premium-gold flex items-center gap-1 cursor-pointer font-el-messiri min-h-[44px]"
+            className="py-2 px-4 text-xs font-extrabold btn-premium-gold flex items-center gap-1 cursor-pointer font-el-messiri min-h-[2.75rem]"
           >
             <span>عرض</span>
             <ArrowLeft className="w-3.5 h-3.5" />
@@ -301,7 +307,7 @@ export default function PropertyListingsSection({
               type="button"
               aria-pressed={selectedType === tab.id}
               aria-controls="property-results"
-              className={`${index < 3 ? 'col-span-2' : 'col-span-3'} min-w-0 py-3 px-2 sm:px-6 rounded-xl sm:rounded-full text-center text-xs sm:text-sm leading-relaxed font-bold transition-colors duration-200 border cursor-pointer min-h-[44px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-primary ${
+              className={`${index < 3 ? 'col-span-2' : 'col-span-3'} min-w-0 py-2.5 px-2 sm:px-6 rounded-xl sm:rounded-full text-center text-xs sm:text-sm leading-relaxed font-bold transition-all duration-200 border cursor-pointer min-h-[2.5rem] flex items-center justify-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-primary ${
                 selectedType === tab.id
                   ? 'bg-gold-primary text-bg-midnight border-gold-primary shadow-lg shadow-gold-primary/10'
                   : 'bg-bg-royal/40 hover:bg-bg-royal/70 text-text-secondary border-border-gold/20 hover:border-gold-primary hover:text-white'
@@ -324,17 +330,37 @@ export default function PropertyListingsSection({
             </h2>
           </div>
           <div className="w-full md:w-auto text-xs sm:text-sm text-text-muted">
-            <div role="group" aria-label="أدوات عرض العقارات" className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-stretch gap-2 md:flex md:gap-3">
-              {/* View Switcher */}
-              <div className="grid min-w-0 grid-cols-2 items-stretch bg-bg-royal/40 border border-border-gold/15 rounded-xl p-1 md:flex">
+            <div role="group" aria-label="أدوات عرض العقارات" className="flex flex-col w-full gap-2.5 md:flex-row md:items-center md:gap-3 md:w-auto">
+              {/* Row 1 on mobile (1 item): Local Filter Toggle */}
+              <button
+                type="button"
+                aria-label="تصفية العقارات"
+                aria-expanded={showLocalFilters}
+                aria-controls="property-local-filters"
+                onClick={() => setShowLocalFilters(open => !open)}
+                className={`w-full md:w-auto flex items-center justify-center gap-2 py-2 px-4 rounded-xl border transition-all duration-300 cursor-pointer min-h-[2.5rem] text-xs sm:text-sm font-bold font-el-messiri ${
+                  showLocalFilters
+                    ? 'bg-gold-primary text-bg-midnight border-gold-primary shadow-lg shadow-gold-primary/20'
+                    : 'bg-bg-royal/30 text-gold-primary border border-border-gold/25 hover:border-gold-primary hover:bg-gold-primary/10'
+                }`}
+                title="تصفية العقارات"
+              >
+                <svg aria-hidden="true" className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
+                </svg>
+                <span>الفلاتر المتقدمة</span>
+              </button>
+
+              {/* Row 2 on mobile (2 items): View Switcher (Always 2 columns side-by-side) */}
+              <div className="grid grid-cols-2 w-full md:w-auto items-stretch bg-bg-royal/40 border border-border-gold/20 rounded-xl p-1 gap-1">
                 <button
                   type="button"
                   aria-pressed={propertiesViewMode === 'grid'}
                   aria-controls="property-results"
                   onClick={() => setPropertiesViewMode('grid')}
-                  className={`min-w-0 px-2 md:px-3.5 py-2 rounded-lg transition-colors duration-200 cursor-pointer whitespace-nowrap text-xs sm:text-sm font-semibold font-el-messiri min-h-[44px] flex items-center justify-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-primary ${
+                  className={`px-3 py-1.5 rounded-lg transition-colors duration-200 cursor-pointer whitespace-nowrap text-xs sm:text-sm font-bold font-el-messiri min-h-[2.25rem] flex items-center justify-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-primary ${
                     propertiesViewMode === 'grid'
-                      ? 'bg-gold-primary text-bg-midnight font-bold shadow-md shadow-gold-primary/10'
+                      ? 'bg-gold-primary text-bg-midnight font-bold shadow-md shadow-gold-primary/15'
                       : 'text-text-muted hover:text-white'
                   }`}
                 >
@@ -345,35 +371,15 @@ export default function PropertyListingsSection({
                   aria-pressed={propertiesViewMode === 'table'}
                   aria-controls="property-results"
                   onClick={() => setPropertiesViewMode('table')}
-                  className={`min-w-0 px-2 md:px-3.5 py-2 rounded-lg transition-colors duration-200 cursor-pointer whitespace-nowrap text-xs sm:text-sm font-semibold font-el-messiri min-h-[44px] flex items-center justify-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-primary ${
+                  className={`px-3 py-1.5 rounded-lg transition-colors duration-200 cursor-pointer whitespace-nowrap text-xs sm:text-sm font-bold font-el-messiri min-h-[2.25rem] flex items-center justify-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-primary ${
                     propertiesViewMode === 'table'
-                      ? 'bg-gold-primary text-bg-midnight font-bold shadow-md shadow-gold-primary/10'
+                      ? 'bg-gold-primary text-bg-midnight font-bold shadow-md shadow-gold-primary/15'
                       : 'text-text-muted hover:text-white'
                   }`}
                 >
                   جدول التفاصيل
                 </button>
               </div>
-
-              {/* Local Filter Toggle */}
-              <button
-                type="button"
-                aria-label="تصفية العقارات"
-                aria-expanded={showLocalFilters}
-                aria-controls="property-local-filters"
-                onClick={() => setShowLocalFilters(open => !open)}
-                className={`flex items-center justify-center gap-2 px-3 rounded-xl border transition-colors duration-200 cursor-pointer min-h-[44px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-primary ${
-                  showLocalFilters
-                    ? 'bg-gold-primary text-bg-midnight border-gold-primary shadow-lg shadow-gold-primary/20'
-                    : 'bg-bg-royal/30 text-gold-primary border border-border-gold/15 hover:border-gold-primary hover:bg-gold-primary/10'
-                }`}
-                title="تصفية العقارات"
-              >
-                <svg aria-hidden="true" className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
-                </svg>
-                <span className="font-bold">الفلاتر</span>
-              </button>
             </div>
             <p role="status" className="mt-3 text-center md:text-start">
               تم العثور على <strong className="text-gold-primary font-mono">{properties.length}</strong> وحدة مطروحة
@@ -448,7 +454,7 @@ export default function PropertyListingsSection({
                     setSelectedRooms('all');
                     setMaxPrice('all');
                   }}
-                  className="text-xs text-text-muted hover:text-white transition-colors duration-200 underline cursor-pointer font-el-messiri min-h-[44px] px-2 flex items-center"
+                  className="text-xs text-text-muted hover:text-white transition-colors duration-200 underline cursor-pointer font-el-messiri min-h-[2.75rem] px-2 flex items-center"
                 >
                   إعادة تعيين الفلاتر
                 </button>
@@ -461,7 +467,7 @@ export default function PropertyListingsSection({
           <div id="property-results" className="space-y-8 sm:space-y-12">
             {propertiesViewMode === 'table' ? (
               <div className="custom-table-wrapper w-full max-h-[60vh] overflow-auto rounded-2xl border-2 border-gold-primary/50 bg-[#0F2342]/90 backdrop-blur-xl shadow-2xl scrollbar-thin scrollbar-thumb-gold-primary scrollbar-track-transparent" dir="rtl">
-                <table className="w-full min-w-[950px] text-start text-xs sm:text-sm table-auto border-collapse" dir="rtl">
+                <table className="w-full min-w-[59.375rem] text-start text-xs sm:text-sm table-auto border-collapse" dir="rtl">
                   <thead className="sticky top-0 z-20 shadow-md">
                     <tr className="border-b border-border-gold/30 text-gold-primary font-el-messiri bg-[#18325C]">
                       <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 text-start bg-[#18325C]">الصورة</th>
@@ -508,7 +514,7 @@ export default function PropertyListingsSection({
                             {property.pricing.price.toLocaleString()} ر.س
                           </td>
                           <td className="py-3 px-5 text-center border-x border-border-gold/10">
-                            <Link href={`/property/${property.slug}`} className="py-2 px-5 text-xs font-bold btn-premium-gold rounded-md inline-block font-el-messiri whitespace-nowrap min-w-[125px] min-h-[44px] flex items-center justify-center">
+                            <Link href={`/property/${property.slug}`} className="py-2 px-5 text-xs font-bold btn-premium-gold rounded-md inline-block font-el-messiri whitespace-nowrap min-w-[7.8125rem] min-h-[2.75rem] flex items-center justify-center">
                               عرض كامل التفاصيل
                             </Link>
                           </td>
@@ -522,7 +528,7 @@ export default function PropertyListingsSection({
               <>
                 {featuredProperty && <FeaturedPropertyCard property={featuredProperty} />}
                 {carouselProperties.length > 0 && (
-                  <div className="mobile-property-carousel w-full overflow-x-auto overscroll-x-contain snap-x snap-mandatory py-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:hidden" aria-label="المزيد من الوحدات العقارية">
+                  <div data-pf-carousel className="mobile-property-carousel w-full overflow-x-auto overscroll-x-contain snap-x snap-mandatory py-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:hidden" aria-label="المزيد من الوحدات العقارية">
                     <div className="flex w-max gap-4">
                       {carouselProperties.map(property => (
                         <div key={property.id} className="shrink-0 snap-start">
@@ -533,7 +539,7 @@ export default function PropertyListingsSection({
                   </div>
                 )}
                 {carouselProperties.length > 0 && (
-                  <div className="hidden md:block w-full relative overflow-hidden py-4 select-none" dir="ltr">
+                  <div data-pf-carousel className="hidden md:block w-full relative overflow-hidden py-4 select-none" dir="ltr">
                     <div className="flex flex-row flex-nowrap gap-4 sm:gap-6 w-max animate-marquee-ltr hover:[animation-play-state:paused] cursor-pointer">
                       {getMarqueeItems(carouselProperties).map((property, idx) => (
                         <div key={`${property.id}-marquee-${idx}`} dir="rtl">
@@ -549,7 +555,7 @@ export default function PropertyListingsSection({
             <div className="text-center mt-6">
               <Link
                 href="/properties"
-                className="py-3.5 px-10 text-xs sm:text-sm font-extrabold btn-premium-gold inline-flex items-center gap-2 cursor-pointer font-el-messiri min-h-[44px]"
+                className="py-3.5 px-10 text-xs sm:text-sm font-extrabold btn-premium-gold inline-flex items-center gap-2 cursor-pointer font-el-messiri min-h-[2.75rem]"
               >
                 <span>عرض جميع الوحدات العقارية</span>
                 <ArrowLeft className="w-4 h-4 transition-transform duration-300 -translate-x-0.5 group-hover:-translate-x-1.5" />
@@ -562,7 +568,7 @@ export default function PropertyListingsSection({
             <p className="text-sm font-semibold text-text-secondary">عذراً، لم نجد أي عروض تطابق فلاتر البحث الحالية.</p>
             <button
               type="button"
-              className="mt-4 text-xs font-bold text-gold-primary underline hover:text-gold-light cursor-pointer min-h-[44px] px-4"
+              className="mt-4 text-xs font-bold text-gold-primary underline hover:text-gold-light cursor-pointer min-h-[2.75rem] px-4"
               onClick={() => {
                 setSelectedCity('all');
                 setSelectedType('all');

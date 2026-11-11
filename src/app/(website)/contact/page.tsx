@@ -99,13 +99,13 @@ export default function ContactPage() {
     <div className="bg-[#060D1A] text-white min-h-screen relative overflow-x-hidden font-sans select-none dir-rtl bg-[linear-gradient(rgba(201,169,110,0.015)_1px,transparent_1px),linear-gradient(90deg,rgba(201,169,110,0.015)_1px,transparent_1px)] bg-[size:50px_50px]">
       
       {/* Static Glowing spots - radial gradient, zero CPU overhead (no keyframe animations) */}
-      <div className="absolute top-[20%] right-[10%] w-[500px] h-[500px] bg-gradient-to-br from-gold-primary/8 to-transparent rounded-full blur-[130px] pointer-events-none -z-10" />
-      <div className="absolute bottom-[20%] left-[10%] w-[500px] h-[500px] bg-gradient-to-tr from-brand-primary/8 to-transparent rounded-full blur-[130px] pointer-events-none -z-10" />
+      <div className="absolute top-[20%] right-[10%] w-[31.25rem] h-[31.25rem] bg-gradient-to-br from-gold-primary/8 to-transparent rounded-full blur-[130px] pointer-events-none -z-10" />
+      <div className="absolute bottom-[20%] left-[10%] w-[31.25rem] h-[31.25rem] bg-gradient-to-tr from-brand-primary/8 to-transparent rounded-full blur-[130px] pointer-events-none -z-10" />
 
       {/* ----------------------------------------------------
-         1. Parallax Luxury Hero Banner
+         1. Parallax Luxury Hero Banner (100vh & Centered)
          ---------------------------------------------------- */}
-      <section className="relative w-full h-[100vh] flex items-center justify-center overflow-hidden">
+      <section className="relative w-full min-h-[100dvh] h-[100dvh] flex items-center justify-center overflow-hidden">
         {/* Background Image - Priority loaded & optimized */}
         <Image
           src="/hero-bg-3.webp"
@@ -117,8 +117,8 @@ export default function ContactPage() {
         {/* Dark Luxury Gradient Overlay - Lightened for better image visibility */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#060D1A]/20 via-[#060D1A]/55 to-[#060D1A] z-10" />
 
-        {/* Content on Top */}
-        <div className="relative z-20 text-center px-4 max-w-4xl mx-auto mt-12 sm:mt-16">
+        {/* Content on Top - Perfectly Centered */}
+        <div className="relative z-20 text-center px-4 max-w-4xl mx-auto flex flex-col items-center justify-center pt-16 pb-8">
           <motion.span
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -132,10 +132,10 @@ export default function ContactPage() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-2xl sm:text-4xl md:text-5xl font-black text-white leading-tight font-el-messiri"
+            className="text-2xl sm:text-4xl md:text-5xl font-bold text-white leading-tight font-el-messiri"
           >
             قنوات الاتصال المباشر لـ <br className="hidden sm:inline" />
-            <span className="bg-gradient-to-r from-gold-light via-gold-primary to-gold-warm bg-clip-text text-transparent font-black">نخبة المستثمرين العقاريين</span>
+            <span className="bg-gradient-to-r from-gold-light via-gold-primary to-gold-warm bg-clip-text text-transparent font-bold">نخبة المستثمرين العقاريين</span>
           </motion.h1>
           
           <motion.p
@@ -147,6 +147,122 @@ export default function ContactPage() {
             نقدّم تجربة استشارية متكاملة تتوافق مع تطلعاتكم. تواصلوا معنا مباشرة عبر قنوات الاتصال الهاتفي والمراسلة الرقمية.
           </motion.p>
         </div>
+      </section>
+
+      {/* ----------------------------------------------------
+         1.5. Direct Contact Channels Cards (Always in ONE Single Row on Desktop)
+         ---------------------------------------------------- */}
+      <section className="relative z-30 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-14 sm:-mt-16 mb-6">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-40px" }}
+          variants={{
+            hidden: {},
+            visible: { transition: { staggerChildren: 0.08 } }
+          }}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+        >
+          {/* Card 1: Direct Phone */}
+          <motion.div
+            variants={fadeUpVariants}
+            className="p-4 sm:p-5 bg-[#0F2040]/90 backdrop-blur-xl border border-gold-primary/30 rounded-2xl shadow-xl flex flex-col justify-between text-right relative group hover:border-gold-primary/60 transition-all duration-300"
+          >
+            <div className="flex items-center gap-3 mb-2.5">
+              <div className="w-10 h-10 rounded-xl bg-gold-primary/10 border border-gold-primary/30 flex items-center justify-center text-gold-primary shrink-0 group-hover:bg-gold-primary group-hover:text-bg-midnight transition-colors">
+                <Phone className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <span className="text-[10px] text-text-muted block">الاتصال المباشر</span>
+                <h4 className="text-sm font-bold text-white font-el-messiri truncate">هاتف المبيعات</h4>
+              </div>
+            </div>
+            <p className="text-xs text-text-secondary font-mono mb-3" dir="ltr">+966 12 600 0000</p>
+            <a
+              href="tel:+966126000000"
+              className="w-full py-1.5 px-3 text-xs font-bold btn-premium-gold rounded-xl flex items-center justify-center gap-1.5 font-el-messiri cursor-pointer"
+            >
+              <span>اتصل الآن</span>
+              <ArrowUpLeft className="w-3.5 h-3.5" />
+            </a>
+          </motion.div>
+
+          {/* Card 2: WhatsApp */}
+          <motion.div
+            variants={fadeUpVariants}
+            className="p-4 sm:p-5 bg-[#0F2040]/90 backdrop-blur-xl border border-gold-primary/30 rounded-2xl shadow-xl flex flex-col justify-between text-right relative group hover:border-gold-primary/60 transition-all duration-300"
+          >
+            <div className="flex items-center gap-3 mb-2.5">
+              <div className="w-10 h-10 rounded-xl bg-status-available/10 border border-status-available/30 flex items-center justify-center text-status-available shrink-0 group-hover:bg-status-available group-hover:text-white transition-colors">
+                <MessageCircle className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <span className="text-[10px] text-text-muted block">خدمة فورية</span>
+                <h4 className="text-sm font-bold text-white font-el-messiri truncate">واتساب المستشارين</h4>
+              </div>
+            </div>
+            <p className="text-xs text-text-secondary font-mono mb-3" dir="ltr">+966 55 883 7846</p>
+            <a
+              href="https://wa.me/966558837846"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full py-1.5 px-3 text-xs font-bold bg-status-available/20 hover:bg-status-available text-white border border-status-available/40 rounded-xl flex items-center justify-center gap-1.5 font-el-messiri transition-all cursor-pointer"
+            >
+              <span>محادثة فورية</span>
+              <ArrowUpLeft className="w-3.5 h-3.5" />
+            </a>
+          </motion.div>
+
+          {/* Card 3: Official Email */}
+          <motion.div
+            variants={fadeUpVariants}
+            className="p-4 sm:p-5 bg-[#0F2040]/90 backdrop-blur-xl border border-gold-primary/30 rounded-2xl shadow-xl flex flex-col justify-between text-right relative group hover:border-gold-primary/60 transition-all duration-300"
+          >
+            <div className="flex items-center gap-3 mb-2.5">
+              <div className="w-10 h-10 rounded-xl bg-gold-primary/10 border border-gold-primary/30 flex items-center justify-center text-gold-primary shrink-0 group-hover:bg-gold-primary group-hover:text-bg-midnight transition-colors">
+                <Mail className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <span className="text-[10px] text-text-muted block">المراسلات الرسمية</span>
+                <h4 className="text-sm font-bold text-white font-el-messiri truncate">البريد الإلكتروني</h4>
+              </div>
+            </div>
+            <p className="text-xs text-text-secondary font-mono mb-3 truncate" dir="ltr">info@alghrbiagolden.com</p>
+            <a
+              href="mailto:info@alghrbiagolden.com"
+              className="w-full py-1.5 px-3 text-xs font-bold btn-premium-glass rounded-xl flex items-center justify-center gap-1.5 font-el-messiri cursor-pointer"
+            >
+              <span>إرسال بريد</span>
+              <ArrowUpLeft className="w-3.5 h-3.5" />
+            </a>
+          </motion.div>
+
+          {/* Card 4: Main Office */}
+          <motion.div
+            variants={fadeUpVariants}
+            className="p-4 sm:p-5 bg-[#0F2040]/90 backdrop-blur-xl border border-gold-primary/30 rounded-2xl shadow-xl flex flex-col justify-between text-right relative group hover:border-gold-primary/60 transition-all duration-300"
+          >
+            <div className="flex items-center gap-3 mb-2.5">
+              <div className="w-10 h-10 rounded-xl bg-gold-primary/10 border border-gold-primary/30 flex items-center justify-center text-gold-primary shrink-0 group-hover:bg-gold-primary group-hover:text-bg-midnight transition-colors">
+                <MapPin className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <span className="text-[10px] text-text-muted block">مقر الإدارة العامة</span>
+                <h4 className="text-sm font-bold text-white font-el-messiri truncate">المركز الرئيسي</h4>
+              </div>
+            </div>
+            <p className="text-xs text-text-secondary mb-3 truncate">طريق الملك عبد العزيز، جدة</p>
+            <a
+              href="https://maps.google.com/?q=Al+Ghrbia+Golden+Jeddah"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full py-1.5 px-3 text-xs font-bold btn-premium-glass rounded-xl flex items-center justify-center gap-1.5 font-el-messiri cursor-pointer"
+            >
+              <span>الاتجاهات</span>
+              <Navigation className="w-3.5 h-3.5" />
+            </a>
+          </motion.div>
+        </motion.div>
       </section>
 
       {/* ----------------------------------------------------
@@ -199,7 +315,7 @@ export default function ContactPage() {
                         <span className="block text-xs font-semibold text-slate-700 mb-1.5">
                           الصفة
                         </span>
-                        <div className="grid grid-cols-2 gap-2 p-1 bg-slate-200/40 border border-slate-200/60 rounded-xl">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 p-1 bg-slate-200/40 border border-slate-200/60 rounded-xl">
                           <button
                             type="button"
                             onClick={() => setResidentType('citizen')}
@@ -391,7 +507,7 @@ export default function ContactPage() {
             variants={fadeUpVariants}
             className="lg:col-span-5"
           >
-            <div className="p-6 sm:p-8 bg-[#FAF8F5] border border-gold-primary/35 rounded-[2.5rem] shadow-[0_30px_70px_rgba(201,169,110,0.12)] h-full flex flex-col justify-between gap-6 relative overflow-hidden group">
+            <div className="p-4 sm:p-8 bg-[#FAF8F5] border border-gold-primary/35 rounded-[2.5rem] shadow-[0_30px_70px_rgba(201,169,110,0.12)] h-full flex flex-col justify-between gap-6 relative overflow-hidden group">
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold-primary to-transparent" />
               <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-gold-primary/5 to-transparent blur-2xl pointer-events-none rounded-full" />
               
@@ -406,7 +522,7 @@ export default function ContactPage() {
                 
                 <motion.div 
                   variants={fadeUpVariants}
-                  className="grid grid-cols-2 gap-2 p-1 bg-slate-200/50 border border-slate-200/80 rounded-full"
+                  className="grid grid-cols-1 sm:grid-cols-2 gap-2 p-1 bg-slate-200/50 border border-slate-200/80 rounded-full"
                 >
                   <button
                     type="button"
@@ -433,7 +549,7 @@ export default function ContactPage() {
                 </motion.div>
               </div>
 
-              <div className="flex-1 flex flex-col justify-center min-h-[220px]">
+              <div className="flex-1 flex flex-col justify-center min-h-[13.75rem]">
                 <AnimatePresence mode="wait">
                   {activeBranch === 'jeddah' ? (
                     <motion.div
@@ -463,7 +579,7 @@ export default function ContactPage() {
                         </motion.p>
                         <motion.p variants={fadeUpVariants} className="flex items-center gap-2.5">
                           <Mail className="w-4 h-4 text-gold-primary shrink-0" />
-                          <span className="font-mono text-xs">jeddah@alghrbiagolden.com</span>
+                          <span className="font-mono text-xs break-all">jeddah@alghrbiagolden.com</span>
                         </motion.p>
                         <motion.p variants={fadeUpVariants} className="flex items-center gap-2.5">
                           <Clock className="w-4 h-4 text-gold-primary shrink-0" />
@@ -516,7 +632,7 @@ export default function ContactPage() {
                         </motion.p>
                         <motion.p variants={fadeUpVariants} className="flex items-center gap-2.5">
                           <Mail className="w-4 h-4 text-gold-primary shrink-0" />
-                          <span className="font-mono text-xs">riyadh@alghrbiagolden.com</span>
+                          <span className="font-mono text-xs break-all">riyadh@alghrbiagolden.com</span>
                         </motion.p>
                         <motion.p variants={fadeUpVariants} className="flex items-center gap-2.5">
                           <Clock className="w-4 h-4 text-gold-primary shrink-0" />
@@ -583,9 +699,9 @@ export default function ContactPage() {
       </section>
 
       {/* ----------------------------------------------------
-         3. Social Media Grid Section (Premium Glass Cards)
+         3. Social Media Grid Section (Always ONE Row on Desktop)
          ---------------------------------------------------- */}
-      <section className="py-20 relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-white/5">
+      <section className="py-16 sm:py-20 relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-white/5">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -594,7 +710,7 @@ export default function ContactPage() {
             hidden: {},
             visible: { transition: { staggerChildren: 0.1 } }
           }}
-          className="flex flex-col items-center text-center mb-12"
+          className="flex flex-col items-center text-center mb-10"
         >
           <motion.span variants={fadeUpVariants} className="inline-block py-1.5 px-4 text-[10px] font-extrabold text-gold-primary bg-gold-primary/10 border border-gold-primary/30 rounded-full uppercase tracking-widest mb-3">
             منصاتنا الرقمية
@@ -617,23 +733,23 @@ export default function ContactPage() {
             hidden: {},
             visible: { transition: { staggerChildren: 0.1 } }
           }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
         >
           {/* Instagram Card */}
           <motion.div
             variants={fadeUpVariants}
             whileHover={{ y: -6, scale: 1.02 }}
-            className="p-6 bg-[#FAF8F5] border border-gold-primary/35 rounded-3xl shadow-[0_15px_40px_rgba(201,169,110,0.08)] flex flex-col justify-between items-start text-right transition-all duration-300 relative overflow-hidden group min-h-[270px]"
+            className="p-5 sm:p-6 bg-[#FAF8F5] border border-gold-primary/35 rounded-3xl shadow-[0_15px_40px_rgba(201,169,110,0.08)] flex flex-col justify-between items-start text-right transition-all duration-300 relative group h-full min-w-0"
           >
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold-primary to-transparent" />
             <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-gold-primary/5 to-transparent blur-xl pointer-events-none rounded-full" />
             <div className="w-full">
-              <div className="w-12 h-12 rounded-full bg-gold-primary/10 border border-gold-primary/30 flex items-center justify-center text-gold-primary shadow-inner mb-4 transition-all duration-300 group-hover:bg-gold-primary group-hover:text-bg-midnight group-hover:border-gold-primary">
+              <div className="w-11 h-11 rounded-2xl bg-gold-primary/10 border border-gold-primary/30 flex items-center justify-center text-gold-primary shadow-inner mb-3.5 transition-all duration-300 group-hover:bg-gold-primary group-hover:text-bg-midnight group-hover:border-gold-primary">
                 <Instagram className="w-5 h-5" />
               </div>
               <h4 className="font-extrabold text-[#060D1A] text-base font-el-messiri transition-colors duration-300 group-hover:text-gold-deep">إنستغرام</h4>
-              <span className="text-[10px] sm:text-xs text-gold-deep font-mono font-semibold" dir="ltr">@alghrbiagolden</span>
-              <p className="text-xs text-slate-600 leading-relaxed mt-3 mb-6 font-sans transition-colors duration-300 group-hover:text-slate-800">
+              <span className="text-[10px] sm:text-xs text-gold-deep font-mono font-semibold break-all block mt-0.5" dir="ltr">@alghrbiagolden</span>
+              <p className="text-xs text-slate-600 leading-relaxed mt-2.5 mb-5 font-sans line-clamp-2 transition-colors duration-300 group-hover:text-slate-800">
                 تابع تغطياتنا الميدانية وجولاتنا الحية لمشاريعنا الفاخرة وتصاميمنا العصرية أولاً بأول.
               </p>
             </div>
@@ -641,7 +757,7 @@ export default function ContactPage() {
               href="https://instagram.com/alghrbiagolden"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full py-2.5 px-4 bg-white hover:bg-gold-primary/10 border border-slate-200 hover:border-gold-primary rounded-full text-xs font-bold text-slate-700 hover:text-gold-deep flex items-center justify-center gap-2 transition-all duration-300 shadow-sm mt-auto"
+              className="w-full py-2 px-4 bg-white hover:bg-gold-primary/10 border border-slate-200 hover:border-gold-primary rounded-xl text-xs font-bold text-slate-700 hover:text-gold-deep flex items-center justify-center gap-1.5 transition-all duration-300 shadow-sm mt-auto"
             >
               <span>متابعة الآن</span>
               <ArrowUpLeft className="w-3.5 h-3.5" />
@@ -652,17 +768,17 @@ export default function ContactPage() {
           <motion.div
             variants={fadeUpVariants}
             whileHover={{ y: -6, scale: 1.02 }}
-            className="p-6 bg-[#FAF8F5] border border-gold-primary/35 rounded-3xl shadow-[0_15px_40px_rgba(201,169,110,0.08)] flex flex-col justify-between items-start text-right transition-all duration-300 relative overflow-hidden group min-h-[270px]"
+            className="p-5 sm:p-6 bg-[#FAF8F5] border border-gold-primary/35 rounded-3xl shadow-[0_15px_40px_rgba(201,169,110,0.08)] flex flex-col justify-between items-start text-right transition-all duration-300 relative group h-full min-w-0"
           >
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold-primary to-transparent" />
             <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-gold-primary/5 to-transparent blur-xl pointer-events-none rounded-full" />
             <div className="w-full">
-              <div className="w-12 h-12 rounded-full bg-gold-primary/10 border border-gold-primary/30 flex items-center justify-center text-gold-primary shadow-inner mb-4 transition-all duration-300 group-hover:bg-gold-primary group-hover:text-bg-midnight group-hover:border-gold-primary">
+              <div className="w-11 h-11 rounded-2xl bg-gold-primary/10 border border-gold-primary/30 flex items-center justify-center text-gold-primary shadow-inner mb-3.5 transition-all duration-300 group-hover:bg-gold-primary group-hover:text-bg-midnight group-hover:border-gold-primary">
                 <Youtube className="w-5 h-5" />
               </div>
               <h4 className="font-extrabold text-[#060D1A] text-base font-el-messiri transition-colors duration-300 group-hover:text-gold-deep">يوتيوب</h4>
-              <span className="text-[10px] sm:text-xs text-gold-deep font-mono font-semibold" dir="ltr">Golden Western</span>
-              <p className="text-xs text-slate-600 leading-relaxed mt-3 mb-6 font-sans transition-colors duration-300 group-hover:text-slate-800">
+              <span className="text-[10px] sm:text-xs text-gold-deep font-mono font-semibold break-all block mt-0.5" dir="ltr">Golden Western</span>
+              <p className="text-xs text-slate-600 leading-relaxed mt-2.5 mb-5 font-sans line-clamp-2 transition-colors duration-300 group-hover:text-slate-800">
                 شاهد العروض السينمائية وجولات الفيديو عالية الدقة لوحداتنا السكنية ومشاريعنا الكبرى.
               </p>
             </div>
@@ -670,7 +786,7 @@ export default function ContactPage() {
               href="https://youtube.com/@alghrbiagolden"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full py-2.5 px-4 bg-white hover:bg-gold-primary/10 border border-slate-200 hover:border-gold-primary rounded-full text-xs font-bold text-slate-700 hover:text-gold-deep flex items-center justify-center gap-2 transition-all duration-300 shadow-sm mt-auto"
+              className="w-full py-2 px-4 bg-white hover:bg-gold-primary/10 border border-slate-200 hover:border-gold-primary rounded-xl text-xs font-bold text-slate-700 hover:text-gold-deep flex items-center justify-center gap-1.5 transition-all duration-300 shadow-sm mt-auto"
             >
               <span>زيارة القناة</span>
               <ArrowUpLeft className="w-3.5 h-3.5" />
@@ -681,17 +797,17 @@ export default function ContactPage() {
           <motion.div
             variants={fadeUpVariants}
             whileHover={{ y: -6, scale: 1.02 }}
-            className="p-6 bg-[#FAF8F5] border border-gold-primary/35 rounded-3xl shadow-[0_15px_40px_rgba(201,169,110,0.08)] flex flex-col justify-between items-start text-right transition-all duration-300 relative overflow-hidden group min-h-[270px]"
+            className="p-5 sm:p-6 bg-[#FAF8F5] border border-gold-primary/35 rounded-3xl shadow-[0_15px_40px_rgba(201,169,110,0.08)] flex flex-col justify-between items-start text-right transition-all duration-300 relative group h-full min-w-0"
           >
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold-primary to-transparent" />
             <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-gold-primary/5 to-transparent blur-xl pointer-events-none rounded-full" />
             <div className="w-full">
-              <div className="w-12 h-12 rounded-full bg-gold-primary/10 border border-gold-primary/30 flex items-center justify-center text-gold-primary shadow-inner mb-4 transition-all duration-300 group-hover:bg-gold-primary group-hover:text-bg-midnight group-hover:border-gold-primary">
+              <div className="w-11 h-11 rounded-2xl bg-gold-primary/10 border border-gold-primary/30 flex items-center justify-center text-gold-primary shadow-inner mb-3.5 transition-all duration-300 group-hover:bg-gold-primary group-hover:text-bg-midnight group-hover:border-gold-primary">
                 <Linkedin className="w-5 h-5" />
               </div>
               <h4 className="font-extrabold text-[#060D1A] text-base font-el-messiri transition-colors duration-300 group-hover:text-gold-deep">لينكد إن</h4>
-              <span className="text-[10px] sm:text-xs text-gold-deep font-mono font-semibold" dir="ltr">company/alghrbiagolden</span>
-              <p className="text-xs text-slate-600 leading-relaxed mt-3 mb-6 font-sans transition-colors duration-300 group-hover:text-slate-800">
+              <span className="text-[10px] sm:text-xs text-gold-deep font-mono font-semibold break-all block mt-0.5" dir="ltr">company/alghrbiagolden</span>
+              <p className="text-xs text-slate-600 leading-relaxed mt-2.5 mb-5 font-sans line-clamp-2 transition-colors duration-300 group-hover:text-slate-800">
                 تواصل معنا للمشاركات المهنية والفرص الاستثمارية والشركات الاستراتيجية العقارية.
               </p>
             </div>
@@ -699,7 +815,7 @@ export default function ContactPage() {
               href="https://linkedin.com/company/alghrbiagolden"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full py-2.5 px-4 bg-white hover:bg-gold-primary/10 border border-slate-200 hover:border-gold-primary rounded-full text-xs font-bold text-slate-700 hover:text-gold-deep flex items-center justify-center gap-2 transition-all duration-300 shadow-sm mt-auto"
+              className="w-full py-2 px-4 bg-white hover:bg-gold-primary/10 border border-slate-200 hover:border-gold-primary rounded-xl text-xs font-bold text-slate-700 hover:text-gold-deep flex items-center justify-center gap-1.5 transition-all duration-300 shadow-sm mt-auto"
             >
               <span>تواصل مهنياً</span>
               <ArrowUpLeft className="w-3.5 h-3.5" />
@@ -710,27 +826,27 @@ export default function ContactPage() {
           <motion.div
             variants={fadeUpVariants}
             whileHover={{ y: -6, scale: 1.02 }}
-            className="p-6 bg-[#FAF8F5] border border-gold-primary/35 rounded-3xl shadow-[0_15px_40px_rgba(201,169,110,0.08)] flex flex-col justify-between items-start text-right transition-all duration-300 relative overflow-hidden group min-h-[270px]"
+            className="p-5 sm:p-6 bg-[#FAF8F5] border border-gold-primary/35 rounded-3xl shadow-[0_15px_40px_rgba(201,169,110,0.08)] flex flex-col justify-between items-start text-right transition-all duration-300 relative group h-full min-w-0"
           >
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold-primary to-transparent" />
             <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-gold-primary/5 to-transparent blur-xl pointer-events-none rounded-full" />
             <div className="w-full">
-              <div className="w-12 h-12 rounded-full bg-gold-primary/10 border border-gold-primary/30 flex items-center justify-center text-gold-primary shadow-inner mb-4 transition-all duration-300 group-hover:bg-gold-primary group-hover:text-bg-midnight group-hover:border-gold-primary">
+              <div className="w-11 h-11 rounded-2xl bg-gold-primary/10 border border-gold-primary/30 flex items-center justify-center text-gold-primary shadow-inner mb-3.5 transition-all duration-300 group-hover:bg-gold-primary group-hover:text-bg-midnight group-hover:border-gold-primary">
                 <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
                   <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                 </svg>
               </div>
               <h4 className="font-extrabold text-[#060D1A] text-base font-el-messiri transition-colors duration-300 group-hover:text-gold-deep">منصة إكس</h4>
-              <span className="text-[10px] sm:text-xs text-gold-deep font-mono font-semibold" dir="ltr">@alghrbiagolden</span>
-              <p className="text-xs text-slate-600 leading-relaxed mt-3 mb-6 font-sans transition-colors duration-300 group-hover:text-slate-800">
-                بق على اطلاع بآخر أخبار التطوير العقاري وتحديثات أعمال التشييد وبناء مشاريعنا الجارية.
+              <span className="text-[10px] sm:text-xs text-gold-deep font-mono font-semibold break-all block mt-0.5" dir="ltr">@alghrbiagolden</span>
+              <p className="text-xs text-slate-600 leading-relaxed mt-2.5 mb-5 font-sans line-clamp-2 transition-colors duration-300 group-hover:text-slate-800">
+                ابق على اطلاع بآخر أخبار التطوير العقاري وتحديثات أعمال التشييد وبناء مشاريعنا الجارية.
               </p>
             </div>
             <a
               href="https://x.com/alghrbiagolden"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full py-2.5 px-4 bg-white hover:bg-gold-primary/10 border border-slate-200 hover:border-gold-primary rounded-full text-xs font-bold text-slate-700 hover:text-gold-deep flex items-center justify-center gap-2 transition-all duration-300 shadow-sm mt-auto"
+              className="w-full py-2 px-4 bg-white hover:bg-gold-primary/10 border border-slate-200 hover:border-gold-primary rounded-xl text-xs font-bold text-slate-700 hover:text-gold-deep flex items-center justify-center gap-1.5 transition-all duration-300 shadow-sm mt-auto"
             >
               <span>آخر التحديثات</span>
               <ArrowUpLeft className="w-3.5 h-3.5" />

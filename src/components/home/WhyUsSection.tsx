@@ -40,11 +40,11 @@ export default function WhyUsSection() {
   ];
 
   return (
-    <section id="about-section" className="relative w-full overflow-hidden py-20 sm:py-24 bg-gradient-to-br from-[#FAF8F5] via-[#FFFFFF] to-[#F5EFE4] border-y border-slate-200/50 z-10">
-      <div className="absolute top-0 start-1/4 w-[400px] h-[400px] bg-gradient-to-br from-gold-primary/5 to-transparent rounded-full blur-3xl -z-10 animate-pulse duration-[8000ms]"></div>
-      <div className="absolute bottom-0 end-1/4 w-[400px] h-[400px] bg-gradient-to-tr from-brand-primary/5 to-transparent rounded-full blur-3xl -z-10 animate-pulse duration-[10000ms]"></div>
+    <section id="about-section" className="relative w-full overflow-hidden py-20 sm:py-24 bg-gradient-to-br from-[#FAF8F5] via-[#FFFFFF] to-[#F5EFE4] border-y border-slate-200/50 z-10" data-pf-full-bleed>
+      <div className="absolute top-0 start-1/4 w-[25rem] h-[25rem] bg-gradient-to-br from-gold-primary/5 to-transparent rounded-full blur-3xl -z-10 animate-pulse duration-[8000ms]"></div>
+      <div className="absolute bottom-0 end-1/4 w-[25rem] h-[25rem] bg-gradient-to-tr from-brand-primary/5 to-transparent rounded-full blur-3xl -z-10 animate-pulse duration-[10000ms]"></div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
+      <div className="relative w-[min(calc(100%-2rem),78rem)] lg:w-[min(73vw,78rem)] mx-auto px-4 sm:px-6 lg:px-8 z-10">
         <motion.div
           initial="hidden"
           whileInView="visible"

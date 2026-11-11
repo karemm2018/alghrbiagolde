@@ -63,7 +63,7 @@ const DetailedPropertyCard = ({ property, openInquiry }: { property: Property; o
       className="group flex flex-col lg:flex-row bg-[#0F2342]/70 backdrop-blur-xl border border-border-gold/30 rounded-3xl overflow-hidden shadow-2xl transition-all duration-300 hover:border-gold-primary/50"
     >
       {/* Image Block */}
-      <div className="relative w-full lg:w-[35%] aspect-[16/10] lg:aspect-auto min-h-[240px] overflow-hidden bg-bg-deep">
+      <div className="relative w-full lg:w-[35%] aspect-[16/10] lg:aspect-auto min-h-[15rem] overflow-hidden bg-bg-deep">
         <Image 
           src={property.media.thumbnail || '/properties/apartment.webp'} 
           alt={property.title}
@@ -116,32 +116,32 @@ const DetailedPropertyCard = ({ property, openInquiry }: { property: Property; o
             {property.description}
           </p>
 
-          {/* Specifications Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-3 rounded-2xl bg-white/[0.03] border border-white/5 mb-5 text-xs text-text-secondary text-center">
-            <div className="flex flex-col items-center justify-center gap-1">
-              <span className="text-[9px] text-text-muted">المساحة</span>
+          {/* Specifications Grid (Always 4 columns row layout) */}
+          <div className="grid grid-cols-4 gap-1 sm:gap-3 p-2 sm:p-3 rounded-2xl bg-white/[0.03] border border-white/5 mb-4 sm:mb-5 text-[11px] sm:text-xs text-text-secondary text-center">
+            <div className="flex flex-col items-center justify-center gap-0.5 sm:gap-1 min-w-0">
+              <span className="text-[8px] sm:text-[9px] text-text-muted">المساحة</span>
               <div className="flex items-center gap-1 font-bold text-white">
-                <Ruler className="w-3.5 h-3.5 text-gold-primary" />
-                <span>{formatArea(property.specs.area)}</span>
+                <Ruler className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gold-primary shrink-0" />
+                <span className="text-[11px] sm:text-xs font-mono">{formatArea(property.specs.area)}</span>
               </div>
             </div>
-            <div className="flex flex-col items-center justify-center gap-1 border-s sm:border-s-0 sm:border-x border-white/5">
-              <span className="text-[9px] text-text-muted">الغرف</span>
+            <div className="flex flex-col items-center justify-center gap-0.5 sm:gap-1 border-s border-white/5 min-w-0">
+              <span className="text-[8px] sm:text-[9px] text-text-muted">الغرف</span>
               <div className="flex items-center gap-1 font-bold text-white">
-                <Bed className="w-3.5 h-3.5 text-gold-primary" />
-                <span>{property.specs.bedrooms}</span>
+                <Bed className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gold-primary shrink-0" />
+                <span className="text-[11px] sm:text-xs font-mono">{property.specs.bedrooms}</span>
               </div>
             </div>
-            <div className="flex flex-col items-center justify-center gap-1 border-s border-white/5">
-              <span className="text-[9px] text-text-muted">الحمامات</span>
+            <div className="flex flex-col items-center justify-center gap-0.5 sm:gap-1 border-s border-white/5 min-w-0">
+              <span className="text-[8px] sm:text-[9px] text-text-muted">الحمامات</span>
               <div className="flex items-center gap-1 font-bold text-white">
-                <Bath className="w-3.5 h-3.5 text-gold-primary" />
-                <span>{property.specs.bathrooms}</span>
+                <Bath className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gold-primary shrink-0" />
+                <span className="text-[11px] sm:text-xs font-mono">{property.specs.bathrooms}</span>
               </div>
             </div>
-            <div className="flex flex-col items-center justify-center gap-1 border-s border-white/5">
-              <span className="text-[9px] text-text-muted">الفئة</span>
-              <span className="font-extrabold text-gold-light">{typeLabel}</span>
+            <div className="flex flex-col items-center justify-center gap-0.5 sm:gap-1 border-s border-white/5 min-w-0">
+              <span className="text-[8px] sm:text-[9px] text-text-muted">الفئة</span>
+              <span className="font-extrabold text-gold-light text-[10px] sm:text-xs truncate">{typeLabel}</span>
             </div>
           </div>
 
@@ -525,9 +525,9 @@ export default function PropertiesPage() {
   return (
     <main className="min-h-screen bg-bg-midnight relative overflow-x-hidden" dir="rtl">
       {/* ----------------------------------------------------
-         1. Full-screen Hero Section (80vh & Full Width)
+         1. Full-screen Hero Section (100vh & Full Width)
          ---------------------------------------------------- */}
-      <section className="relative h-[80vh] w-full flex items-center justify-center bg-bg-deep overflow-hidden">
+      <section className="relative w-full min-h-[100dvh] h-[100dvh] flex items-center justify-center bg-bg-deep overflow-hidden">
         {/* Background Image with Slow Zoom effect */}
         <div className="absolute inset-0 z-0 select-none">
           <Image 
@@ -541,8 +541,8 @@ export default function PropertiesPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-[#060D1A]/90 via-[#060D1A]/55 to-[#060D1A]/15"></div>
         </div>
 
-        {/* Banner Contents (Centered vertically with balanced padding and shifted 10vh down below floating navbar) */}
-        <div className="relative z-10 max-w-5xl w-[90%] mx-auto text-center flex flex-col items-center justify-center pt-28 sm:pt-36 pb-12 sm:pb-16 translate-y-[10vh]">
+        {/* Banner Contents (Centered vertically and horizontally with balanced padding) */}
+        <div className="relative z-10 max-w-5xl w-[92%] mx-auto text-center flex flex-col items-center justify-center px-4 pt-16 pb-8">
           <motion.span 
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -555,7 +555,7 @@ export default function PropertiesPage() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="text-xl xs:text-2xl sm:text-5xl lg:text-6xl font-black text-white leading-tight font-el-messiri mb-6 drop-shadow-xl text-center"
+            className="text-xl xs:text-2xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight font-el-messiri mb-6 drop-shadow-xl text-center"
           >
             استكشف <span className="bg-gradient-to-r from-gold-light via-gold-primary to-gold-warm bg-clip-text text-transparent">الوحدات العقارية الفاخرة</span>
           </motion.h1>
@@ -715,7 +715,7 @@ export default function PropertiesPage() {
                     </div>
 
                     {/* Price options row */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-2 sm:gap-4">
                       <CustomSelect 
                         id="min-price-select"
                         title="الحد الأدنى للسعر"
@@ -873,7 +873,7 @@ export default function PropertiesPage() {
         </div>
 
         {/* Listings content render based on viewMode */}
-        <section className="min-h-[250px]">
+        <section className="min-h-[15.625rem]">
           {filteredProperties.length > 0 ? (
             <AnimatePresence mode="wait">
               
@@ -885,7 +885,7 @@ export default function PropertiesPage() {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.35 }}
-                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
+                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6"
                 >
                   {filteredProperties.map((property) => (
                     <PropertyCard key={property.id} property={property} />
@@ -932,7 +932,7 @@ export default function PropertiesPage() {
                     {carouselPropertiesList.map((property) => (
                       <div 
                         key={property.id} 
-                        className="w-[290px] sm:w-[350px] shrink-0 snap-center"
+                        className="w-[18.125rem] sm:w-[21.875rem] shrink-0 snap-center"
                       >
                         <PropertyCard property={property} />
                       </div>
@@ -976,7 +976,7 @@ export default function PropertiesPage() {
                     className="custom-table-wrapper w-full max-h-[60vh] overflow-auto rounded-2xl border-2 border-gold-primary/50 bg-[#0F2342]/90 backdrop-blur-xl shadow-2xl scrollbar-thin scrollbar-thumb-gold-primary scrollbar-track-transparent" 
                     dir="rtl"
                   >
-                    <table className="w-full min-w-[950px] text-right text-xs sm:text-[13px] table-auto border-collapse">
+                    <table className="w-full min-w-[59.375rem] text-right text-xs sm:text-[0.8125rem] table-auto border-collapse">
                       <thead className="sticky top-0 z-20 shadow-md">
                         <tr className="border-b border-border-gold/30 text-gold-primary font-el-messiri bg-[#18325C]">
                           <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-s-0 last:border-e-0 text-right bg-[#18325C]">الصورة</th>

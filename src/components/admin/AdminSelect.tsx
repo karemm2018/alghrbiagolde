@@ -48,7 +48,7 @@ export default function AdminSelect({
   };
 
   return (
-    <div ref={containerRef} className={`relative min-w-[160px] ${className}`}>
+    <div ref={containerRef} className={`relative min-w-[10rem] ${className}`}>
       {/* Trigger Button */}
       <button
         type="button"

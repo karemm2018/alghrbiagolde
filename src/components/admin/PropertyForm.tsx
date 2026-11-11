@@ -720,7 +720,7 @@ const getStoragePathFromUrl = (url: string) => {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="neu-label">سعر المتر المربع</label>
                       <div className="relative">
@@ -806,7 +806,7 @@ const getStoragePathFromUrl = (url: string) => {
             </div>
 
             <div className="space-y-6">
-              <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4">
                 <div>
                   <label className="neu-label text-center block">المساحة (م²) *</label>
                   <div className="relative">
@@ -911,7 +911,7 @@ const getStoragePathFromUrl = (url: string) => {
               {/* Amenities checkboxes (Expanded columns to fill width) */}
               <div>
                 <label className="neu-label mb-3">الميزات الإضافية والخدمات التابعة</label>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
                   {AVAILABLE_FEATURES.map((feat) => {
                     const isChecked = features.includes(feat.id);
                     const IconComponent = FEATURE_ICONS[feat.id] || Sparkles;
@@ -947,7 +947,7 @@ const getStoragePathFromUrl = (url: string) => {
             </div>
 
             <div className="space-y-4">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
                     <label className="neu-label mb-0">المدينة *</label>
@@ -1309,7 +1309,7 @@ const getStoragePathFromUrl = (url: string) => {
                   <label className="neu-label mb-2">مقاطع الفيديو الترويجية للعقار (متعدد)</label>
                   
                   {videos.length > 0 && (
-                    <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4 mb-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4 mb-4">
                       {videos.map((vidUrl, idx) => (
                         <div key={idx} className="relative aspect-video bg-[var(--neu-depressed)] rounded-2xl overflow-hidden group border border-white/20">
                           <video src={vidUrl} className="w-full h-full object-cover" />
@@ -1484,7 +1484,7 @@ const getStoragePathFromUrl = (url: string) => {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="neu-label">المدينة *</label>
                   <input

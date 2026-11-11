@@ -104,19 +104,25 @@ export default function PropertyCard({ property }: PropertyCardProps) {
       {/* Top Gold Shimmer Bar */}
       <div className="absolute top-0 start-0 w-full h-[2.5px] bg-gradient-to-r from-transparent via-gold-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20"></div>
 
-      {/* Thumbnail Image Container */}
-      <div className="relative aspect-[4/3] overflow-hidden bg-bg-deep">
+      {/* Thumbnail Image Container (Cinematic 16/10 ratio to optimize card height) */}
+      <div className="relative aspect-[16/10] rounded-t-2xl overflow-hidden bg-bg-deep shrink-0">
         {/* Subtle overlay for text contrast */}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent z-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent z-10 pointer-events-none"></div>
         
-        {/* Status Badge */}
-        <div className="absolute top-4 start-4 z-20">
+        {/* Location Tag Badge inside image (Top Right in RTL) */}
+        <div className="absolute top-3 start-3 z-20 flex items-center gap-1 px-2.5 py-1 text-[10px] font-semibold text-white bg-slate-900/85 backdrop-blur-md border border-white/15 rounded-full shadow-md max-w-[65%]">
+          <MapPin className="w-3 h-3 text-gold-primary shrink-0" />
+          <span className="truncate">{property.location.district}، {property.location.city}</span>
+        </div>
+
+        {/* Status Badge (Top Left in RTL) */}
+        <div className="absolute top-3 end-3 z-20">
           {renderStatusBadge(property.status)}
         </div>
 
-        {/* Type tag overlay */}
-        <div className="absolute bottom-4 start-4 z-20">
-          <span className="px-2.5 py-1 text-[9px] font-extrabold text-white bg-slate-900/80 backdrop-blur-md border border-white/10 rounded-md uppercase">
+        {/* Type tag overlay (Bottom Right in RTL) */}
+        <div className="absolute bottom-3 start-3 z-20">
+          <span className="px-2.5 py-1 text-[9px] font-extrabold text-white bg-slate-900/85 backdrop-blur-md border border-white/10 rounded-md uppercase">
             {property.type === 'annex' ? 'ملحق روف' : property.type === 'villa' ? 'فيلا مستقلة' : property.type === 'penthouse' ? 'بنتهاوس' : 'شقة سكنية'}
           </span>
         </div>
@@ -132,78 +138,62 @@ export default function PropertyCard({ property }: PropertyCardProps) {
       </div>
 
       {/* Card Body */}
-      <div className="flex flex-col flex-1 p-6 text-right">
-        {/* Project Name */}
-        <motion.div variants={itemVariants} className="flex items-center gap-1 mb-2 text-xs font-semibold text-text-muted">
-          <span className="w-1.5 h-1.5 rounded-full bg-gold-primary"></span>
-          <span>{property.project.name}</span>
-        </motion.div>
+      <div className="flex flex-col flex-1 p-3.5 sm:p-4 text-right justify-between min-w-0">
+        <div>
+          {/* Project Name */}
+          <motion.div variants={itemVariants} className="flex items-center gap-1 mb-1 text-[11px] font-semibold text-text-muted">
+            <span className="w-1.5 h-1.5 rounded-full bg-gold-primary"></span>
+            <span>{property.project.name}</span>
+          </motion.div>
 
-        {/* Title */}
-        <motion.h3 variants={itemVariants} className="text-sm sm:text-base font-extrabold text-text-primary mb-3 line-clamp-1 leading-snug hover-premium-gold">
-          {property.title}
-        </motion.h3>
+          {/* Title */}
+          <motion.h3 variants={itemVariants} className="text-sm sm:text-base font-extrabold text-text-primary mb-2.5 line-clamp-1 leading-snug hover-premium-gold">
+            {property.title}
+          </motion.h3>
 
-        {/* Address / Location */}
-        <motion.div variants={itemVariants} className="flex items-center gap-1.5 text-xs text-text-secondary mb-4">
-          <MapPin className="w-3.5 h-3.5 text-gold-primary shrink-0" />
-          <span className="line-clamp-1">{property.location.district}، {property.location.city}</span>
-        </motion.div>
-
-        {/* Key Specs Icons (Glass Theme styled) */}
-        <motion.div variants={itemVariants} className="grid grid-cols-3 gap-2 py-3 px-2 rounded-xl bg-white/[0.04] border border-white/10 mb-5 text-xs text-text-secondary">
-          <div className="flex flex-col items-center justify-center gap-1">
-            <span className="text-[10px] text-text-muted uppercase">الغرف</span>
-            <div className="flex items-center gap-1">
-              <Bed className="w-3.5 h-3.5 text-gold-primary" />
-              <span className="font-bold text-text-primary font-mono">{property.specs.bedrooms}</span>
+          {/* Key Specs Icons (Always 3 columns in a single compact row) */}
+          <motion.div variants={itemVariants} className="grid grid-cols-3 gap-1 py-1.5 px-1 sm:px-2 rounded-xl bg-white/[0.04] border border-white/10 mb-3 text-[11px] text-text-secondary">
+            <div className="flex flex-col items-center justify-center gap-0.5 text-center min-w-0">
+              <span className="text-[9px] text-text-muted uppercase">الغرف</span>
+              <div className="flex items-center gap-1">
+                <Bed className="w-3.5 h-3.5 text-gold-primary shrink-0" />
+                <span className="font-bold text-text-primary font-mono text-xs">{property.specs.bedrooms}</span>
+              </div>
             </div>
-          </div>
-          <div className="flex flex-col items-center justify-center gap-1 border-x border-white/10">
-            <span className="text-[10px] text-text-muted uppercase">الحمامات</span>
-            <div className="flex items-center gap-1">
-              <Bath className="w-3.5 h-3.5 text-gold-primary" />
-              <span className="font-bold text-text-primary font-mono">{property.specs.bathrooms}</span>
+            <div className="flex flex-col items-center justify-center gap-0.5 text-center border-x border-white/10 min-w-0">
+              <span className="text-[9px] text-text-muted uppercase">الحمامات</span>
+              <div className="flex items-center gap-1">
+                <Bath className="w-3.5 h-3.5 text-gold-primary shrink-0" />
+                <span className="font-bold text-text-primary font-mono text-xs">{property.specs.bathrooms}</span>
+              </div>
             </div>
-          </div>
-          <div className="flex flex-col items-center justify-center gap-1">
-            <span className="text-[10px] text-text-muted uppercase">المساحة</span>
-            <div className="flex items-center gap-1">
-              <Ruler className="w-3.5 h-3.5 text-gold-primary" />
-              <span className="font-bold text-text-primary font-mono">{formatArea(property.specs.area)}</span>
+            <div className="flex flex-col items-center justify-center gap-0.5 text-center min-w-0">
+              <span className="text-[9px] text-text-muted uppercase">المساحة</span>
+              <div className="flex items-center gap-1">
+                <Ruler className="w-3.5 h-3.5 text-gold-primary shrink-0" />
+                <span className="font-bold text-text-primary font-mono text-xs">{formatArea(property.specs.area)}</span>
+              </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
 
-        {/* Financial Values */}
-        <motion.div variants={itemVariants} className="flex justify-between items-center mt-auto pt-4 border-t border-white/10">
-          <div>
-            <p className="text-[9px] text-text-muted uppercase mb-0.5">السعر الإجمالي</p>
-            <p className="text-lg font-extrabold text-gold-primary font-el-messiri">
+        {/* Bottom Row: Price and Button ALWAYS in one single horizontal row */}
+        <motion.div variants={itemVariants} className="border-t border-white/10 pt-2.5 mt-auto flex items-center justify-between gap-2 min-w-0">
+          <div className="text-right min-w-0">
+            <span className="text-[9px] text-text-muted block leading-none mb-1">السعر الإجمالي</span>
+            <span className="text-xs sm:text-sm lg:text-base font-extrabold text-gold-primary font-el-messiri whitespace-nowrap leading-none block">
               {formatPrice(property.pricing.price)}
-            </p>
+            </span>
           </div>
-          {property.pricing.monthlyInstallment && (
-            <div className="text-end">
-              <p className="text-[9px] text-text-muted uppercase mb-0.5">قسط شهري متوقع</p>
-              <p className="text-sm font-bold text-text-primary font-mono">
-                {new Intl.NumberFormat('en-US').format(property.pricing.monthlyInstallment)} ر.س
-              </p>
-            </div>
-          )}
+          <Link
+            href={`/property/${property.slug}`}
+            className="shrink-0 flex items-center justify-center gap-1.5 py-1.5 px-3 sm:px-3.5 text-xs font-bold btn-premium-gold rounded-xl cursor-pointer font-el-messiri transition-all hover:scale-102 active:scale-98 shadow-md"
+          >
+            <span>عرض التفاصيل</span>
+            <ArrowLeft className="w-3 h-3 transition-transform duration-300" />
+          </Link>
         </motion.div>
       </div>
-
-      {/* Card Footer - Single Premium Details Button */}
-      <motion.div variants={itemVariants} className="border-t border-white/10 p-4 bg-white/[0.02]">
-        <Link
-          href={`/property/${property.slug}`}
-          className="w-full flex items-center justify-center gap-2 py-3 px-4 text-xs font-extrabold text-gold-primary bg-gold-primary/[0.08] border border-gold-primary/25 rounded-xl hover:bg-gold-primary hover:text-bg-midnight transition-all duration-300 hover:shadow-[0_8px_24px_rgba(201,169,110,0.2)] active:scale-[0.97] cursor-pointer group/btn"
-        >
-          <span>عرض التفاصيل</span>
-          <ArrowLeft className="w-3.5 h-3.5 transition-transform duration-300 group-hover/btn:-translate-x-1" />
-        </Link>
-      </motion.div>
     </motion.div>
   );
 }

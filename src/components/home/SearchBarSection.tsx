@@ -90,7 +90,7 @@ export default function SearchBarSection({
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
-                className="text-white/40 hover:text-white shrink-0 p-1.5 cursor-pointer transition-colors duration-200 min-w-[36px] min-h-[36px] sm:min-w-[40px] sm:min-h-[40px] flex items-center justify-center rounded-full"
+                className="text-white/40 hover:text-white shrink-0 p-1.5 cursor-pointer transition-colors duration-200 min-w-[2.25rem] min-h-[2.25rem] sm:min-w-[2.5rem] sm:min-h-[2.5rem] flex items-center justify-center rounded-full"
                 title="مسح البحث"
                 aria-label="مسح حقل البحث"
               >
@@ -101,7 +101,7 @@ export default function SearchBarSection({
             {/* Search Submit Button - Perfectly proportioned single line */}
             <button
               type="submit"
-              className="h-[42px] px-4 sm:px-6 text-xs sm:text-sm font-extrabold btn-premium-gold shrink-0 flex items-center gap-1.5 cursor-pointer font-el-messiri rounded-full whitespace-nowrap"
+              className="h-[2.625rem] px-4 sm:px-6 text-xs sm:text-sm font-extrabold btn-premium-gold shrink-0 flex items-center gap-1.5 cursor-pointer font-el-messiri rounded-full whitespace-nowrap"
             >
               <Search className="w-4 h-4" />
               <span>بحث</span>
@@ -203,7 +203,7 @@ export default function SearchBarSection({
                     <span className="block text-xs font-bold text-transparent mb-2 hidden lg:block select-none pointer-events-none">&nbsp;</span>
                     <button
                       type="submit"
-                      className="w-full h-[46px] text-xs sm:text-sm font-extrabold btn-premium-gold flex items-center justify-center gap-2 cursor-pointer font-el-messiri rounded-xl sm:rounded-2xl whitespace-nowrap shadow-md"
+                      className="w-full h-[2.875rem] text-xs sm:text-sm font-extrabold btn-premium-gold flex items-center justify-center gap-2 cursor-pointer font-el-messiri rounded-xl sm:rounded-2xl whitespace-nowrap shadow-md"
                     >
                       <Search className="w-4 h-4 shrink-0" />
                       <span>تطبيق الفلاتر</span>
@@ -222,7 +222,7 @@ export default function SearchBarSection({
                         setSelectedRooms('all');
                         setMaxPrice('all');
                       }}
-                      className="text-xs text-text-muted hover:text-white transition-colors duration-200 underline cursor-pointer font-el-messiri min-h-[44px] px-2 flex items-center"
+                      className="text-xs text-text-muted hover:text-white transition-colors duration-200 underline cursor-pointer font-el-messiri min-h-[2.75rem] px-2 flex items-center"
                     >
                       إعادة تعيين الفلاتر
                     </button>

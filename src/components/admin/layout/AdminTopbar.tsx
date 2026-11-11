@@ -89,7 +89,7 @@ export default function AdminTopbar({
       >
         <Bell className="w-5 h-5 text-[var(--neu-text-secondary)]" />
         {newSubmissionsCount > 0 && (
-          <span className="absolute -top-1.5 -end-1.5 min-w-[18px] h-[18px] rounded-full bg-red-600 border-2 border-[var(--neu-bg)] text-[9px] font-bold text-white flex items-center justify-center px-1">
+          <span className="absolute -top-1.5 -end-1.5 min-w-[1.125rem] h-[1.125rem] rounded-full bg-red-600 border-2 border-[var(--neu-bg)] text-[9px] font-bold text-white flex items-center justify-center px-1">
             {newSubmissionsCount}
           </span>
         )}

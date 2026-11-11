@@ -967,7 +967,7 @@ const getStoragePathFromUrl = (url: string) => {
             {/* Gallery Images */}
             <div>
               <label className="neu-label">معرض صور المشروع (Gallery)</label>
-              <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-4 mt-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-4 mt-2">
                 {gallery.map((img, idx) => (
                   <div key={idx} className="relative h-32 rounded-xl overflow-hidden bg-[var(--neu-depressed)] group border border-white/5">
                     <Image src={img} alt="Gallery Preview" fill className="object-cover" />

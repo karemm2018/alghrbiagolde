@@ -21,11 +21,11 @@ export default function RequestPropertyBanner({ onOpenInquiry }: RequestProperty
   };
 
   return (
-    <section className="relative w-full md:h-[70vh] min-h-[600px] overflow-hidden py-16 md:py-0 bg-bg-deep flex items-center">
+    <section data-pf-full-bleed className="relative w-full min-h-[clamp(30rem,70vh,42rem)] overflow-hidden py-16 md:py-20 bg-bg-deep flex items-center">
       {/* Light Background Divider */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#FAF8F5] via-[#FFFFFF] to-[#F5EFE4] -skew-y-2 origin-top-right border-y border-border-gold/25 z-0 shadow-inner"></div>
 
-      <div className="relative w-full max-w-6xl mx-auto px-6 sm:px-8 z-10 flex flex-col md:flex-row items-center justify-center gap-10 md:gap-16 lg:gap-16">
+      <div className="relative w-[min(calc(100%-2rem),78rem)] lg:w-[min(73vw,78rem)] mx-auto px-6 sm:px-8 z-10 flex flex-col md:flex-row items-center justify-center gap-10 md:gap-16 lg:gap-16">
 
         {/* Text Column */}
         <motion.div
@@ -60,15 +60,15 @@ export default function RequestPropertyBanner({ onOpenInquiry }: RequestProperty
           >
             <div className="absolute top-[52%] -translate-y-1/2 start-[-20px] end-[-25px] h-6 sm:h-7 md:h-8.5 bg-gradient-to-r from-[#9A7A40] via-[#C9A96E] to-[#9A7A40] border-y border-[#E8C98A]/40 z-0 rounded-[1px] shadow-sm"></div>
 
-            <span className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white relative z-10 font-aref-ruqaa [-webkit-text-stroke:5px_#FAF8F5] sm:[-webkit-text-stroke:7px_#FAF8F5] md:[-webkit-text-stroke:8px_#FAF8F5] [text-shadow:0_8px_20px_rgba(6,13,26,0.14)] select-none">
+            <span className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white relative z-10 font-aref-ruqaa [-webkit-text-stroke:5px_#FAF8F5] sm:[-webkit-text-stroke:7px_#FAF8F5] md:[-webkit-text-stroke:8px_#FAF8F5] [text-shadow:0_8px_20px_rgba(6,13,26,0.14)] select-none">
               بخطوة
             </span>
 
-            <span className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-bg-midnight absolute inset-0 z-[15] font-aref-ruqaa [-webkit-text-stroke:3px_#7A5E2A] select-none pointer-events-none">
+            <span className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-bg-midnight absolute inset-0 z-[15] font-aref-ruqaa [-webkit-text-stroke:3px_#7A5E2A] select-none pointer-events-none">
               بخطوة
             </span>
 
-            <span className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white absolute inset-0 z-20 font-aref-ruqaa pointer-events-none select-none">
+            <span className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white absolute inset-0 z-20 font-aref-ruqaa pointer-events-none select-none">
               بخطوة
             </span>
           </motion.div>
@@ -81,7 +81,7 @@ export default function RequestPropertyBanner({ onOpenInquiry }: RequestProperty
             <button
               type="button"
               onClick={onOpenInquiry}
-              className="py-3.5 px-12 text-xs sm:text-sm font-extrabold bg-bg-midnight hover:bg-gold-primary text-white hover:text-bg-midnight border border-border-gold/30 rounded-full cursor-pointer hover:scale-[1.03] active:scale-[0.97] transition-all duration-300 shadow-md hover:shadow-xl shadow-bg-midnight/10 min-h-[44px]"
+              className="py-3.5 px-12 text-xs sm:text-sm font-extrabold bg-bg-midnight hover:bg-gold-primary text-white hover:text-bg-midnight border border-border-gold/30 rounded-full cursor-pointer hover:scale-[1.03] active:scale-[0.97] transition-all duration-300 shadow-md hover:shadow-xl shadow-bg-midnight/10 min-h-[2.75rem]"
             >
               اطلب الآن
             </button>
@@ -99,7 +99,7 @@ export default function RequestPropertyBanner({ onOpenInquiry }: RequestProperty
             damping: 18,
             delay: 0.3
           }}
-          className="flex-none md:flex-[1.3] w-full md:w-[65%] h-[280px] sm:h-[380px] md:h-[560px] lg:h-[640px] relative z-10 group bg-transparent"
+          className="flex-none md:flex-[1.3] w-full md:w-[65%] h-[17.5rem] sm:h-[23.75rem] md:h-[35rem] lg:h-[40rem] relative z-10 group bg-transparent"
         >
           <Image
             src="/projects/villa_3d_render.webp"

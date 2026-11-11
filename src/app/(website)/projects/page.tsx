@@ -64,7 +64,7 @@ const DetailedProjectCard = ({ project, openInquiry }: { project: Project; openI
       className="group flex flex-col lg:flex-row bg-[#0F2342]/70 backdrop-blur-xl border border-border-gold/30 rounded-3xl overflow-hidden shadow-2xl transition-all duration-300 hover:border-gold-primary/50"
     >
       {/* Image Block */}
-      <div className="relative w-full lg:w-[35%] aspect-[16/10] lg:aspect-auto min-h-[240px] overflow-hidden bg-bg-deep">
+      <div className="relative w-full lg:w-[35%] aspect-[16/10] lg:aspect-auto min-h-[15rem] overflow-hidden bg-bg-deep">
         <Image 
           src={project.media.hero || '/properties/apartment.webp'} 
           alt={project.name}
@@ -72,7 +72,7 @@ const DetailedProjectCard = ({ project, openInquiry }: { project: Project; openI
           sizes="(max-width: 1024px) 100vw, 35vw"
           className="object-cover transition-transform duration-[6000ms] group-hover:scale-108 z-0"
         />
-        <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-l from-slate-950/70 via-transparent to-transparent z-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-l from-slate-950/70 via-transparent to-transparent z-10 pointer-events-none"></div>
         <div className="absolute top-4 start-4 z-20">
           <span className={`px-3 py-1 text-[10px] font-extrabold text-white border rounded-full ${statusClass}`}>
             {statusLabel}
@@ -107,23 +107,23 @@ const DetailedProjectCard = ({ project, openInquiry }: { project: Project; openI
             {project.description}
           </p>
 
-          {/* Specifications Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-3 rounded-2xl bg-white/[0.03] border border-white/5 mb-6 text-xs text-text-secondary text-center">
-            <div className="flex flex-col items-center justify-center gap-1">
-              <span className="text-[9px] text-text-muted">المنطقة</span>
-              <span className="font-bold text-white">{project.location.district}</span>
+          {/* Specifications Grid (Always 4 columns row layout) */}
+          <div className="grid grid-cols-4 gap-1 sm:gap-3 p-2 sm:p-3 rounded-2xl bg-white/[0.03] border border-white/5 mb-5 sm:mb-6 text-[11px] sm:text-xs text-text-secondary text-center">
+            <div className="flex flex-col items-center justify-center gap-0.5 sm:gap-1 min-w-0">
+              <span className="text-[8px] sm:text-[9px] text-text-muted">المنطقة</span>
+              <span className="font-bold text-white text-[11px] sm:text-xs truncate">{project.location.district}</span>
             </div>
-            <div className="flex flex-col items-center justify-center gap-1 border-s sm:border-s-0 sm:border-x border-white/5">
-              <span className="text-[9px] text-text-muted">إجمالي الوحدات</span>
-              <span className="font-bold text-white">{project.specs.totalUnits} شقة</span>
+            <div className="flex flex-col items-center justify-center gap-0.5 sm:gap-1 border-s border-white/5 min-w-0">
+              <span className="text-[8px] sm:text-[9px] text-text-muted">إجمالي الوحدات</span>
+              <span className="font-bold text-white text-[11px] sm:text-xs">{project.specs.totalUnits} شقة</span>
             </div>
-            <div className="flex flex-col items-center justify-center gap-1 border-s border-white/5">
-              <span className="text-[9px] text-text-muted">الوحدات المتاحة</span>
-              <span className="font-bold text-gold-light">{project.specs.availableUnits} شقة</span>
+            <div className="flex flex-col items-center justify-center gap-0.5 sm:gap-1 border-s border-white/5 min-w-0">
+              <span className="text-[8px] sm:text-[9px] text-text-muted">الوحدات المتاحة</span>
+              <span className="font-bold text-gold-light text-[11px] sm:text-xs">{project.specs.availableUnits} شقة</span>
             </div>
-            <div className="flex flex-col items-center justify-center gap-1 border-s border-white/5">
-              <span className="text-[9px] text-text-muted">تاريخ التسليم</span>
-              <span className="font-bold text-white">{project.specs.completionDate}</span>
+            <div className="flex flex-col items-center justify-center gap-0.5 sm:gap-1 border-s border-white/5 min-w-0">
+              <span className="text-[8px] sm:text-[9px] text-text-muted">تاريخ التسليم</span>
+              <span className="font-bold text-white text-[11px] sm:text-xs">{project.specs.completionDate}</span>
             </div>
           </div>
         </div>
@@ -201,7 +201,7 @@ const ProjectCard = ({ project, openInquiry }: { project: Project; openInquiry: 
       className="group relative bg-[#0F2342]/70 backdrop-blur-xl border border-border-gold/30 rounded-3xl overflow-hidden shadow-2xl transition-all duration-300 hover:border-gold-primary/50 flex flex-col h-full text-right"
     >
       {/* Image Block */}
-      <div className="relative aspect-[16/10] overflow-hidden bg-bg-deep shrink-0">
+      <div className="relative aspect-[16/10] rounded-t-3xl overflow-hidden bg-bg-deep shrink-0">
         <Image 
           src={project.media.hero || '/properties/apartment.webp'} 
           alt={project.name}
@@ -209,7 +209,7 @@ const ProjectCard = ({ project, openInquiry }: { project: Project; openInquiry: 
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           className="object-cover transition-transform duration-[6000ms] group-hover:scale-108 z-0"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent z-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent z-10 pointer-events-none"></div>
         <div className="absolute top-4 start-4 z-20">
           <span className={`px-3 py-1 text-[10px] font-extrabold text-white border rounded-full ${statusClass}`}>
             {statusLabel}
@@ -218,7 +218,7 @@ const ProjectCard = ({ project, openInquiry }: { project: Project; openInquiry: 
       </div>
 
       {/* Info Block */}
-      <div className="p-6 flex-1 flex flex-col justify-between">
+      <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between min-w-0">
         <div>
           <div className="flex items-center gap-1.5 mb-2 text-xs text-text-muted">
             <MapPin className="w-3.5 h-3.5 text-gold-primary shrink-0" />
@@ -235,29 +235,29 @@ const ProjectCard = ({ project, openInquiry }: { project: Project; openInquiry: 
             {project.tagline || project.description}
           </p>
 
-          <div className="grid grid-cols-2 gap-3 p-3 rounded-2xl bg-white/[0.02] border border-white/5 mb-4 text-[11px] text-text-secondary text-center">
-            <div className="flex flex-col gap-0.5">
-              <span className="text-[9px] text-text-muted">تاريخ التسليم</span>
-              <span className="font-bold text-white">{project.specs.completionDate}</span>
+          <div className="grid grid-cols-2 gap-2 p-2.5 sm:p-3 rounded-2xl bg-white/[0.02] border border-white/5 mb-4 text-[10px] sm:text-[11px] text-text-secondary text-center">
+            <div className="flex flex-col gap-0.5 min-w-0">
+              <span className="text-[8px] sm:text-[9px] text-text-muted">تاريخ التسليم</span>
+              <span className="font-bold text-white text-xs sm:text-sm">{project.specs.completionDate}</span>
             </div>
-            <div className="flex flex-col gap-0.5 flex-1">
-              <span className="text-[9px] text-text-muted">الوحدات المتاحة</span>
-              <span className="font-bold text-gold-light">{project.specs.availableUnits} من {project.specs.totalUnits}</span>
+            <div className="flex flex-col gap-0.5 flex-1 min-w-0 border-s border-white/5">
+              <span className="text-[8px] sm:text-[9px] text-text-muted">الوحدات المتاحة</span>
+              <span className="font-bold text-gold-light text-xs sm:text-sm">{project.specs.availableUnits} من {project.specs.totalUnits}</span>
             </div>
           </div>
         </div>
 
-        {/* Price & Action */}
+        {/* Price & Action (Always row layout) */}
         <div>
-          <div className="border-t border-white/5 pt-4 flex items-center justify-between gap-4">
-            <div className="text-right">
+          <div className="border-t border-white/5 pt-4 flex items-center justify-between gap-2 min-w-0">
+            <div className="text-right min-w-0">
               <span className="text-[9px] text-text-muted block">تبدأ الأسعار من</span>
-              <span className="text-base font-extrabold text-gold-primary font-el-messiri">
+              <span className="text-xs sm:text-sm lg:text-base font-extrabold text-gold-primary font-el-messiri whitespace-nowrap">
                 {formatPrice(project.priceRange.min)}
               </span>
             </div>
             
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
               <a
                 href={project.brochureUrl || `/brochure-${project.slug}.pdf`}
                 target={project.brochureUrl ? "_blank" : undefined}
@@ -270,7 +270,7 @@ const ProjectCard = ({ project, openInquiry }: { project: Project; openInquiry: 
               </a>
               <Link
                 href={`/projects/${project.slug}`}
-                className="py-2 px-4 text-xs font-bold btn-premium-gold rounded-xl cursor-pointer font-el-messiri transition-all hover:scale-102 active:scale-98 shadow-md text-center"
+                className="py-2 px-3.5 sm:px-4 text-xs font-bold btn-premium-gold rounded-xl cursor-pointer font-el-messiri transition-all hover:scale-102 active:scale-98 shadow-md text-center"
               >
                 تفاصيل
               </Link>
@@ -488,9 +488,9 @@ export default function ProjectsPage() {
   return (
     <main className="min-h-screen bg-bg-midnight relative overflow-x-hidden" dir="rtl">
       {/* ----------------------------------------------------
-         1. Full-screen Hero Section (80vh & Full Width)
+         1. Full-screen Hero Section (100vh & Full Width)
          ---------------------------------------------------- */}
-      <section className="relative h-[80vh] w-full flex items-center justify-center bg-bg-deep overflow-hidden">
+      <section className="relative w-full min-h-[100dvh] h-[100dvh] flex items-center justify-center bg-bg-deep overflow-hidden">
         {/* Background Image with Slow Zoom effect */}
         <div className="absolute inset-0 z-0 select-none">
           <Image 
@@ -504,8 +504,8 @@ export default function ProjectsPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-[#060D1A]/90 via-[#060D1A]/55 to-[#060D1A]/15"></div>
         </div>
 
-        {/* Banner Contents (Centered vertically and shifted 10vh down below floating navbar) */}
-        <div className="relative z-10 max-w-5xl w-[90%] mx-auto text-center flex flex-col items-center justify-center pt-28 sm:pt-36 pb-12 sm:pb-16 translate-y-[10vh]">
+        {/* Banner Contents (Centered vertically and horizontally with balanced padding) */}
+        <div className="relative z-10 max-w-5xl w-[92%] mx-auto text-center flex flex-col items-center justify-center px-4 pt-16 pb-8">
           <motion.span 
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -518,7 +518,7 @@ export default function ProjectsPage() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="text-xl xs:text-2xl sm:text-5xl lg:text-6xl font-black text-white leading-tight font-el-messiri mb-6 drop-shadow-xl text-center"
+            className="text-xl xs:text-2xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight font-el-messiri mb-6 drop-shadow-xl text-center"
           >
             اكتشف <span className="bg-gradient-to-r from-gold-light via-gold-primary to-gold-warm bg-clip-text text-transparent">مشاريعنا المعمارية الفاخرة</span>
           </motion.h1>
@@ -780,7 +780,7 @@ export default function ProjectsPage() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.35 }}
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6"
               >
                 {filteredProjects.map((project) => (
                   <ProjectCard 
@@ -831,7 +831,7 @@ export default function ProjectsPage() {
                   {filteredProjects.map((project) => (
                     <div 
                       key={project.id} 
-                      className="w-[290px] sm:w-[350px] shrink-0 snap-center"
+                      className="w-[18.125rem] sm:w-[21.875rem] shrink-0 snap-center"
                     >
                       <ProjectCard project={project} openInquiry={openInquiry} />
                     </div>
@@ -877,7 +877,7 @@ export default function ProjectsPage() {
                   className="custom-table-wrapper w-full max-h-[60vh] overflow-auto rounded-2xl border-2 border-gold-primary/50 bg-[#0F2342]/90 backdrop-blur-xl shadow-2xl scrollbar-thin scrollbar-thumb-gold-primary scrollbar-track-transparent"
                   dir="rtl"
                 >
-                  <table className="w-full min-w-[950px] text-right text-xs sm:text-[13px] table-auto border-collapse">
+                  <table className="w-full min-w-[59.375rem] text-right text-xs sm:text-[0.8125rem] table-auto border-collapse">
                     <thead className="sticky top-0 z-20 shadow-md">
                       <tr className="border-b border-border-gold/30 text-gold-primary font-el-messiri bg-[#18325C]">
                         <th className="py-4 px-5 font-bold whitespace-nowrap border-x border-border-gold/15 first:border-s-0 last:border-e-0 text-right bg-[#18325C]">اسم المشروع</th>

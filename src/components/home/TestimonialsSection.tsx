@@ -102,11 +102,11 @@ export default function TestimonialsSection() {
   };
 
   return (
-    <section className="relative w-full overflow-hidden py-20 sm:py-24 bg-gradient-to-b from-bg-deep via-bg-navy to-bg-deep border-y border-border-gold/15 z-10">
-      <div className="absolute top-0 end-1/4 w-[500px] h-[500px] bg-gradient-to-br from-gold-primary/5 to-transparent rounded-full blur-3xl -z-10 animate-pulse duration-[8000ms]"></div>
-      <div className="absolute bottom-0 start-1/4 w-[500px] h-[500px] bg-gradient-to-tr from-brand-primary/5 to-transparent rounded-full blur-3xl -z-10 animate-pulse duration-[10000ms]"></div>
+    <section className="relative w-full overflow-hidden py-20 sm:py-24 bg-gradient-to-b from-bg-deep via-bg-navy to-bg-deep border-y border-border-gold/15 z-10" data-pf-full-bleed>
+      <div className="absolute top-0 end-1/4 w-[31.25rem] h-[31.25rem] bg-gradient-to-br from-gold-primary/5 to-transparent rounded-full blur-3xl -z-10 animate-pulse duration-[8000ms]"></div>
+      <div className="absolute bottom-0 start-1/4 w-[31.25rem] h-[31.25rem] bg-gradient-to-tr from-brand-primary/5 to-transparent rounded-full blur-3xl -z-10 animate-pulse duration-[10000ms]"></div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
+      <div className="relative w-[min(calc(100%-2rem),78rem)] lg:w-[min(73vw,78rem)] mx-auto px-4 sm:px-6 lg:px-8 z-10">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -129,7 +129,7 @@ export default function TestimonialsSection() {
           <motion.div
             whileHover={shouldReduceMotion ? {} : { scale: 1.01, y: -4 }}
             transition={{ type: "spring", stiffness: 400, damping: 22 }}
-            className="relative bg-bg-royal/45 backdrop-blur-2xl border border-gold-primary/30 rounded-[2.5rem] p-8 sm:p-12 md:p-16 shadow-[0_45px_90px_rgba(0,0,0,0.55)] hover:shadow-[0_55px_100px_rgba(201,169,110,0.15)] transition-all duration-500 overflow-hidden text-center min-h-[380px] sm:min-h-[340px] flex flex-col justify-between cursor-pointer"
+            className="relative bg-bg-royal/45 backdrop-blur-2xl border border-gold-primary/30 rounded-[2.5rem] p-8 sm:p-12 md:p-16 shadow-[0_45px_90px_rgba(0,0,0,0.55)] hover:shadow-[0_55px_100px_rgba(201,169,110,0.15)] transition-all duration-500 overflow-hidden text-center min-h-[23.75rem] sm:min-h-[21.25rem] flex flex-col justify-between cursor-pointer"
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}
             onTouchEnd={onTouchEnd}
@@ -164,7 +164,7 @@ export default function TestimonialsSection() {
                 <div className="flex flex-col items-center gap-4 mt-2">
                   <div className="relative">
                     <div className="absolute -inset-1 rounded-full bg-gradient-to-tr from-gold-deep via-gold-primary to-gold-light opacity-40 blur-[2px]"></div>
-                    <div className="relative w-14 h-14 rounded-full bg-bg-royal border border-gold-primary/30 flex items-center justify-center font-black text-gold-primary text-sm shadow-md">
+                    <div className="relative w-14 h-14 rounded-full bg-bg-royal border border-gold-primary/30 flex items-center justify-center font-bold text-gold-primary text-sm shadow-md">
                       {TESTIMONIALS[currentTestimonialIndex].initials}
                     </div>
                   </div>
@@ -186,7 +186,7 @@ export default function TestimonialsSection() {
             <button
               type="button"
               onClick={handlePrev}
-              className="md:absolute md:top-1/2 md:-end-6 md:-translate-y-1/2 mx-2 md:mx-0 w-12 h-12 rounded-full bg-bg-royal/80 backdrop-blur-md border border-border-gold/20 hover:border-gold-primary text-white hover:text-gold-primary flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-all duration-300 cursor-pointer z-10 min-w-[44px] min-h-[44px]"
+              className="md:absolute md:top-1/2 md:-end-6 md:-translate-y-1/2 mx-2 md:mx-0 w-12 h-12 rounded-full bg-bg-royal/80 backdrop-blur-md border border-border-gold/20 hover:border-gold-primary text-white hover:text-gold-primary flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-all duration-300 cursor-pointer z-10 min-w-[2.75rem] min-h-[2.75rem]"
               aria-label="التقييم السابق"
             >
               <ChevronRight className="w-5 h-5" />
@@ -195,7 +195,7 @@ export default function TestimonialsSection() {
             <button
               type="button"
               onClick={handleNext}
-              className="md:absolute md:top-1/2 md:-start-6 md:-translate-y-1/2 mx-2 md:mx-0 w-12 h-12 rounded-full bg-bg-royal/80 backdrop-blur-md border border-border-gold/20 hover:border-gold-primary text-white hover:text-gold-primary flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-all duration-300 cursor-pointer z-10 min-w-[44px] min-h-[44px]"
+              className="md:absolute md:top-1/2 md:-start-6 md:-translate-y-1/2 mx-2 md:mx-0 w-12 h-12 rounded-full bg-bg-royal/80 backdrop-blur-md border border-border-gold/20 hover:border-gold-primary text-white hover:text-gold-primary flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-all duration-300 cursor-pointer z-10 min-w-[2.75rem] min-h-[2.75rem]"
               aria-label="التقييم التالي"
             >
               <ChevronLeft className="w-5 h-5" />

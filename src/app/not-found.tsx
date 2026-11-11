@@ -12,12 +12,12 @@ export default function NotFound() {
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-brand-deep/15 via-bg-midnight/70 to-bg-midnight/90 z-0"></div>
       
       <div className="relative z-10 text-center max-w-md mx-auto space-y-6">
-        <h1 className="text-7xl sm:text-9xl font-black bg-gradient-to-r from-gold-light via-gold-primary to-gold-warm bg-clip-text text-transparent font-serif tracking-widest animate-pulse">
+        <h1 className="text-7xl sm:text-9xl font-bold bg-gradient-to-r from-gold-light via-gold-primary to-gold-warm bg-clip-text text-transparent font-serif tracking-widest animate-pulse">
           404
         </h1>
         
         <div className="space-y-2">
-          <h2 className="text-xl sm:text-2xl font-extrabold text-white">الصفحة غير موجودة</h2>
+          <h2 className="text-xl sm:text-2xl font-bold text-white">الصفحة غير موجودة</h2>
           <p className="text-sm text-text-secondary leading-relaxed">
             العنوان الذي تحاول الوصول إليه غير متوفر حالياً أو تم نقله. نسعد بمساعدتك في العودة للرئيسية واستعراض أرقى العقارات.
           </p>
